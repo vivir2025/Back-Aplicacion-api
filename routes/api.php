@@ -15,6 +15,7 @@ use App\Http\Controllers\EnvioMuestraController;
 use App\Http\Controllers\FindriskTestController;
 use App\Http\Controllers\AfinamientoController;
 use App\Http\Controllers\TamizajeController;
+use App\Http\Controllers\LogController;
 
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth:sanctum');
@@ -30,6 +31,12 @@ Route::get('/', function () {
 });
 
 Route::middleware('auth:sanctum')->group(function () {
+    
+   Route::prefix('logs')->group(function () {
+        Route::get('/', [LogController::class, 'index']);
+        Route::get('/stats', [LogController::class, 'stats']);
+        Route::get('/{id}', [LogController::class, 'show']);
+    });
     // Perfil de usuario
     Route::get('/perfil', [AuthController::class, 'perfil']);
     Route::put('/perfil', [AuthController::class, 'actualizarPerfil']);
@@ -100,19 +107,31 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('findrisk/paciente/{idpaciente}', [FindriskTestController::class, 'getByPaciente']);
     Route::get('findrisk/sede/{idsede}', [FindriskTestController::class, 'getBySede']);
     Route::get('findrisk/paciente-sede/{identificacion}', [FindriskTestController::class, 'getPacienteConSede']);
-    Route::get('/{id}', [FindriskTestController::class, 'show']);
-    Route::put('/{id}', [FindriskTestController::class, 'update']);
-    Route::delete('/{id}', [FindriskTestController::class, 'destroy']);
+   
+// ❌ COMENTANDO ESTAS LÍNEAS PROBLEMÁTICAS
+// Route::get('/{id}', [FindriskTestController::class, 'show']);
+// Route::put('/{id}', [FindriskTestController::class, 'update']);
+// Route::delete('/{id}', [FindriskTestController::class, 'destroy']);
+
     Route::get('findrisk-tests/export', [FindriskTestController::class, 'getExportData']);
 
     
     
      // Rutas de afinamientos
-    Route::apiResource('afinamientos', AfinamientoController::class);
-    Route::get('afinamientos/paciente/{pacienteId}', [AfinamientoController::class, 'getAfinamientosPorPaciente']);
-    Route::get('mis-afinamientos', [AfinamientoController::class, 'getMisAfinamientos']);
+// ✅ ORDEN CORRECTO  
+Route::apiResource('afinamientos', AfinamientoController::class);
+Route::get('mis-afinamientos', [AfinamientoController::class, 'getMisAfinamientos']);
+Route::get('afinamientos/paciente/{pacienteId}', [AfinamientoController::class, 'getAfinamientosPorPaciente']);
+
+
+
+
+    
+
+
     
      //  RUTAS DE TAMIZAJES
+  
     Route::prefix('tamizajes')->group(function () {
         Route::get('/', [TamizajeController::class, 'index']);
         Route::post('/', [TamizajeController::class, 'store']);
@@ -122,6 +141,7 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('/{id}', [TamizajeController::class, 'show']);
         Route::put('/{id}', [TamizajeController::class, 'update']);
         Route::delete('/{id}', [TamizajeController::class, 'destroy']);
+       
     });
     
 });

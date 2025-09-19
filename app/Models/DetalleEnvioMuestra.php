@@ -56,7 +56,9 @@ class DetalleEnvioMuestra extends Model
         'acido_folico',
         'peso',
         'talla',
-        'volumen'
+        'volumen',
+        'microo',
+        'creaori'
     ];
 
     protected $casts = [
@@ -96,6 +98,8 @@ class DetalleEnvioMuestra extends Model
         'peso' => 'decimal:2',
         'talla' => 'decimal:2',
         'volumen' => 'string',
+        'microo' => 'string',
+        'creaori' => 'string',
     ];
 
     protected static function boot()

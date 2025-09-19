@@ -68,7 +68,9 @@ class Visita extends Model
         'fotos_base64' => 'array',
         'archivos_adjuntos' => 'array',
         'opciones_multiples' => 'array',
-        'sync_status' => 'integer'
+        'sync_status' => 'integer',
+        'latitud' => 'decimal:8',    
+        'longitud' => 'decimal:8' 
     ];
 
     // Accessor para riesgo_fotografico_url
@@ -148,7 +150,7 @@ class Visita extends Model
     {
         return $this->belongsToMany(Medicamento::class, 'medicamento_visita')
                     ->withPivot('indicaciones')
-                    ->withTimestamps();
+                     ->withoutTimestamps(); // ← Agregar esta línea
     }
 
     // Método para convertir a array para API

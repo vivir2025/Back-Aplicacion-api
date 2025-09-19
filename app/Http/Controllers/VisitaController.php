@@ -5,42 +5,233 @@ namespace App\Http\Controllers;
 use App\Models\Visita;
 use App\Models\Paciente;
 use App\Models\Medicamento;
-use App\Models\MedicamentoVisita; // ✅ AGREGAR ESTE MODELO
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\DB; // ✅ AGREGAR ESTA LÍNEA
 
 class VisitaController extends Controller
 {
     public function index()
     {
-        return Visita::with(['usuario', 'paciente', 'medicamentos'])->get();
+        return Visita::with(['usuario', 'paciente'])->get();
     }
 
-    public function store(Request $request)
-    {
-        Log::info('=== RECIBIENDO DATOS DE VISITA ===');
-        Log::info('Todos los campos:', $request->all());
+  public function store(Request $request)
+{
+    Log::info('=== RECIBIENDO DATOS DE VISITA ===');
+    Log::info('Todos los campos:', $request->all());
+    
+    // ✅ LOGS ESPECÍFICOS PARA COORDENADAS - AGREGAR AQUÍ
+    Log::info('🌍 DEBUG COORDENADAS:', [
+        'latitud_raw' => $request->get('latitud'),
+        'longitud_raw' => $request->get('longitud'),
+        'latitud_exists' => $request->has('latitud'),
+        'longitud_exists' => $request->has('longitud'),
+        'latitud_filled' => $request->filled('latitud'),
+        'longitud_filled' => $request->filled('longitud'),
+        'all_keys' => array_keys($request->all()),
+        'request_method' => $request->method(),
+        'content_type' => $request->header('Content-Type')
+    ]);
+    
+    // ✅ VERIFICAR SI LAS COORDENADAS ESTÁN EN LOS ARCHIVOS
+    if ($request->hasFile('latitud')) {
+        Log::info('🚨 Latitud viene como archivo!');
+    }
+    if ($request->hasFile('longitud')) {
+        Log::info('🚨 Longitud viene como archivo!');
+    }
+
+    // ✅ VERIFICAR EN FORM DATA
+    Log::info('🔍 Form Data completo:', [
+        'form_data' => $_POST ?? 'No POST data',
+        'files' => $_FILES ?? 'No FILES data'
+    ]);
+    
+    if ($request->has('medicamentos')) {
+        Log::info('Campo medicamentos (raw):', ['medicamentos' => $request->medicamentos]);
         
-        if ($request->has('medicamentos')) {
-            Log::info('Campo medicamentos (raw):', ['medicamentos' => $request->medicamentos]);
-            
-            if (is_string($request->medicamentos)) {
-                $medicamentosDecoded = json_decode($request->medicamentos, true);
-                Log::info('Medicamentos decodificados:', ['medicamentos_decoded' => $medicamentosDecoded]);
+        if (is_string($request->medicamentos)) {
+            $medicamentosDecoded = json_decode($request->medicamentos, true);
+            Log::info('Medicamentos decodificados:', ['medicamentos_decoded' => $medicamentosDecoded]);
+        }
+    }
+
+    // ✅ VALIDACIÓN COMPLETA CON COORDENADAS
+    $request->validate([
+        'nombre_apellido' => 'required|string',
+        'identificacion' => 'required|string',
+        'fecha' => 'required|date',
+        'idusuario' => 'required|exists:usuarios,id',
+        'idpaciente' => 'required|exists:pacientes,id',
+        
+        // Campos opcionales
+        'id' => 'sometimes|string',
+        'hta' => 'sometimes|nullable|string',
+        'dm' => 'sometimes|nullable|string',
+        'telefono' => 'sometimes|nullable|string',
+        'zona' => 'sometimes|nullable|string',
+        'peso' => 'sometimes|nullable|numeric',
+        'talla' => 'sometimes|nullable|numeric',
+        'imc' => 'sometimes|nullable|numeric',
+        'perimetro_abdominal' => 'sometimes|nullable|numeric',
+        'frecuencia_cardiaca' => 'sometimes|nullable|integer',
+        'frecuencia_respiratoria' => 'sometimes|nullable|integer',
+        'tension_arterial' => 'sometimes|nullable|string',
+        'glucometria' => 'sometimes|nullable|numeric',
+        'temperatura' => 'sometimes|nullable|numeric',
+        'familiar' => 'sometimes|nullable|string',
+        
+        // ✅ AGREGAR VALIDACIONES FALTANTES
+        'latitud' => 'sometimes|nullable|numeric',
+        'longitud' => 'sometimes|nullable|numeric',
+        'estado' => 'sometimes|nullable|string',
+        'sync_status' => 'sometimes|nullable|integer',
+        'observaciones_adicionales' => 'sometimes|nullable|string',
+        'tipo_visita' => 'sometimes|nullable|string',
+        
+        // Archivos
+        'riesgo_fotografico' => 'sometimes|nullable|file|image|mimes:jpeg,png,jpg,gif|max:2048',
+        'riesgo_fotografico_url' => 'sometimes|nullable|string',
+        'riesgo_fotografico_base64' => 'sometimes|nullable|string',
+        
+        'abandono_social' => 'sometimes|nullable|string',
+        'motivo' => 'sometimes|nullable|string',
+        'factores' => 'sometimes|nullable|string',
+        'conductas' => 'sometimes|nullable|string',
+        'novedades' => 'sometimes|nullable|string',
+        'proximo_control' => 'sometimes|nullable|date',
+        
+        'firma' => 'sometimes|nullable|file|image|mimes:jpeg,png,jpg,gif|max:2048',
+        'firma_url' => 'sometimes|nullable|string',
+        'firma_base64' => 'sometimes|nullable|string',
+        
+        'medicamentos' => 'sometimes|string',
+    ]);
+
+    // ✅ PROCESAR MEDICAMENTOS
+    $medicamentosData = [];
+    if ($request->has('medicamentos') && !empty($request->medicamentos)) {
+        try {
+            $medicamentosData = json_decode($request->medicamentos, true);
+            if (!is_array($medicamentosData)) {
+                Log::warning('Medicamentos no es un array válido:', ['medicamentos' => $request->medicamentos]);
+                $medicamentosData = [];
             }
+        } catch (\Exception $e) {
+            Log::error('Error decodificando medicamentos JSON:', ['error' => $e->getMessage()]);
+            $medicamentosData = [];
+        }
+    }
+
+    $visitaData = $request->except(['medicamentos', 'riesgo_fotografico_base64', 'firma_base64']);
+    
+    if ($request->has('id')) {
+        $visitaData['id'] = $request->id;
+    }
+
+    // ✅ FORZAR COORDENADAS SI NO LLEGAN - AGREGAR AQUÍ
+    if (!isset($visitaData['latitud']) || empty($visitaData['latitud'])) {
+        Log::warning('⚠️ Latitud no recibida, usando valor por defecto');
+        $visitaData['latitud'] = null; // o un valor por defecto
+    }
+
+    if (!isset($visitaData['longitud']) || empty($visitaData['longitud'])) {
+        Log::warning('⚠️ Longitud no recibida, usando valor por defecto');
+        $visitaData['longitud'] = null; // o un valor por defecto
+    }
+
+    Log::info('📍 Coordenadas finales:', [
+        'latitud' => $visitaData['latitud'] ?? 'NULL',
+        'longitud' => $visitaData['longitud'] ?? 'NULL'
+    ]);
+
+    // ✅ ASEGURAR VALORES POR DEFECTO
+    if (!isset($visitaData['estado']) || empty($visitaData['estado'])) {
+        $visitaData['estado'] = 'pendiente';
+    }
+    
+    if (!isset($visitaData['sync_status'])) {
+        $visitaData['sync_status'] = 0;
+    }
+
+    try {
+        // ✅ USAR TRANSACCIÓN
+        DB::beginTransaction();
+
+        // Procesar archivos
+        if ($request->hasFile('riesgo_fotografico')) {
+            $this->processRiskPhotoFile($visitaData, $request->file('riesgo_fotografico'));
+        } elseif ($request->has('riesgo_fotografico_base64') && !empty($request->riesgo_fotografico_base64)) {
+            $this->processRiskPhotoBase64($visitaData, $request->riesgo_fotografico_base64);
         }
 
-        // ✅ VALIDACIÓN IGUAL QUE EL PRIMER CONTROLADOR
+        if ($request->hasFile('firma')) {
+            $this->processSignatureFile($visitaData, $request->file('firma'));
+        } elseif ($request->has('firma_base64') && !empty($request->firma_base64)) {
+            $this->processSignatureBase64($visitaData, $request->firma_base64);
+        }
+
+        Log::info('Datos finales para crear visita:', $visitaData);
+        $visita = Visita::create($visitaData);
+        Log::info('Visita creada:', ['id' => $visita->id]);
+
+        // ✅ PROCESAR MEDICAMENTOS CON MÉTODO CORREGIDO
+        if (!empty($medicamentosData)) {
+            $this->processMedicamentos($visita, $medicamentosData);
+        }
+
+        DB::commit();
+
+        $visitaCompleta = $visita->load(['usuario', 'paciente']);
+        
+        return response()->json([
+            'success' => true,
+            'data' => $visitaCompleta,
+            'message' => 'Visita creada exitosamente'
+        ], 201);
+
+    } catch (\Exception $e) {
+        DB::rollBack();
+        Log::error('Error al crear visita:', [
+            'error' => $e->getMessage(),
+            'trace' => $e->getTraceAsString(),
+            'line' => $e->getLine(),
+            'file' => $e->getFile()
+        ]);
+        
+        return response()->json([
+            'success' => false,
+            'message' => 'Error al crear visita: ' . $e->getMessage()
+        ], 500);
+    }
+}
+
+    public function show($id)
+    {
+        try {
+            $visita = Visita::with(['usuario', 'paciente'])->findOrFail($id);
+            return response()->json(['success' => true, 'data' => $visita]);
+        } catch (\Exception $e) {
+            return response()->json(['success' => false, 'message' => 'Visita no encontrada'], 404);
+        }
+    }
+public function update(Request $request, $id)
+{
+    try {
+        $visita = Visita::findOrFail($id);
+        Log::info('=== ACTUALIZANDO VISITA ===', ['visita_id' => $id]);
+        Log::info('Datos recibidos para update:', $request->all());
+        
         $request->validate([
-            'nombre_apellido' => 'required|string',
-            'identificacion' => 'required|string',
-            'fecha' => 'required|date',
-            'idusuario' => 'required|exists:usuarios,id',
-            'idpaciente' => 'required|exists:pacientes,id',
+            'nombre_apellido' => 'sometimes|required|string',
+            'identificacion' => 'sometimes|required|string',
+            'fecha' => 'sometimes|required|date',
+            'idusuario' => 'sometimes|required|exists:usuarios,id',
+            'idpaciente' => 'sometimes|required|exists:pacientes,id',
             
             // Campos opcionales
-            'id' => 'sometimes|string',
             'hta' => 'sometimes|nullable|string',
             'dm' => 'sometimes|nullable|string',
             'telefono' => 'sometimes|nullable|string',
@@ -56,7 +247,14 @@ class VisitaController extends Controller
             'temperatura' => 'sometimes|nullable|numeric',
             'familiar' => 'sometimes|nullable|string',
             
-            // Archivos
+            // ✅ AGREGAR VALIDACIONES FALTANTES EN UPDATE
+            'latitud' => 'sometimes|nullable|numeric',
+            'longitud' => 'sometimes|nullable|numeric',
+            'estado' => 'sometimes|nullable|string',
+            'sync_status' => 'sometimes|nullable|integer',
+            'observaciones_adicionales' => 'sometimes|nullable|string',
+            'tipo_visita' => 'sometimes|nullable|string',
+            
             'riesgo_fotografico' => 'sometimes|nullable|file|image|mimes:jpeg,png,jpg,gif|max:2048',
             'riesgo_fotografico_url' => 'sometimes|nullable|string',
             'riesgo_fotografico_base64' => 'sometimes|nullable|string',
@@ -74,188 +272,104 @@ class VisitaController extends Controller
             
             'medicamentos' => 'sometimes|string',
         ]);
-
-        // ✅ PROCESAR MEDICAMENTOS IGUAL QUE EL PRIMER CONTROLADOR
+        
+        // ✅ PROCESAR MEDICAMENTOS IGUAL QUE EN STORE
         $medicamentosData = [];
         if ($request->has('medicamentos') && !empty($request->medicamentos)) {
             try {
                 $medicamentosData = json_decode($request->medicamentos, true);
                 if (!is_array($medicamentosData)) {
-                    Log::warning('Medicamentos no es un array válido:', ['medicamentos' => $request->medicamentos]);
+                    Log::warning('Medicamentos no es un array válido en update:', ['medicamentos' => $request->medicamentos]);
                     $medicamentosData = [];
                 }
+                Log::info('Medicamentos decodificados en update:', ['medicamentos_decoded' => $medicamentosData]);
             } catch (\Exception $e) {
-                Log::error('Error decodificando medicamentos JSON:', ['error' => $e->getMessage()]);
+                Log::error('Error decodificando medicamentos en update:', ['error' => $e->getMessage()]);
                 $medicamentosData = [];
             }
         }
 
+        // ✅ OBTENER DATOS EXCLUYENDO CAMPOS ESPECIALES (IGUAL QUE EN STORE)
         $visitaData = $request->except(['medicamentos', 'riesgo_fotografico_base64', 'firma_base64']);
+
+        // ✅ FORZAR COORDENADAS SI NO LLEGAN (IGUAL QUE EN STORE)
+        if (!isset($visitaData['latitud']) || empty($visitaData['latitud'])) {
+            Log::warning('⚠️ Latitud no recibida en update, manteniendo valor actual');
+            // No sobreescribir si no viene
+            unset($visitaData['latitud']);
+        }
+
+        if (!isset($visitaData['longitud']) || empty($visitaData['longitud'])) {
+            Log::warning('⚠️ Longitud no recibida en update, manteniendo valor actual');
+            // No sobreescribir si no viene
+            unset($visitaData['longitud']);
+        }
+
+        Log::info('📍 Coordenadas finales en update:', [
+            'latitud' => $visitaData['latitud'] ?? 'NO CAMBIA',
+            'longitud' => $visitaData['longitud'] ?? 'NO CAMBIA'
+        ]);
+
+        // ✅ USAR TRANSACCIÓN EN UPDATE
+        DB::beginTransaction();
+
+        // Procesar archivos (mantener tu lógica actual)
+        if ($request->hasFile('riesgo_fotografico')) {
+            $this->deleteExistingFile($visita->riesgo_fotografico);
+            $this->processRiskPhotoFile($visitaData, $request->file('riesgo_fotografico'));
+        } elseif ($request->has('riesgo_fotografico_base64') && !empty($request->riesgo_fotografico_base64)) {
+            $this->deleteExistingFile($visita->riesgo_fotografico);
+            $this->processRiskPhotoBase64($visitaData, $request->riesgo_fotografico_base64);
+        }
         
-        if ($request->has('id')) {
-            $visitaData['id'] = $request->id;
+        if ($request->hasFile('firma')) {
+            $this->deleteExistingFile($visita->firma);
+            $this->processSignatureFile($visitaData, $request->file('firma'));
+        } elseif ($request->has('firma_base64') && !empty($request->firma_base64)) {
+            $this->deleteExistingFile($visita->firma);
+            $this->processSignatureBase64($visitaData, $request->firma_base64);
+        }
+        
+        Log::info('Datos finales para actualizar visita:', $visitaData);
+        
+        // ✅ ACTUALIZAR LA VISITA
+        $visita->update($visitaData);
+
+        // ✅ PROCESAR MEDICAMENTOS IGUAL QUE EN STORE (SIN RELACIÓN)
+        if (!empty($medicamentosData)) {
+            $this->processMedicamentos($visita, $medicamentosData, true);
         }
 
-        try {
-            // ✅ PROCESAR ARCHIVOS IGUAL QUE EL PRIMER CONTROLADOR
-            // Procesar foto de riesgo (archivo o base64)
-            if ($request->hasFile('riesgo_fotografico')) {
-                $this->processRiskPhotoFile($visitaData, $request->file('riesgo_fotografico'));
-            } elseif ($request->has('riesgo_fotografico_base64') && !empty($request->riesgo_fotografico_base64)) {
-                $this->processRiskPhotoBase64($visitaData, $request->riesgo_fotografico_base64);
-            }
+        DB::commit();
 
-            // Procesar firma (archivo o base64)
-            if ($request->hasFile('firma')) {
-                $this->processSignatureFile($visitaData, $request->file('firma'));
-            } elseif ($request->has('firma_base64') && !empty($request->firma_base64)) {
-                $this->processSignatureBase64($visitaData, $request->firma_base64);
-            }
+        Log::info('Visita actualizada exitosamente:', ['id' => $visita->id]);
 
-            $visita = Visita::create($visitaData);
-            Log::info('Visita creada:', ['id' => $visita->id]);
+        // ✅ CARGAR RELACIONES IGUAL QUE EN STORE
+        $visitaCompleta = $visita->load(['usuario', 'paciente']);
 
-            // ✅ PROCESAR MEDICAMENTOS IGUAL QUE EL PRIMER CONTROLADOR
-            if (!empty($medicamentosData)) {
-                $this->processMedicamentos($visita, $medicamentosData);
-            }
+        return response()->json([
+            'success' => true,
+            'data' => $visitaCompleta,
+            'message' => 'Visita actualizada exitosamente'
+        ]);
 
-            $visitaCompleta = $visita->load(['usuario', 'paciente', 'medicamentos']);
-            
-            return response()->json([
-                'success' => true,
-                'data' => $visitaCompleta,
-                'message' => 'Visita creada exitosamente'
-            ], 201);
-
-        } catch (\Exception $e) {
-            Log::error('Error al crear visita:', [
-                'error' => $e->getMessage(),
-                'trace' => $e->getTraceAsString()
-            ]);
-            
-            return response()->json([
-                'success' => false,
-                'message' => 'Error al crear visita: ' . $e->getMessage()
-            ], 500);
-        }
+    } catch (\Exception $e) {
+        DB::rollBack();
+        Log::error('Error al actualizar visita:', [
+            'visita_id' => $id,
+            'error' => $e->getMessage(),
+            'trace' => $e->getTraceAsString(),
+            'line' => $e->getLine(),
+            'file' => $e->getFile()
+        ]);
+        
+        return response()->json([
+            'success' => false,
+            'message' => 'Error al actualizar visita: ' . $e->getMessage()
+        ], 500);
     }
+}
 
-    public function show($id)
-    {
-        try {
-            $visita = Visita::with(['usuario', 'paciente', 'medicamentos'])->findOrFail($id);
-            return response()->json(['success' => true, 'data' => $visita]);
-        } catch (\Exception $e) {
-            return response()->json(['success' => false, 'message' => 'Visita no encontrada'], 404);
-        }
-    }
-
-    public function update(Request $request, $id)
-    {
-        try {
-            $visita = Visita::findOrFail($id);
-            Log::info('=== ACTUALIZANDO VISITA ===', ['visita_id' => $id]);
-            
-            $request->validate([
-                'nombre_apellido' => 'sometimes|required|string',
-                'identificacion' => 'sometimes|required|string',
-                'fecha' => 'sometimes|required|date',
-                'idusuario' => 'sometimes|required|exists:usuarios,id',
-                'idpaciente' => 'sometimes|required|exists:pacientes,id',
-                
-                // Campos opcionales
-                'hta' => 'sometimes|nullable|string',
-                'dm' => 'sometimes|nullable|string',
-                'telefono' => 'sometimes|nullable|string',
-                'zona' => 'sometimes|nullable|string',
-                'peso' => 'sometimes|nullable|numeric',
-                'talla' => 'sometimes|nullable|numeric',
-                'imc' => 'sometimes|nullable|numeric',
-                'perimetro_abdominal' => 'sometimes|nullable|numeric',
-                'frecuencia_cardiaca' => 'sometimes|nullable|integer',
-                'frecuencia_respiratoria' => 'sometimes|nullable|integer',
-                'tension_arterial' => 'sometimes|nullable|string',
-                'glucometria' => 'sometimes|nullable|numeric',
-                'temperatura' => 'sometimes|nullable|numeric',
-                'familiar' => 'sometimes|nullable|string',
-                
-                'riesgo_fotografico' => 'sometimes|nullable|file|image|mimes:jpeg,png,jpg,gif|max:2048',
-                'riesgo_fotografico_url' => 'sometimes|nullable|string',
-                'riesgo_fotografico_base64' => 'sometimes|nullable|string',
-                
-                'abandono_social' => 'sometimes|nullable|string',
-                'motivo' => 'sometimes|nullable|string',
-                'factores' => 'sometimes|nullable|string',
-                'conductas' => 'sometimes|nullable|string',
-                'novedades' => 'sometimes|nullable|string',
-                'proximo_control' => 'sometimes|nullable|date',
-                
-                'firma' => 'sometimes|nullable|file|image|mimes:jpeg,png,jpg,gif|max:2048',
-                'firma_url' => 'sometimes|nullable|string',
-                'firma_base64' => 'sometimes|nullable|string',
-                
-                'medicamentos' => 'sometimes|string',
-            ]);
-            
-            // ✅ PROCESAR MEDICAMENTOS IGUAL QUE EL PRIMER CONTROLADOR
-            $medicamentosData = [];
-            if ($request->has('medicamentos') && !empty($request->medicamentos)) {
-                try {
-                    $medicamentosData = json_decode($request->medicamentos, true);
-                } catch (\Exception $e) {
-                    Log::error('Error decodificando medicamentos en update:', ['error' => $e->getMessage()]);
-                }
-            }
-
-            $visitaData = $request->except(['medicamentos', 'riesgo_fotografico_base64', 'firma_base64']);
-
-            // ✅ PROCESAR ARCHIVOS IGUAL QUE EL PRIMER CONTROLADOR
-            // Procesar foto de riesgo (archivo o base64)
-            if ($request->hasFile('riesgo_fotografico')) {
-                $this->deleteExistingFile($visita->riesgo_fotografico);
-                $this->processRiskPhotoFile($visitaData, $request->file('riesgo_fotografico'));
-            } elseif ($request->has('riesgo_fotografico_base64') && !empty($request->riesgo_fotografico_base64)) {
-                $this->deleteExistingFile($visita->riesgo_fotografico);
-                $this->processRiskPhotoBase64($visitaData, $request->riesgo_fotografico_base64);
-            }
-            
-            // Procesar firma (archivo o base64)
-            if ($request->hasFile('firma')) {
-                $this->deleteExistingFile($visita->firma);
-                $this->processSignatureFile($visitaData, $request->file('firma'));
-            } elseif ($request->has('firma_base64') && !empty($request->firma_base64)) {
-                $this->deleteExistingFile($visita->firma);
-                $this->processSignatureBase64($visitaData, $request->firma_base64);
-            }
-            
-            $visita->update($visitaData);
-
-            // ✅ PROCESAR MEDICAMENTOS EN UPDATE IGUAL QUE EL PRIMER CONTROLADOR
-            if (!empty($medicamentosData)) {
-                $this->processMedicamentos($visita, $medicamentosData, true);
-            }
-
-            $visitaCompleta = $visita->load(['usuario', 'paciente', 'medicamentos']);
-
-            return response()->json([
-                'success' => true,
-                'data' => $visitaCompleta,
-                'message' => 'Visita actualizada exitosamente'
-            ]);
-
-        } catch (\Exception $e) {
-            Log::error('Error al actualizar visita:', [
-                'visita_id' => $id,
-                'error' => $e->getMessage()
-            ]);
-            
-            return response()->json([
-                'success' => false,
-                'message' => 'Error al actualizar visita: ' . $e->getMessage()
-            ], 500);
-        }
-    }
 
     public function destroy($id)
     {
@@ -303,7 +417,7 @@ class VisitaController extends Controller
         ]);
     }
 
-    // ✅ MÉTODOS PARA SUBIR ARCHIVOS (mantener los que ya tienes)
+    // ✅ MÉTODOS PARA SUBIR ARCHIVOS
     public function uploadRiskPhoto(Request $request)
     {
         try {
@@ -456,7 +570,7 @@ class VisitaController extends Controller
         }
     }
 
-    // ========== MÉTODOS PRIVADOS DEL PRIMER CONTROLADOR ==========
+    // ========== MÉTODOS PRIVADOS ==========
 
     private function processRiskPhotoFile(&$data, $file)
     {
@@ -534,12 +648,12 @@ class VisitaController extends Controller
         }
     }
 
-    // ✅ MÉTODO CLAVE: PROCESAR MEDICAMENTOS IGUAL QUE EL PRIMER CONTROLADOR
+    // ✅ MÉTODO CLAVE CORREGIDO: PROCESAR MEDICAMENTOS SIN TIMESTAMPS
     private function processMedicamentos($visita, $medicamentosData, $isUpdate = false)
     {
         if ($isUpdate) {
-            // Si es actualización, primero desvinculamos todos los medicamentos
-            $visita->medicamentos()->detach();
+            // Si es actualización, primero eliminamos los registros existentes
+            DB::table('medicamento_visita')->where('visita_id', $visita->id)->delete();
         }
         
         $medicamentosGuardados = 0;
@@ -551,17 +665,28 @@ class VisitaController extends Controller
                     continue;
                 }
 
+                // Verificar que el medicamento existe
                 $medicamentoExiste = Medicamento::find($medicamento['id']);
                 if (!$medicamentoExiste) {
                     Log::warning('Medicamento no existe:', ['id' => $medicamento['id']]);
                     continue;
                 }
 
-                $visita->medicamentos()->attach($medicamento['id'], [
+                // ✅ INSERTAR DIRECTAMENTE CON DB::table() SIN TIMESTAMPS
+                DB::table('medicamento_visita')->insert([
+                    'medicamento_id' => $medicamento['id'],
+                    'visita_id' => $visita->id,
                     'indicaciones' => $medicamento['indicaciones'] ?? null
                 ]);
                 
                 $medicamentosGuardados++;
+                
+                Log::info('Medicamento guardado:', [
+                    'visita_id' => $visita->id,
+                    'medicamento_id' => $medicamento['id'],
+                    'indicaciones' => $medicamento['indicaciones'] ?? null
+                ]);
+                
             } catch (\Exception $e) {
                 Log::error('Error guardando medicamento:', [
                     'medicamento' => $medicamento,
