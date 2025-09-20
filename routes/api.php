@@ -32,9 +32,12 @@ Route::get('/', function () {
 
 Route::middleware('auth:sanctum')->group(function () {
     
-   Route::prefix('logs')->group(function () {
+     Route::prefix('logs')->group(function () {
         Route::get('/', [LogController::class, 'index']);
         Route::get('/stats', [LogController::class, 'stats']);
+        Route::get('/export', [LogController::class, 'export']);
+        Route::get('/download', [LogController::class, 'download']);
+        Route::post('/clear', [LogController::class, 'clear']);
         Route::get('/{id}', [LogController::class, 'show']);
     });
     // Perfil de usuario
