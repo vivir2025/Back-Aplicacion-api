@@ -33,6 +33,8 @@ class LogController extends Controller
     private function parseLogs($logPath, $request)
     {
         $content = File::get($logPath);
+        $content = mb_convert_encoding($content, 'UTF-8', 'UTF-8');
+        $content = preg_replace('/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]/', '', $content);
         $lines = explode("\n", $content);
         
         $logs = [];
