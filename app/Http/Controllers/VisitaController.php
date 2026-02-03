@@ -137,42 +137,59 @@ class VisitaController extends Controller
         $pacienteExiste = Paciente::find($request->idpaciente);
         
         if (!$pacienteExiste) {
-            Log::warning('⚠️ Paciente no existe, creando automáticamente:', [
-                'idpaciente' => $request->idpaciente,
-                'identificacion' => $request->identificacion,
-                'nombre_apellido' => $request->nombre_apellido
-            ]);
-            
-            // Crear paciente con los datos mínimos disponibles
-            try {
-                // ✅ Obtener la sede del usuario que está haciendo la visita
-                $usuario = Usuario::find($request->idusuario);
-                $idsedeUsuario = $usuario ? $usuario->idsede : null;
+            // ✅ PRIMERO: Buscar por identificación (cédula)
+            if ($request->has('identificacion') && !empty($request->identificacion)) {
+                $pacientePorIdentificacion = Paciente::where('identificacion', $request->identificacion)->first();
                 
-                $nombreCompleto = explode(' ', $request->nombre_apellido, 2);
-                $pacienteExiste = Paciente::create([
-                    'id' => $request->idpaciente,
-                    'identificacion' => $request->identificacion,
-                    'nombre' => $nombreCompleto[0] ?? 'Sin nombre',
-                    'apellido' => $nombreCompleto[1] ?? 'Sin apellido',
-                    'fecnacimiento' => now()->subYears(30), // Fecha temporal
-                    'genero' => 'No especificado',
-                    'latitud' => $request->latitud ?? null,
-                    'longitud' => $request->longitud ?? null,
-                    'idsede' => $idsedeUsuario  // ✅ Sede del usuario logeado
-                ]);
-                
-                Log::info('✅ Paciente creado automáticamente:', ['id' => $pacienteExiste->id]);
-            } catch (\Exception $e) {
-                Log::error('❌ Error creando paciente automáticamente:', [
-                    'error' => $e->getMessage(),
-                    'idpaciente' => $request->idpaciente
-                ]);
-                
-                return response()->json([
-                    'success' => false,
-                    'message' => 'Error: El paciente no existe y no se pudo crear automáticamente. ' . $e->getMessage()
-                ], 422);
+                if ($pacientePorIdentificacion) {
+                    Log::info('✅ Paciente encontrado por identificación, usando paciente existente:', [
+                        'id_offline' => $request->idpaciente,
+                        'id_real' => $pacientePorIdentificacion->id,
+                        'identificacion' => $request->identificacion
+                    ]);
+                    
+                    // Usar el paciente encontrado
+                    $pacienteExiste = $pacientePorIdentificacion;
+                    $request->merge(['idpaciente' => $pacientePorIdentificacion->id]);
+                } else {
+                    // El paciente NO existe ni por ID ni por identificación, crearlo
+                    Log::warning('⚠️ Paciente no existe, creando automáticamente:', [
+                        'idpaciente' => $request->idpaciente,
+                        'identificacion' => $request->identificacion,
+                        'nombre_apellido' => $request->nombre_apellido
+                    ]);
+                    
+                    try {
+                        // ✅ Obtener la sede del usuario que está haciendo la visita
+                        $usuario = Usuario::find($request->idusuario);
+                        $idsedeUsuario = $usuario ? $usuario->idsede : null;
+                        
+                        $nombreCompleto = explode(' ', $request->nombre_apellido, 2);
+                        $pacienteExiste = Paciente::create([
+                            'id' => $request->idpaciente,
+                            'identificacion' => $request->identificacion,
+                            'nombre' => $nombreCompleto[0] ?? 'Sin nombre',
+                            'apellido' => $nombreCompleto[1] ?? 'Sin apellido',
+                            'fecnacimiento' => now()->subYears(30),
+                            'genero' => 'No especificado',
+                            'latitud' => $request->latitud ?? null,
+                            'longitud' => $request->longitud ?? null,
+                            'idsede' => $idsedeUsuario
+                        ]);
+                        
+                        Log::info('✅ Paciente creado automáticamente:', ['id' => $pacienteExiste->id]);
+                    } catch (\Exception $e) {
+                        Log::error('❌ Error creando paciente automáticamente:', [
+                            'error' => $e->getMessage(),
+                            'idpaciente' => $request->idpaciente
+                        ]);
+                        
+                        return response()->json([
+                            'success' => false,
+                            'message' => 'Error: El paciente no existe y no se pudo crear automáticamente. ' . $e->getMessage()
+                        ], 422);
+                    }
+                }
             }
         }
     }
@@ -343,41 +360,59 @@ public function update(Request $request, $id)
             $pacienteExiste = Paciente::find($request->idpaciente);
             
             if (!$pacienteExiste) {
-                Log::warning('⚠️ Paciente no existe en update, creando automáticamente:', [
-                    'idpaciente' => $request->idpaciente,
-                    'identificacion' => $request->identificacion,
-                    'nombre_apellido' => $request->nombre_apellido
-                ]);
-                
-                try {
-                    // ✅ Obtener la sede del usuario que está haciendo la visita
-                    $usuario = Usuario::find($request->idusuario);
-                    $idsedeUsuario = $usuario ? $usuario->idsede : null;
+                // ✅ PRIMERO: Buscar por identificación (cédula)
+                if ($request->has('identificacion') && !empty($request->identificacion)) {
+                    $pacientePorIdentificacion = Paciente::where('identificacion', $request->identificacion)->first();
                     
-                    $nombreCompleto = explode(' ', $request->nombre_apellido, 2);
-                    $pacienteExiste = Paciente::create([
-                        'id' => $request->idpaciente,
-                        'identificacion' => $request->identificacion,
-                        'nombre' => $nombreCompleto[0] ?? 'Sin nombre',
-                        'apellido' => $nombreCompleto[1] ?? 'Sin apellido',
-                        'fecnacimiento' => now()->subYears(30),
-                        'genero' => 'No especificado',
-                        'latitud' => $request->latitud ?? null,
-                        'longitud' => $request->longitud ?? null,
-                        'idsede' => $idsedeUsuario  // ✅ Sede del usuario logeado
-                    ]);
-                    
-                    Log::info('✅ Paciente creado automáticamente en update:', ['id' => $pacienteExiste->id]);
-                } catch (\Exception $e) {
-                    Log::error('❌ Error creando paciente en update:', [
-                        'error' => $e->getMessage(),
-                        'idpaciente' => $request->idpaciente
-                    ]);
-                    
-                    return response()->json([
-                        'success' => false,
-                        'message' => 'Error: El paciente no existe y no se pudo crear automáticamente. ' . $e->getMessage()
-                    ], 422);
+                    if ($pacientePorIdentificacion) {
+                        Log::info('✅ Paciente encontrado por identificación en update, usando paciente existente:', [
+                            'id_offline' => $request->idpaciente,
+                            'id_real' => $pacientePorIdentificacion->id,
+                            'identificacion' => $request->identificacion
+                        ]);
+                        
+                        // Usar el paciente encontrado
+                        $pacienteExiste = $pacientePorIdentificacion;
+                        $request->merge(['idpaciente' => $pacientePorIdentificacion->id]);
+                    } else {
+                        // El paciente NO existe ni por ID ni por identificación, crearlo
+                        Log::warning('⚠️ Paciente no existe en update, creando automáticamente:', [
+                            'idpaciente' => $request->idpaciente,
+                            'identificacion' => $request->identificacion,
+                            'nombre_apellido' => $request->nombre_apellido
+                        ]);
+                        
+                        try {
+                            // ✅ Obtener la sede del usuario que está haciendo la visita
+                            $usuario = Usuario::find($request->idusuario);
+                            $idsedeUsuario = $usuario ? $usuario->idsede : null;
+                            
+                            $nombreCompleto = explode(' ', $request->nombre_apellido, 2);
+                            $pacienteExiste = Paciente::create([
+                                'id' => $request->idpaciente,
+                                'identificacion' => $request->identificacion,
+                                'nombre' => $nombreCompleto[0] ?? 'Sin nombre',
+                                'apellido' => $nombreCompleto[1] ?? 'Sin apellido',
+                                'fecnacimiento' => now()->subYears(30),
+                                'genero' => 'No especificado',
+                                'latitud' => $request->latitud ?? null,
+                                'longitud' => $request->longitud ?? null,
+                                'idsede' => $idsedeUsuario
+                            ]);
+                            
+                            Log::info('✅ Paciente creado automáticamente en update:', ['id' => $pacienteExiste->id]);
+                        } catch (\Exception $e) {
+                            Log::error('❌ Error creando paciente en update:', [
+                                'error' => $e->getMessage(),
+                                'idpaciente' => $request->idpaciente
+                            ]);
+                            
+                            return response()->json([
+                                'success' => false,
+                                'message' => 'Error: El paciente no existe y no se pudo crear automáticamente. ' . $e->getMessage()
+                            ], 422);
+                        }
+                    }
                 }
             }
         }
