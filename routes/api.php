@@ -16,6 +16,7 @@ use App\Http\Controllers\FindriskTestController;
 use App\Http\Controllers\AfinamientoController;
 use App\Http\Controllers\TamizajeController;
 use App\Http\Controllers\LogController;
+use App\Http\Controllers\PacienteSyncController;
 
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth:sanctum');
@@ -55,6 +56,7 @@ Route::middleware('auth:sanctum')->group(function () {
     // Pacientes
     Route::apiResource('pacientes', PacienteController::class);
     Route::get('/pacientes/buscar/{identificacion}', [PacienteController::class, 'buscarPorIdentificacion']);
+    Route::post('/pacientes/sync-batch', [PacienteSyncController::class, 'syncBatch']); // ✅ Nueva ruta para sincronización masiva
     
     // Medicamentos
     Route::apiResource('medicamentos', MedicamentoController::class);

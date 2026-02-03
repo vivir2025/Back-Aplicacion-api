@@ -58,13 +58,13 @@ class VisitaController extends Controller
         }
     }
 
-    // ✅ VALIDACIÓN COMPLETA CON COORDENADAS
+    // ✅ VALIDACIÓN COMPLETA CON COORDENADAS - CAMBIO: idpaciente ahora es nullable
     $request->validate([
         'nombre_apellido' => 'required|string',
         'identificacion' => 'required|string',
         'fecha' => 'required|date',
         'idusuario' => 'required|exists:usuarios,id',
-        'idpaciente' => 'required|exists:pacientes,id',
+        'idpaciente' => 'nullable|string',  // ✅ CAMBIADO: Ya no requiere que exista en la BD
         
         // Campos opcionales
         'id' => 'sometimes|string',
@@ -129,6 +129,47 @@ class VisitaController extends Controller
     
     if ($request->has('id')) {
         $visitaData['id'] = $request->id;
+    }
+
+    // ✅ BUSCAR O CREAR PACIENTE SI NO EXISTE
+    if ($request->has('idpaciente') && !empty($request->idpaciente)) {
+        $pacienteExiste = Paciente::find($request->idpaciente);
+        
+        if (!$pacienteExiste) {
+            Log::warning('⚠️ Paciente no existe, creando automáticamente:', [
+                'idpaciente' => $request->idpaciente,
+                'identificacion' => $request->identificacion,
+                'nombre_apellido' => $request->nombre_apellido
+            ]);
+            
+            // Crear paciente con los datos mínimos disponibles
+            try {
+                $nombreCompleto = explode(' ', $request->nombre_apellido, 2);
+                $pacienteExiste = Paciente::create([
+                    'id' => $request->idpaciente,
+                    'identificacion' => $request->identificacion,
+                    'nombre' => $nombreCompleto[0] ?? 'Sin nombre',
+                    'apellido' => $nombreCompleto[1] ?? 'Sin apellido',
+                    'fecnacimiento' => now()->subYears(30), // Fecha temporal
+                    'genero' => 'No especificado',
+                    'latitud' => $request->latitud ?? null,
+                    'longitud' => $request->longitud ?? null,
+                    'idsede' => null
+                ]);
+                
+                Log::info('✅ Paciente creado automáticamente:', ['id' => $pacienteExiste->id]);
+            } catch (\Exception $e) {
+                Log::error('❌ Error creando paciente automáticamente:', [
+                    'error' => $e->getMessage(),
+                    'idpaciente' => $request->idpaciente
+                ]);
+                
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Error: El paciente no existe y no se pudo crear automáticamente. ' . $e->getMessage()
+                ], 422);
+            }
+        }
     }
 
     // ✅ FORZAR COORDENADAS SI NO LLEGAN - AGREGAR AQUÍ
@@ -229,7 +270,7 @@ public function update(Request $request, $id)
             'identificacion' => 'sometimes|required|string',
             'fecha' => 'sometimes|required|date',
             'idusuario' => 'sometimes|required|exists:usuarios,id',
-            'idpaciente' => 'sometimes|required|exists:pacientes,id',
+            'idpaciente' => 'sometimes|nullable|string',  // ✅ CAMBIADO: Ya no requiere que exista en la BD
             
             // Campos opcionales
             'hta' => 'sometimes|nullable|string',
@@ -291,6 +332,46 @@ public function update(Request $request, $id)
 
         // ✅ OBTENER DATOS EXCLUYENDO CAMPOS ESPECIALES (IGUAL QUE EN STORE)
         $visitaData = $request->except(['medicamentos', 'riesgo_fotografico_base64', 'firma_base64']);
+
+        // ✅ BUSCAR O CREAR PACIENTE SI NO EXISTE (igual que en store)
+        if ($request->has('idpaciente') && !empty($request->idpaciente)) {
+            $pacienteExiste = Paciente::find($request->idpaciente);
+            
+            if (!$pacienteExiste) {
+                Log::warning('⚠️ Paciente no existe en update, creando automáticamente:', [
+                    'idpaciente' => $request->idpaciente,
+                    'identificacion' => $request->identificacion,
+                    'nombre_apellido' => $request->nombre_apellido
+                ]);
+                
+                try {
+                    $nombreCompleto = explode(' ', $request->nombre_apellido, 2);
+                    $pacienteExiste = Paciente::create([
+                        'id' => $request->idpaciente,
+                        'identificacion' => $request->identificacion,
+                        'nombre' => $nombreCompleto[0] ?? 'Sin nombre',
+                        'apellido' => $nombreCompleto[1] ?? 'Sin apellido',
+                        'fecnacimiento' => now()->subYears(30),
+                        'genero' => 'No especificado',
+                        'latitud' => $request->latitud ?? null,
+                        'longitud' => $request->longitud ?? null,
+                        'idsede' => null
+                    ]);
+                    
+                    Log::info('✅ Paciente creado automáticamente en update:', ['id' => $pacienteExiste->id]);
+                } catch (\Exception $e) {
+                    Log::error('❌ Error creando paciente en update:', [
+                        'error' => $e->getMessage(),
+                        'idpaciente' => $request->idpaciente
+                    ]);
+                    
+                    return response()->json([
+                        'success' => false,
+                        'message' => 'Error: El paciente no existe y no se pudo crear automáticamente. ' . $e->getMessage()
+                    ], 422);
+                }
+            }
+        }
 
         // ✅ FORZAR COORDENADAS SI NO LLEGAN (IGUAL QUE EN STORE)
         if (!isset($visitaData['latitud']) || empty($visitaData['latitud'])) {
