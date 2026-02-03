@@ -150,7 +150,9 @@ class VisitaController extends Controller
                     
                     // Usar el paciente encontrado
                     $pacienteExiste = $pacientePorIdentificacion;
+                    // ✅ ACTUALIZAR TANTO REQUEST COMO visitaData
                     $request->merge(['idpaciente' => $pacientePorIdentificacion->id]);
+                    $visitaData['idpaciente'] = $pacientePorIdentificacion->id;
                 } else {
                     // El paciente NO existe ni por ID ni por identificación, crearlo
                     Log::warning('⚠️ Paciente no existe, creando automáticamente:', [
@@ -166,7 +168,7 @@ class VisitaController extends Controller
                         
                         $nombreCompleto = explode(' ', $request->nombre_apellido, 2);
                         $pacienteExiste = Paciente::create([
-                            'id' => $request->idpaciente,
+                            // NO usar el id offline, dejar que Laravel genere un UUID
                             'identificacion' => $request->identificacion,
                             'nombre' => $nombreCompleto[0] ?? 'Sin nombre',
                             'apellido' => $nombreCompleto[1] ?? 'Sin apellido',
@@ -176,6 +178,9 @@ class VisitaController extends Controller
                             'longitud' => $request->longitud ?? null,
                             'idsede' => $idsedeUsuario
                         ]);
+                        
+                        // ✅ ACTUALIZAR visitaData con el ID del paciente creado
+                        $visitaData['idpaciente'] = $pacienteExiste->id;
                         
                         Log::info('✅ Paciente creado automáticamente:', ['id' => $pacienteExiste->id]);
                     } catch (\Exception $e) {
@@ -191,6 +196,10 @@ class VisitaController extends Controller
                     }
                 }
             }
+        } else {
+            // ✅ El paciente ya existe con el ID proporcionado
+            Log::info('✅ Paciente existe con ID proporcionado:', ['id' => $pacienteExiste->id]);
+            $visitaData['idpaciente'] = $pacienteExiste->id;
         }
     }
 
