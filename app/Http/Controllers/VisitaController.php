@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Visita;
 use App\Models\Paciente;
 use App\Models\Medicamento;
+use App\Models\Usuario;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
@@ -144,6 +145,10 @@ class VisitaController extends Controller
             
             // Crear paciente con los datos mínimos disponibles
             try {
+                // ✅ Obtener la sede del usuario que está haciendo la visita
+                $usuario = Usuario::find($request->idusuario);
+                $idsedeUsuario = $usuario ? $usuario->idsede : null;
+                
                 $nombreCompleto = explode(' ', $request->nombre_apellido, 2);
                 $pacienteExiste = Paciente::create([
                     'id' => $request->idpaciente,
@@ -154,7 +159,7 @@ class VisitaController extends Controller
                     'genero' => 'No especificado',
                     'latitud' => $request->latitud ?? null,
                     'longitud' => $request->longitud ?? null,
-                    'idsede' => null
+                    'idsede' => $idsedeUsuario  // ✅ Sede del usuario logeado
                 ]);
                 
                 Log::info('✅ Paciente creado automáticamente:', ['id' => $pacienteExiste->id]);
@@ -345,6 +350,10 @@ public function update(Request $request, $id)
                 ]);
                 
                 try {
+                    // ✅ Obtener la sede del usuario que está haciendo la visita
+                    $usuario = Usuario::find($request->idusuario);
+                    $idsedeUsuario = $usuario ? $usuario->idsede : null;
+                    
                     $nombreCompleto = explode(' ', $request->nombre_apellido, 2);
                     $pacienteExiste = Paciente::create([
                         'id' => $request->idpaciente,
@@ -355,7 +364,7 @@ public function update(Request $request, $id)
                         'genero' => 'No especificado',
                         'latitud' => $request->latitud ?? null,
                         'longitud' => $request->longitud ?? null,
-                        'idsede' => null
+                        'idsede' => $idsedeUsuario  // ✅ Sede del usuario logeado
                     ]);
                     
                     Log::info('✅ Paciente creado automáticamente en update:', ['id' => $pacienteExiste->id]);
