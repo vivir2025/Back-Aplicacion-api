@@ -37,17 +37,17 @@ class BrigadaController extends Controller
         try {
             DB::beginTransaction();
             
-            Log::info('”9à3 Datos recibidos para crear brigada:', $request->all());
+            Log::info('ðŸ“¥ Datos recibidos para crear brigada:', $request->all());
             
             // Validar datos
             $validated = $request->validate([
                 'lugar_evento' => 'required|string',
                 'fecha_brigada' => 'required|date',
-                'nombre_conductor' => 'required|string',
-                'usuarios_hta' => 'required|string',
-                'usuarios_dn' => 'required|string',
-                'usuarios_hta_rcu' => 'required|string',
-                'usuarios_dm_rcu' => 'required|string',
+                'nombre_conductor' => 'nullable|string',
+                'usuarios_hta' => 'nullable|string',
+                'usuarios_dn' => 'nullable|string',
+                'usuarios_hta_rcu' => 'nullable|string',
+                'usuarios_dm_rcu' => 'nullable|string',
                 'tema' => 'required|string',
                 'observaciones' => 'nullable|string',
                 'pacientes' => 'required|array',
@@ -55,7 +55,7 @@ class BrigadaController extends Controller
                 'medicamentos_resumen' => 'nullable|array',
             ]);
 
-            // 1. ”9‹5 CREAR LA BRIGADA
+            // 1. ðŸ†• CREAR LA BRIGADA
             $brigada = Brigada::create([
                 'lugar_evento' => $validated['lugar_evento'],
                 'fecha_brigada' => $validated['fecha_brigada'],
@@ -68,9 +68,9 @@ class BrigadaController extends Controller
                 'observaciones' => $validated['observaciones'] ?? '',
             ]);
 
-            Log::info('7¼3 Brigada creada:', ['id' => $brigada->id]);
+            Log::info('âœ… Brigada creada:', ['id' => $brigada->id]);
 
-            // 2. ”9Ó5 ASIGNAR PACIENTES
+            // 2. ðŸ‘¥ ASIGNAR PACIENTES
             foreach ($validated['pacientes'] as $pacienteId) {
                 BrigadaPaciente::create([
                     'brigada_id' => $brigada->id,
@@ -78,9 +78,9 @@ class BrigadaController extends Controller
                 ]);
             }
 
-            Log::info('7¼3 Pacientes asignados:', ['count' => count($validated['pacientes'])]);
+            Log::info('âœ… Pacientes asignados:', ['count' => count($validated['pacientes'])]);
 
-            // 3. ”9×2 PROCESAR MEDICAMENTOS (CORREGIDO)
+            // 3. ðŸ’Š PROCESAR MEDICAMENTOS (CORREGIDO)
             if (!empty($validated['medicamentos_resumen'])) {
                 foreach ($validated['medicamentos_resumen'] as $medicamento) {
                     // Validar que tenga los campos necesarios
@@ -96,7 +96,7 @@ class BrigadaController extends Controller
                                 'indicaciones' => $medicamento['indicaciones'] ?? '',
                             ]);
                             
-                            Log::info('”9×2 Medicamento asignado:', [
+                            Log::info('ðŸ’Š Medicamento asignado:', [
                                 'brigada_id' => $brigada->id,
                                 'paciente_id' => $medicamento['paciente_id'],
                                 'medicamento_id' => $medicamento['medicamento_id'],
@@ -106,10 +106,10 @@ class BrigadaController extends Controller
                     }
                 }
                 
-                Log::info('7¼3 Medicamentos procesados:', ['count' => count($validated['medicamentos_resumen'])]);
+                Log::info('âœ… Medicamentos procesados:', ['count' => count($validated['medicamentos_resumen'])]);
             }
 
-            // 4. ”9à2 CARGAR RELACIONES (CORREGIDO)
+            // 4. ðŸ“¤ CARGAR RELACIONES (CORREGIDO)
             $brigada->load(['pacientes', 'medicamentosPacientes.medicamento']);
 
             DB::commit();
@@ -122,7 +122,7 @@ class BrigadaController extends Controller
 
         } catch (\Exception $e) {
             DB::rollBack();
-            Log::error('7Ã4 Error creando brigada:', [
+            Log::error('âŒ Error creando brigada:', [
                 'error' => $e->getMessage(),
                 'trace' => $e->getTraceAsString()
             ]);
