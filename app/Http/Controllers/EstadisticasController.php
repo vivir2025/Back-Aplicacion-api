@@ -79,10 +79,13 @@ class EstadisticasController extends Controller
             }
             $totalPacientes = $queryPacientes->count();
 
-            // 📊 Total de Brigadas
+            // 📊 Total de Brigadas (filtradas por pacientes de la sede)
             $queryBrigadas = Brigada::query();
             if ($sedeId) {
-                $queryBrigadas->where('idsede', $sedeId);
+                // Brigadas que tengan pacientes de esta sede
+                $queryBrigadas->whereHas('pacientes', function($q) use ($sedeId) {
+                    $q->where('idsede', $sedeId);
+                });
             }
             if ($fechaInicio && $fechaFin) {
                 $queryBrigadas->whereBetween('created_at', [$fechaInicio, $fechaFin]);
