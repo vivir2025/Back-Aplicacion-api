@@ -59,53 +59,46 @@ class EstadisticasController extends Controller
                 'fecha_fin' => $fechaFin,
             ]);
 
-            // ✅ FILTRAR SIEMPRE POR USUARIO LOGUEADO (incluso administradores)
             $usuarioId = $usuario->id;
 
             // ============================================
-            // OBTENER ESTADÍSTICAS FILTRADAS POR USUARIO
+            // OBTENER ESTADÍSTICAS
             // ============================================
 
-            // 📊 Total de Pacientes (únicos que el usuario ha atendido)
+            // 📊 Total de Pacientes (TODOS, sin filtro de usuario)
             $queryPacientes = Paciente::query();
-            $queryPacientes->whereHas('visitas', function($q) use ($usuarioId) {
-                $q->where('idusuario', $usuarioId);
-            });
             if ($fechaInicio && $fechaFin) {
                 $queryPacientes->whereBetween('created_at', [$fechaInicio, $fechaFin]);
             }
-            $totalPacientes = $queryPacientes->distinct()->count('id');
+            $totalPacientes = $queryPacientes->count();
 
-            // 📊 Total de Brigadas (las brigadas no tienen idusuario, se retorna 0)
+            // 📊 Total de Brigadas (FILTRADAS por usuario - NOTA: requiere campo idusuario en tabla)
+            // Por ahora retorna 0 porque la tabla brigadas no tiene campo idusuario
             $totalBrigadas = 0;
 
-            // 📊 Total de Visitas del usuario
-            $queryVisitas = Visita::query();
-            $queryVisitas->where('idusuario', $usuarioId);
+            // 📊 Total de Visitas (FILTRADAS por usuario)
+            $queryVisitas = Visita::where('idusuario', $usuarioId);
             if ($fechaInicio && $fechaFin) {
                 $queryVisitas->whereBetween('created_at', [$fechaInicio, $fechaFin]);
             }
             $totalVisitas = $queryVisitas->count();
 
-            // 📊 Total de Tamizajes del usuario
-            $queryTamizajes = Tamizaje::query();
-            $queryTamizajes->where('idusuario', $usuarioId);
+            // 📊 Total de Tamizajes (FILTRADAS por usuario)
+            $queryTamizajes = Tamizaje::where('idusuario', $usuarioId);
             if ($fechaInicio && $fechaFin) {
                 $queryTamizajes->whereBetween('created_at', [$fechaInicio, $fechaFin]);
             }
             $totalTamizajes = $queryTamizajes->count();
 
-            // 📊 Total de Laboratorios del usuario
-            $queryLaboratorios = EnvioMuestra::query();
-            $queryLaboratorios->where('idusuario', $usuarioId);
+            // 📊 Total de Envíos de Muestras (FILTRADAS por usuario)
+            $queryLaboratorios = EnvioMuestra::where('idusuario', $usuarioId);
             if ($fechaInicio && $fechaFin) {
                 $queryLaboratorios->whereBetween('created_at', [$fechaInicio, $fechaFin]);
             }
             $totalLaboratorios = $queryLaboratorios->count();
 
-            // 📊 Total de Encuestas del usuario
-            $queryEncuestas = Encuesta::query();
-            $queryEncuestas->where('idusuario', $usuarioId);
+            // 📊 Total de Encuestas (FILTRADAS por usuario)
+            $queryEncuestas = Encuesta::where('idusuario', $usuarioId);
             if ($fechaInicio && $fechaFin) {
                 $queryEncuestas->whereBetween('created_at', [$fechaInicio, $fechaFin]);
             }
@@ -118,15 +111,15 @@ class EstadisticasController extends Controller
             $inicioMes = Carbon::now()->startOfMonth()->toDateString();
             $finMes = Carbon::now()->endOfMonth()->toDateTimeString();
 
-            // Visitas del mes actual del usuario
-            $queryVisitasMes = Visita::query();
-            $queryVisitasMes->where('idusuario', $usuarioId);
-            $visitasMes = $queryVisitasMes->whereBetween('created_at', [$inicioMes, $finMes])->count();
+            // Visitas del mes actual (FILTRADAS por usuario)
+            $visitasMes = Visita::where('idusuario', $usuarioId)
+                ->whereBetween('created_at', [$inicioMes, $finMes])
+                ->count();
 
-            // Laboratorios del mes actual del usuario
-            $queryLaboratoriosMes = EnvioMuestra::query();
-            $queryLaboratoriosMes->where('idusuario', $usuarioId);
-            $laboratoriosMes = $queryLaboratoriosMes->whereBetween('created_at', [$inicioMes, $finMes])->count();
+            // Envíos de muestras del mes actual (FILTRADAS por usuario)
+            $laboratoriosMes = EnvioMuestra::where('idusuario', $usuarioId)
+                ->whereBetween('created_at', [$inicioMes, $finMes])
+                ->count();
 
             // ============================================
             // RESPUESTA
@@ -160,7 +153,7 @@ class EstadisticasController extends Controller
                         'rol' => $usuario->rol,
                     ]
                 ],
-                'message' => 'Estadísticas obtenidas correctamente (filtradas por usuario)'
+                'message' => 'Estadísticas obtenidas correctamente (Pacientes: TODOS | Visitas, Tamizajes, Envíos, Encuestas: filtradas por usuario)'
             ], 200);
 
         } catch (\Illuminate\Validation\ValidationException $e) {
@@ -183,11 +176,11 @@ class EstadisticasController extends Controller
     }
 
     /**
-     * Obtener estadísticas por sede específica (AHORA filtra por usuario logueado)
+     * Obtener estadísticas por sede específica
+     * NOTA: Redirige al método index ya que las estadísticas ahora se basan en el usuario logueado
      */
     public function porSede(Request $request, $sedeId)
     {
-        // Redirigir al método index que ya filtra por usuario
         return $this->index($request);
     }
 }
