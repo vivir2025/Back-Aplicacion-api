@@ -260,41 +260,39 @@ class EncuestaController extends Controller
         }
     }
 
-    public function estadisticas()
+    public function estadisticas(Request $request)
     {
         try {
-            $totalEncuestas = Encuesta::count();
+            $usuario = $request->user();
+            $usuarioId = $usuario->id;
             
-           
-            $encuestasPorUsuario = Encuesta::with('usuario')
-                ->selectRaw('idusuario, COUNT(*) as total')
-                ->groupBy('idusuario')
-                ->get();
-                
-            $encuestasPorSede = Encuesta::with('sede')
-                ->selectRaw('idsede, COUNT(*) as total')
-                ->groupBy('idsede')
-                ->get();
+            // Filtrar solo encuestas del usuario logueado
+            $totalEncuestas = Encuesta::where('idusuario', $usuarioId)->count();
             
-            $encuestasPorMes = Encuesta::selectRaw('YEAR(fecha) as año, MONTH(fecha) as mes, COUNT(*) as total')
+            $encuestasPorMes = Encuesta::where('idusuario', $usuarioId)
+                ->selectRaw('YEAR(fecha) as año, MONTH(fecha) as mes, COUNT(*) as total')
                 ->groupBy('año', 'mes')
                 ->orderBy('año', 'desc')
                 ->orderBy('mes', 'desc')
                 ->limit(12)
                 ->get();
 
-            // Estadísticas de satisfacción (basado en respuestas de calificación)
-            $encuestasConRespuestas = Encuesta::whereNotNull('respuestas_calificacion')->get();
+            // Estadísticas de satisfacción del usuario logueado
+            $encuestasConRespuestas = Encuesta::where('idusuario', $usuarioId)
+                ->whereNotNull('respuestas_calificacion')
+                ->get();
             $estadisticasSatisfaccion = $this->calcularEstadisticasSatisfaccion($encuestasConRespuestas);
 
             return response()->json([
                 'success' => true,
                 'data' => [
                     'total_encuestas' => $totalEncuestas,
-                    'encuestas_por_usuario' => $encuestasPorUsuario, 
-                    'encuestas_por_sede' => $encuestasPorSede,
                     'encuestas_por_mes' => $encuestasPorMes,
-                    'estadisticas_satisfaccion' => $estadisticasSatisfaccion
+                    'estadisticas_satisfaccion' => $estadisticasSatisfaccion,
+                    'usuario' => [
+                        'id' => $usuario->id,
+                        'nombre' => $usuario->nombre,
+                    ]
                 ]
             ]);
         } catch (\Exception $e) {

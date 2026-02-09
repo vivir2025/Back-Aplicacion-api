@@ -243,34 +243,51 @@ class TamizajeController extends Controller
     }
 
     /**
-     * Obtener estadísticas de tamizajes
+     * Obtener estadísticas de tamizajes del usuario logueado
      */
-    public function estadisticas()
+    public function estadisticas(Request $request)
     {
         try {
-            $totalTamizajes = Tamizaje::count();
-            $tamizajesHoy = Tamizaje::whereDate('created_at', today())->count();
-            $tamizajesEsteMes = Tamizaje::whereMonth('created_at', now()->month)
+            $usuario = $request->user();
+            $usuarioId = $usuario->id;
+            
+            $totalTamizajes = Tamizaje::where('idusuario', $usuarioId)->count();
+            $tamizajesHoy = Tamizaje::where('idusuario', $usuarioId)
+                ->whereDate('created_at', today())
+                ->count();
+            $tamizajesEsteMes = Tamizaje::where('idusuario', $usuarioId)
+                ->whereMonth('created_at', now()->month)
                 ->whereYear('created_at', now()->year)
                 ->count();
 
-            // Estadísticas de presión arterial
-            $hipertensionStage1 = Tamizaje::where('pa_sistolica', '>=', 130)
-                ->where('pa_sistolica', '<=', 139)
-                ->orWhere(function($query) {
-                    $query->where('pa_diastolica', '>=', 80)
+            // Estadísticas de presión arterial del usuario
+            $hipertensionStage1 = Tamizaje::where('idusuario', $usuarioId)
+                ->where(function($query) {
+                    $query->where(function($q) {
+                        $q->where('pa_sistolica', '>=', 130)
+                          ->where('pa_sistolica', '<=', 139);
+                    })->orWhere(function($q) {
+                        $q->where('pa_diastolica', '>=', 80)
                           ->where('pa_diastolica', '<=', 89);
+                    });
                 })->count();
 
-            $hipertensionStage2 = Tamizaje::where('pa_sistolica', '>=', 140)
-                ->orWhere('pa_diastolica', '>=', 90)->count();
+            $hipertensionStage2 = Tamizaje::where('idusuario', $usuarioId)
+                ->where(function($query) {
+                    $query->where('pa_sistolica', '>=', 140)
+                          ->orWhere('pa_diastolica', '>=', 90);
+                })->count();
 
             return response()->json([
                 'total_tamizajes' => $totalTamizajes,
                 'tamizajes_hoy' => $tamizajesHoy,
                 'tamizajes_este_mes' => $tamizajesEsteMes,
                 'hipertension_stage_1' => $hipertensionStage1,
-                'hipertension_stage_2' => $hipertensionStage2
+                'hipertension_stage_2' => $hipertensionStage2,
+                'usuario' => [
+                    'id' => $usuario->id,
+                    'nombre' => $usuario->nombre,
+                ]
             ]);
 
         } catch (\Exception $e) {

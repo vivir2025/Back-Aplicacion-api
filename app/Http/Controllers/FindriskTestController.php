@@ -237,29 +237,44 @@ class FindriskTestController extends Controller
         return response()->json($tests);
     }
 
-    public function getEstadisticas()
+    public function getEstadisticas(Request $request)
     {
+        $usuario = $request->user();
+        $usuarioId = $usuario->id;
+        
         $estadisticas = [
-            'total_tests' => FindriskTest::count(),
-            'riesgo_bajo' => FindriskTest::where('puntaje_final', '<', 7)->count(),
-            'riesgo_ligeramente_elevado' => FindriskTest::whereBetween('puntaje_final', [7, 11])->count(),
-            'riesgo_moderado' => FindriskTest::whereBetween('puntaje_final', [12, 14])->count(),
-            'riesgo_alto' => FindriskTest::whereBetween('puntaje_final', [15, 20])->count(),
-            'riesgo_muy_alto' => FindriskTest::where('puntaje_final', '>', 20)->count(),
+            'total_tests' => FindriskTest::where('idusuario', $usuarioId)->count(),
+            'riesgo_bajo' => FindriskTest::where('idusuario', $usuarioId)->where('puntaje_final', '<', 7)->count(),
+            'riesgo_ligeramente_elevado' => FindriskTest::where('idusuario', $usuarioId)->whereBetween('puntaje_final', [7, 11])->count(),
+            'riesgo_moderado' => FindriskTest::where('idusuario', $usuarioId)->whereBetween('puntaje_final', [12, 14])->count(),
+            'riesgo_alto' => FindriskTest::where('idusuario', $usuarioId)->whereBetween('puntaje_final', [15, 20])->count(),
+            'riesgo_muy_alto' => FindriskTest::where('idusuario', $usuarioId)->where('puntaje_final', '>', 20)->count(),
+            'usuario' => [
+                'id' => $usuario->id,
+                'nombre' => $usuario->nombre,
+            ]
         ];
 
         return response()->json($estadisticas);
     }
 
-    public function getEstadisticasPorSede($idsede)
+    public function getEstadisticasPorSede(Request $request, $idsede)
     {
+        // Filtrar siempre por usuario logueado, no por sede
+        $usuario = $request->user();
+        $usuarioId = $usuario->id;
+        
         $estadisticas = [
-            'total_tests' => FindriskTest::where('idsede', $idsede)->count(),
-            'riesgo_bajo' => FindriskTest::where('idsede', $idsede)->where('puntaje_final', '<', 7)->count(),
-            'riesgo_ligeramente_elevado' => FindriskTest::where('idsede', $idsede)->whereBetween('puntaje_final', [7, 11])->count(),
-            'riesgo_moderado' => FindriskTest::where('idsede', $idsede)->whereBetween('puntaje_final', [12, 14])->count(),
-            'riesgo_alto' => FindriskTest::where('idsede', $idsede)->whereBetween('puntaje_final', [15, 20])->count(),
-            'riesgo_muy_alto' => FindriskTest::where('idsede', $idsede)->where('puntaje_final', '>', 20)->count(),
+            'total_tests' => FindriskTest::where('idusuario', $usuarioId)->count(),
+            'riesgo_bajo' => FindriskTest::where('idusuario', $usuarioId)->where('puntaje_final', '<', 7)->count(),
+            'riesgo_ligeramente_elevado' => FindriskTest::where('idusuario', $usuarioId)->whereBetween('puntaje_final', [7, 11])->count(),
+            'riesgo_moderado' => FindriskTest::where('idusuario', $usuarioId)->whereBetween('puntaje_final', [12, 14])->count(),
+            'riesgo_alto' => FindriskTest::where('idusuario', $usuarioId)->whereBetween('puntaje_final', [15, 20])->count(),
+            'riesgo_muy_alto' => FindriskTest::where('idusuario', $usuarioId)->where('puntaje_final', '>', 20)->count(),
+            'usuario' => [
+                'id' => $usuario->id,
+                'nombre' => $usuario->nombre,
+            ]
         ];
 
         return response()->json($estadisticas);

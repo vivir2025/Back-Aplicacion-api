@@ -59,78 +59,53 @@ class EstadisticasController extends Controller
                 'fecha_fin' => $fechaFin,
             ]);
 
-            // Determinar si el usuario es administrador
-            $esAdmin = in_array(strtolower($usuario->rol), ['administrador', 'admin', 'superadmin']);
-            
-            // Definir el scope de la consulta según el rol
-            $sedeId = $esAdmin ? null : $usuario->idsede;
+            // ✅ FILTRAR SIEMPRE POR USUARIO LOGUEADO (incluso administradores)
+            $usuarioId = $usuario->id;
 
             // ============================================
-            // OBTENER ESTADÍSTICAS FILTRADAS
+            // OBTENER ESTADÍSTICAS FILTRADAS POR USUARIO
             // ============================================
 
-            // 📊 Total de Pacientes
+            // 📊 Total de Pacientes (únicos que el usuario ha atendido)
             $queryPacientes = Paciente::query();
-            if ($sedeId) {
-                $queryPacientes->where('idsede', $sedeId);
-            }
+            $queryPacientes->whereHas('visitas', function($q) use ($usuarioId) {
+                $q->where('idusuario', $usuarioId);
+            });
             if ($fechaInicio && $fechaFin) {
                 $queryPacientes->whereBetween('created_at', [$fechaInicio, $fechaFin]);
             }
-            $totalPacientes = $queryPacientes->count();
+            $totalPacientes = $queryPacientes->distinct()->count('id');
 
-            // 📊 Total de Brigadas (filtradas por pacientes de la sede)
-            $queryBrigadas = Brigada::query();
-            if ($sedeId) {
-                // Brigadas que tengan pacientes de esta sede
-                $queryBrigadas->whereHas('pacientes', function($q) use ($sedeId) {
-                    $q->where('idsede', $sedeId);
-                });
-            }
-            if ($fechaInicio && $fechaFin) {
-                $queryBrigadas->whereBetween('created_at', [$fechaInicio, $fechaFin]);
-            }
-            $totalBrigadas = $queryBrigadas->count();
+            // 📊 Total de Brigadas (las brigadas no tienen idusuario, se retorna 0)
+            $totalBrigadas = 0;
 
-            // 📊 Total de Visitas
+            // 📊 Total de Visitas del usuario
             $queryVisitas = Visita::query();
-            if ($sedeId) {
-                $queryVisitas->whereHas('paciente', function($q) use ($sedeId) {
-                    $q->where('idsede', $sedeId);
-                });
-            }
+            $queryVisitas->where('idusuario', $usuarioId);
             if ($fechaInicio && $fechaFin) {
                 $queryVisitas->whereBetween('created_at', [$fechaInicio, $fechaFin]);
             }
             $totalVisitas = $queryVisitas->count();
 
-            // 📊 Total de Tamizajes
+            // 📊 Total de Tamizajes del usuario
             $queryTamizajes = Tamizaje::query();
-            if ($sedeId) {
-                $queryTamizajes->whereHas('paciente', function($q) use ($sedeId) {
-                    $q->where('idsede', $sedeId);
-                });
-            }
+            $queryTamizajes->where('idusuario', $usuarioId);
             if ($fechaInicio && $fechaFin) {
                 $queryTamizajes->whereBetween('created_at', [$fechaInicio, $fechaFin]);
             }
             $totalTamizajes = $queryTamizajes->count();
 
-            // 📊 Total de Laboratorios (Envío de Muestras)
+            // 📊 Total de Laboratorios del usuario
             $queryLaboratorios = EnvioMuestra::query();
-            if ($sedeId) {
-                $queryLaboratorios->where('idsede', $sedeId);
-            }
+            $queryLaboratorios->where('idusuario', $usuarioId);
             if ($fechaInicio && $fechaFin) {
                 $queryLaboratorios->whereBetween('created_at', [$fechaInicio, $fechaFin]);
             }
             $totalLaboratorios = $queryLaboratorios->count();
 
-            // 📊 Total de Encuestas
+            // 📊 Total de Encuestas del usuario
             $queryEncuestas = Encuesta::query();
-            if ($sedeId) {
-                $queryEncuestas->where('idsede', $sedeId);
-            }
+            $queryEncuestas->where('idusuario', $usuarioId);
             if ($fechaInicio && $fechaFin) {
                 $queryEncuestas->whereBetween('created_at', [$fechaInicio, $fechaFin]);
             }
@@ -143,20 +118,14 @@ class EstadisticasController extends Controller
             $inicioMes = Carbon::now()->startOfMonth()->toDateString();
             $finMes = Carbon::now()->endOfMonth()->toDateTimeString();
 
-            // Visitas del mes actual
+            // Visitas del mes actual del usuario
             $queryVisitasMes = Visita::query();
-            if ($sedeId) {
-                $queryVisitasMes->whereHas('paciente', function($q) use ($sedeId) {
-                    $q->where('idsede', $sedeId);
-                });
-            }
+            $queryVisitasMes->where('idusuario', $usuarioId);
             $visitasMes = $queryVisitasMes->whereBetween('created_at', [$inicioMes, $finMes])->count();
 
-            // Laboratorios del mes actual
+            // Laboratorios del mes actual del usuario
             $queryLaboratoriosMes = EnvioMuestra::query();
-            if ($sedeId) {
-                $queryLaboratoriosMes->where('idsede', $sedeId);
-            }
+            $queryLaboratoriosMes->where('idusuario', $usuarioId);
             $laboratoriosMes = $queryLaboratoriosMes->whereBetween('created_at', [$inicioMes, $finMes])->count();
 
             // ============================================
@@ -179,9 +148,9 @@ class EstadisticasController extends Controller
                     
                     // Información adicional
                     'filtros_aplicados' => [
-                        'sede_id' => $sedeId,
-                        'sede_nombre' => $sedeId ? $usuario->sede->nombresede ?? 'N/A' : 'Todas',
-                        'es_administrador' => $esAdmin,
+                        'usuario_id' => $usuarioId,
+                        'sede_id' => $usuario->idsede,
+                        'sede_nombre' => $usuario->sede->nombresede ?? 'N/A',
                         'fecha_inicio' => $fechaInicio,
                         'fecha_fin' => $request->input('fecha_fin'), // Sin hora
                     ],
@@ -191,7 +160,7 @@ class EstadisticasController extends Controller
                         'rol' => $usuario->rol,
                     ]
                 ],
-                'message' => 'Estadísticas obtenidas correctamente'
+                'message' => 'Estadísticas obtenidas correctamente (filtradas por usuario)'
             ], 200);
 
         } catch (\Illuminate\Validation\ValidationException $e) {
@@ -214,37 +183,11 @@ class EstadisticasController extends Controller
     }
 
     /**
-     * Obtener estadísticas por sede específica (solo para administradores)
+     * Obtener estadísticas por sede específica (AHORA filtra por usuario logueado)
      */
     public function porSede(Request $request, $sedeId)
     {
-        try {
-            $usuario = $request->user();
-            
-            // Verificar que sea administrador
-            $esAdmin = in_array(strtolower($usuario->rol), ['administrador', 'admin', 'superadmin']);
-            
-            if (!$esAdmin) {
-                return response()->json([
-                    'success' => false,
-                    'message' => 'No tienes permisos para ver estadísticas de otras sedes'
-                ], 403);
-            }
-
-            // Reutilizar la lógica del método index pero forzando la sede
-            $request->merge(['force_sede' => $sedeId]);
-            
-            // Aquí podrías duplicar la lógica o refactorizar
-            return response()->json([
-                'success' => true,
-                'message' => 'Funcionalidad en desarrollo'
-            ]);
-
-        } catch (\Exception $e) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Error al obtener estadísticas por sede: ' . $e->getMessage()
-            ], 500);
-        }
+        // Redirigir al método index que ya filtra por usuario
+        return $this->index($request);
     }
 }
