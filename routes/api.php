@@ -17,6 +17,7 @@ use App\Http\Controllers\AfinamientoController;
 use App\Http\Controllers\TamizajeController;
 use App\Http\Controllers\LogController;
 use App\Http\Controllers\PacienteSyncController;
+use App\Http\Controllers\EstadisticasController;
 
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth:sanctum');
@@ -44,6 +45,10 @@ Route::middleware('auth:sanctum')->group(function () {
     // Perfil de usuario
     Route::get('/perfil', [AuthController::class, 'perfil']);
     Route::put('/perfil', [AuthController::class, 'actualizarPerfil']);
+    
+    // ✅ ESTADÍSTICAS GENERALES (Filtradas por usuario y sede automáticamente)
+    Route::get('/estadisticas', [EstadisticasController::class, 'index']);
+    Route::get('/estadisticas/sede/{sedeId}', [EstadisticasController::class, 'porSede']);
     
     // Usuarios
     Route::apiResource('usuarios', UsuarioController::class);
