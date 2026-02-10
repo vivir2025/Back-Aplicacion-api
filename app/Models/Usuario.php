@@ -57,4 +57,32 @@ class Usuario extends Authenticatable
     {
         return $this->contrasena;
     }
+
+    /**
+     * Relación con tokens de dispositivos
+     */
+    public function deviceTokens()
+    {
+        return $this->hasMany(DeviceToken::class, 'user_id', 'id');
+    }
+
+    /**
+     * Obtener solo tokens activos
+     */
+    public function deviceTokensActivos()
+    {
+        return $this->hasMany(DeviceToken::class, 'user_id', 'id')
+                    ->where('is_active', true);
+    }
+    
+    /**
+     * Obtener tokens FCM activos (para enviar notificaciones)
+     */
+    public function getFcmTokensAttribute()
+    {
+        return $this->deviceTokensActivos()
+                    ->pluck('fcm_token')
+                    ->toArray();
+    }
+
 }

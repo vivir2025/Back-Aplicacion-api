@@ -18,6 +18,7 @@ use App\Http\Controllers\TamizajeController;
 use App\Http\Controllers\LogController;
 use App\Http\Controllers\PacienteSyncController;
 use App\Http\Controllers\EstadisticasController;
+use App\Http\Controllers\NotificationController;
 
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth:sanctum');
@@ -152,6 +153,19 @@ Route::get('afinamientos/paciente/{pacienteId}', [AfinamientoController::class, 
         Route::put('/{id}', [TamizajeController::class, 'update']);
         Route::delete('/{id}', [TamizajeController::class, 'destroy']);
        
+    });
+    Route::prefix('notifications')->group(function () {
+    // Registrar token del dispositivo
+        Route::post('/register-device', [NotificationController::class, 'registerDevice']);
+        
+        // Enviar notificación a un usuario específico
+        Route::post('/send-to-user', [NotificationController::class, 'sendToUser']);
+        
+        // Enviar notificación a TODOS los dispositivos (broadcast)
+        Route::post('/send-to-all', [NotificationController::class, 'sendToAll']);
+        
+        // Desregistrar token (logout)
+        Route::post('/unregister-device', [NotificationController::class, 'unregisterDevice']);
     });
     
 });

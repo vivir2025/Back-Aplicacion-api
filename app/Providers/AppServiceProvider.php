@@ -13,7 +13,10 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        //
+        // ✅ Registrar FirebaseNotificationService como singleton
+        $this->app->singleton(FirebaseNotificationService::class, function ($app) {
+            return new FirebaseNotificationService();
+        });
     }
 
     /**
