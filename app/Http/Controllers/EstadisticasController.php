@@ -15,20 +15,20 @@ use Carbon\Carbon;
 class EstadisticasController extends Controller
 {
     /**
-     * Obtener estadísticas generales filtradas por usuario y sede
+     * Obtener estadísticas generales del usuario logueado.
      * 
-     * Admite parámetros opcionales de fecha:
-     * - fecha_inicio: Fecha de inicio en formato YYYY-MM-DD
-     * - fecha_fin: Fecha fin en formato YYYY-MM-DD
-     * 
-     * Si el usuario es administrador, ve todas las estadísticas
-     * Si el usuario pertenece a una sede, solo ve estadísticas de su sede
+     * COMPORTAMIENTO:
+     * - Sin filtro de fechas: muestra lo que el usuario hizo en el MES ACTUAL.
+     *   Al cambiar de mes se resetea a cero automáticamente.
+     * - Con filtro de fechas (fecha_inicio / fecha_fin): muestra el rango específico.
+     * - Pacientes: siempre muestra TODOS (sin filtro de usuario ni fecha).
+     * - Visitas, Tamizajes, Envíos de muestras, Encuestas: filtrados por usuario logueado.
      */
     public function index(Request $request)
     {
         try {
             $usuario = $request->user();
-            
+
             if (!$usuario) {
                 return response()->json([
                     'success' => false,
@@ -39,84 +39,82 @@ class EstadisticasController extends Controller
             // Validar fechas si se proporcionan
             $request->validate([
                 'fecha_inicio' => 'nullable|date_format:Y-m-d',
-                'fecha_fin' => 'nullable|date_format:Y-m-d|after_or_equal:fecha_inicio',
+                'fecha_fin'    => 'nullable|date_format:Y-m-d|after_or_equal:fecha_inicio',
             ]);
 
-            $fechaInicio = $request->input('fecha_inicio');
-            $fechaFin = $request->input('fecha_fin');
-            
-            // Si se proporciona fecha_fin, agregar hora para incluir todo el día
-            if ($fechaFin) {
-                $fechaFin .= ' 23:59:59';
+            $fechaInicioInput = $request->input('fecha_inicio');
+            $fechaFinInput    = $request->input('fecha_fin');
+
+            // ============================================
+            // DETERMINAR RANGO DE FECHAS
+            // ============================================
+            // Si NO se envían fechas → usar el mes actual
+            // Si se envían → usar el rango proporcionado
+            $usandoMesActual = false;
+
+            if ($fechaInicioInput && $fechaFinInput) {
+                $fechaInicio = $fechaInicioInput;
+                $fechaFin    = $fechaFinInput . ' 23:59:59';
+            } else {
+                // Por defecto: mes actual
+                $usandoMesActual = true;
+                $fechaInicio = Carbon::now()->startOfMonth()->toDateString();
+                $fechaFin    = Carbon::now()->endOfMonth()->endOfDay()->toDateTimeString();
             }
-
-            Log::info('Obteniendo estadísticas', [
-                'usuario_id' => $usuario->id,
-                'usuario_nombre' => $usuario->nombre,
-                'usuario_rol' => $usuario->rol,
-                'sede_id' => $usuario->idsede,
-                'fecha_inicio' => $fechaInicio,
-                'fecha_fin' => $fechaFin,
-            ]);
 
             $usuarioId = $usuario->id;
 
+            Log::info('Obteniendo estadísticas', [
+                'usuario_id'       => $usuarioId,
+                'usuario_nombre'   => $usuario->nombre,
+                'usuario_rol'      => $usuario->rol,
+                'sede_id'          => $usuario->idsede,
+                'fecha_inicio'     => $fechaInicio,
+                'fecha_fin'        => $fechaFin,
+                'usando_mes_actual' => $usandoMesActual,
+            ]);
+
             // ============================================
-            // OBTENER ESTADÍSTICAS
+            // ESTADÍSTICAS
             // ============================================
 
-            // 📊 Total de Pacientes (TODOS, sin filtro de usuario)
-            $queryPacientes = Paciente::query();
-            if ($fechaInicio && $fechaFin) {
-                $queryPacientes->whereBetween('created_at', [$fechaInicio, $fechaFin]);
-            }
-            $totalPacientes = $queryPacientes->count();
+            // 📊 Total de Pacientes (TODOS, sin filtro de usuario ni fecha)
+            $totalPacientes = Paciente::count();
 
-            // 📊 Total de Brigadas (FILTRADAS por usuario - NOTA: requiere campo idusuario en tabla)
-            // Por ahora retorna 0 porque la tabla brigadas no tiene campo idusuario
+            // 📊 Total de Brigadas
+            // La tabla brigadas no tiene campo idusuario, se retorna 0
             $totalBrigadas = 0;
 
-            // 📊 Total de Visitas (FILTRADAS por usuario)
-            $queryVisitas = Visita::where('idusuario', $usuarioId);
-            if ($fechaInicio && $fechaFin) {
-                $queryVisitas->whereBetween('created_at', [$fechaInicio, $fechaFin]);
-            }
-            $totalVisitas = $queryVisitas->count();
+            // 📊 Total de Visitas del usuario en el rango
+            $totalVisitas = Visita::where('idusuario', $usuarioId)
+                ->whereBetween('created_at', [$fechaInicio, $fechaFin])
+                ->count();
 
-            // 📊 Total de Tamizajes (FILTRADAS por usuario)
-            $queryTamizajes = Tamizaje::where('idusuario', $usuarioId);
-            if ($fechaInicio && $fechaFin) {
-                $queryTamizajes->whereBetween('created_at', [$fechaInicio, $fechaFin]);
-            }
-            $totalTamizajes = $queryTamizajes->count();
+            // 📊 Total de Tamizajes del usuario en el rango
+            $totalTamizajes = Tamizaje::where('idusuario', $usuarioId)
+                ->whereBetween('created_at', [$fechaInicio, $fechaFin])
+                ->count();
 
-            // 📊 Total de Envíos de Muestras (FILTRADAS por usuario)
-            $queryLaboratorios = EnvioMuestra::where('idusuario', $usuarioId);
-            if ($fechaInicio && $fechaFin) {
-                $queryLaboratorios->whereBetween('created_at', [$fechaInicio, $fechaFin]);
-            }
-            $totalLaboratorios = $queryLaboratorios->count();
+            // 📊 Total de Envíos de Muestras del usuario en el rango
+            $totalLaboratorios = EnvioMuestra::where('idusuario', $usuarioId)
+                ->whereBetween('created_at', [$fechaInicio, $fechaFin])
+                ->count();
 
-            // 📊 Total de Encuestas (FILTRADAS por usuario)
-            $queryEncuestas = Encuesta::where('idusuario', $usuarioId);
-            if ($fechaInicio && $fechaFin) {
-                $queryEncuestas->whereBetween('created_at', [$fechaInicio, $fechaFin]);
-            }
-            $totalEncuestas = $queryEncuestas->count();
+            // 📊 Total de Encuestas del usuario en el rango
+            $totalEncuestas = Encuesta::where('idusuario', $usuarioId)
+                ->whereBetween('created_at', [$fechaInicio, $fechaFin])
+                ->count();
 
             // ============================================
-            // ESTADÍSTICAS MENSUALES (MES ACTUAL)
+            // ESTADÍSTICAS DEL MES ACTUAL (siempre se calculan)
             // ============================================
-            
             $inicioMes = Carbon::now()->startOfMonth()->toDateString();
-            $finMes = Carbon::now()->endOfMonth()->toDateTimeString();
+            $finMes    = Carbon::now()->endOfMonth()->endOfDay()->toDateTimeString();
 
-            // Visitas del mes actual (FILTRADAS por usuario)
             $visitasMes = Visita::where('idusuario', $usuarioId)
                 ->whereBetween('created_at', [$inicioMes, $finMes])
                 ->count();
 
-            // Envíos de muestras del mes actual (FILTRADAS por usuario)
             $laboratoriosMes = EnvioMuestra::where('idusuario', $usuarioId)
                 ->whereBetween('created_at', [$inicioMes, $finMes])
                 ->count();
@@ -124,50 +122,54 @@ class EstadisticasController extends Controller
             // ============================================
             // RESPUESTA
             // ============================================
+            $mesActualNombre = Carbon::now()->translatedFormat('F Y');
 
             return response()->json([
                 'success' => true,
                 'data' => [
-                    'total_pacientes' => $totalPacientes,
-                    'total_brigadas' => $totalBrigadas,
-                    'total_visitas' => $totalVisitas,
-                    'total_tamizajes' => $totalTamizajes,
+                    'total_pacientes'      => $totalPacientes,
+                    'total_brigadas'       => $totalBrigadas,
+                    'total_visitas'        => $totalVisitas,
+                    'total_tamizajes'      => $totalTamizajes,
                     'total_envio_muestras' => $totalLaboratorios,
-                    'total_laboratorios' => $totalLaboratorios, // Alias para compatibilidad
-                    'total_encuestas' => $totalEncuestas,
-                    'visitas_mes' => $visitasMes,
-                    'laboratorios_mes' => $laboratoriosMes,
-                    'fecha_consulta' => now()->toIso8601String(),
-                    
-                    // Información adicional
+                    'total_laboratorios'   => $totalLaboratorios,
+                    'total_encuestas'      => $totalEncuestas,
+                    'visitas_mes'          => $visitasMes,
+                    'laboratorios_mes'     => $laboratoriosMes,
+                    'fecha_consulta'       => now()->toIso8601String(),
+
                     'filtros_aplicados' => [
-                        'usuario_id' => $usuarioId,
-                        'sede_id' => $usuario->idsede,
-                        'sede_nombre' => $usuario->sede->nombresede ?? 'N/A',
-                        'fecha_inicio' => $fechaInicio,
-                        'fecha_fin' => $request->input('fecha_fin'), // Sin hora
+                        'usuario_id'        => $usuarioId,
+                        'sede_id'           => $usuario->idsede,
+                        'sede_nombre'       => $usuario->sede->nombresede ?? 'N/A',
+                        'fecha_inicio'      => $fechaInicio,
+                        'fecha_fin'         => $fechaFinInput ?? Carbon::now()->endOfMonth()->toDateString(),
+                        'usando_mes_actual' => $usandoMesActual,
+                        'mes_actual'        => $mesActualNombre,
                     ],
                     'usuario' => [
-                        'id' => $usuario->id,
+                        'id'     => $usuario->id,
                         'nombre' => $usuario->nombre,
-                        'rol' => $usuario->rol,
+                        'rol'    => $usuario->rol,
                     ]
                 ],
-                'message' => 'Estadísticas obtenidas correctamente (Pacientes: TODOS | Visitas, Tamizajes, Envíos, Encuestas: filtradas por usuario)'
+                'message' => $usandoMesActual
+                    ? "Estadísticas del mes actual ({$mesActualNombre}) del usuario"
+                    : "Estadísticas del {$fechaInicioInput} al {$fechaFinInput} del usuario"
             ], 200);
 
         } catch (\Illuminate\Validation\ValidationException $e) {
             return response()->json([
                 'success' => false,
                 'message' => 'Error de validación',
-                'errors' => $e->errors()
+                'errors'  => $e->errors()
             ], 422);
-            
+
         } catch (\Exception $e) {
             Log::error('Error al obtener estadísticas: ' . $e->getMessage(), [
                 'trace' => $e->getTraceAsString()
             ]);
-            
+
             return response()->json([
                 'success' => false,
                 'message' => 'Error al obtener estadísticas: ' . $e->getMessage()
@@ -177,7 +179,6 @@ class EstadisticasController extends Controller
 
     /**
      * Obtener estadísticas por sede específica
-     * NOTA: Redirige al método index ya que las estadísticas ahora se basan en el usuario logueado
      */
     public function porSede(Request $request, $sedeId)
     {
