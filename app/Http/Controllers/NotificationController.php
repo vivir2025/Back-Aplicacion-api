@@ -92,13 +92,18 @@ class NotificationController extends Controller
                 ], 404);
             }
             
-            // Obtener tokens activos del usuario
-            $tokens = $usuario->fcm_tokens; // Usa el accessor que creamos
+            // Obtener tokens activos directamente desde DeviceToken
+            $tokens = DeviceToken::where('user_id', $validated['user_id'])
+                ->where('is_active', true)
+                ->pluck('fcm_token')
+                ->toArray();
             
             if (empty($tokens)) {
                 return response()->json([
                     'success' => false,
-                    'message' => 'Usuario no tiene dispositivos registrados'
+                    'message' => 'Usuario no tiene dispositivos registrados',
+                    'user_id' => $validated['user_id'],
+                    'usuario' => $usuario->nombre
                 ], 404);
             }
             
