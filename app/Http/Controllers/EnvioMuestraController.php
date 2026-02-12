@@ -176,6 +176,44 @@ class EnvioMuestraController extends Controller
                           ->get();
     }
     
+    /**
+     * Actualizar estado de correo (marcar como enviado/no enviado)
+     */
+    public function actualizarEstadoCorreo(Request $request, $id)
+    {
+        try {
+            $envioMuestra = EnvioMuestra::findOrFail($id);
+
+            $request->validate([
+                'enviado_por_correo' => 'required|boolean'
+            ]);
+
+            $envioMuestra->update([
+                'enviado_por_correo' => $request->enviado_por_correo
+            ]);
+
+            return response()->json([
+                'success' => true,
+                'message' => $request->enviado_por_correo 
+                    ? 'Correo marcado como enviado' 
+                    : 'Correo marcado como no enviado',
+                'envio_muestra' => $envioMuestra->load(['sede', 'responsableToma', 'detalles.paciente'])
+            ]);
+
+        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Envío de muestra no encontrado'
+            ], 404);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error al actualizar estado de correo',
+                'error' => $e->getMessage()
+            ], 500);
+        }
+    }
+
     public function getEnviosPorFechaSalida($fecha)
     {
         try {

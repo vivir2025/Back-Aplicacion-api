@@ -95,6 +95,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('responsables', [EnvioMuestraController::class, 'getResponsables']);
     // Agregar esta línea junto con las demás rutas de envío de muestras
     Route::get('envio-muestras/por-fecha-salida/{fecha}', [EnvioMuestraController::class, 'getEnviosPorFechaSalida']);
+    Route::put('envio-muestras/{id}/actualizar-estado-correo', [EnvioMuestraController::class, 'actualizarEstadoCorreo']);
 
     // Rutas para medicamentos de pacientes
     Route::apiResource('brigadas', BrigadaController::class);

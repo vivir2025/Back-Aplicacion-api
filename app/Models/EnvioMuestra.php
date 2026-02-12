@@ -31,6 +31,7 @@ class EnvioMuestra extends Model
         'lugar_llegada',
         'responsable_recepcion_id', // Ahora es string
         'observaciones',
+        'enviado_por_correo',
         'idusuario',
         'idsede'
     ];
@@ -39,6 +40,7 @@ class EnvioMuestra extends Model
         'fecha' => 'date',
         'fecha_salida' => 'date',
         'fecha_llegada' => 'date',
+        'enviado_por_correo' => 'boolean',
         'hora_salida' => 'datetime:H:i',
         'hora_llegada' => 'datetime:H:i',
         'temperatura_salida' => 'decimal:2',
