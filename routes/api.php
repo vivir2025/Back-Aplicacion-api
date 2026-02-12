@@ -155,7 +155,7 @@ Route::get('afinamientos/paciente/{pacienteId}', [AfinamientoController::class, 
        
     });
     Route::prefix('notifications')->group(function () {
-    // Registrar token del dispositivo
+        // Registrar token del dispositivo
         Route::post('/register-device', [NotificationController::class, 'registerDevice']);
         
         // Enviar notificación a un usuario específico
@@ -166,6 +166,16 @@ Route::get('afinamientos/paciente/{pacienteId}', [AfinamientoController::class, 
         
         // Desregistrar token (logout)
         Route::post('/unregister-device', [NotificationController::class, 'unregisterDevice']);
+        
+        // 📋 NUEVAS RUTAS PARA LISTAR USUARIOS CON TOKENS
+        // Listar usuarios que tienen tokens registrados
+        Route::get('/users-with-tokens', [NotificationController::class, 'getUsersWithTokens']);
+        
+        // Obtener estadísticas de tokens
+        Route::get('/stats', [NotificationController::class, 'getTokenStats']);
+        
+        // Obtener tokens de un usuario específico
+        Route::get('/user/{userId}/tokens', [NotificationController::class, 'getUserTokens']);
     });
     
 });
