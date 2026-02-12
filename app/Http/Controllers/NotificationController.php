@@ -226,7 +226,7 @@ class NotificationController extends Controller
                     $query->where('platform', $platform);
                 }
                 $query->select('id', 'user_id', 'platform', 'device_name', 'last_used_at', 'created_at');
-            }, 'sede:id,nombre'])
+            }, 'sede:id,nombresede'])
             ->when($search, function($query, $search) {
                 $query->where(function($q) use ($search) {
                     $q->where('nombre', 'like', "%{$search}%")
@@ -245,7 +245,7 @@ class NotificationController extends Controller
                     'nombre' => $usuario->nombre,
                     'correo' => $usuario->correo,
                     'rol' => $usuario->rol,
-                    'sede' => $usuario->sede ? $usuario->sede->nombre : null,
+                    'sede' => $usuario->sede ? $usuario->sede->nombresede : null,
                     'total_dispositivos' => $usuario->deviceTokens->count(),
                     'dispositivos' => $usuario->deviceTokens->map(function($token) {
                         return [
