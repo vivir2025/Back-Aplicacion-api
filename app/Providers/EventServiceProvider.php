@@ -5,7 +5,20 @@ namespace App\Providers;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
-use Illuminate\Support\Facades\Event;
+
+// Eventos de la aplicación
+use App\Events\VisitaCreada;
+use App\Events\EncuestaCreada;
+use App\Events\TamizajeCreado;
+use App\Events\BrigadaCreada;
+use App\Events\PlanillaLaboratorioCreada;
+use App\Events\LaboratorioEstadoActualizado;
+use App\Events\AfinamientoCreado;
+use App\Events\FindriskCreado;
+use App\Events\ModuloError;
+
+// Listener de Telegram
+use App\Listeners\EnviarNotificacionTelegram;
 
 class EventServiceProvider extends ServiceProvider
 {
@@ -15,8 +28,40 @@ class EventServiceProvider extends ServiceProvider
      * @var array<class-string, array<int, class-string>>
      */
     protected $listen = [
+        // Auth
         Registered::class => [
             SendEmailVerificationNotification::class,
+        ],
+
+        // =====================================================
+        //  Notificaciones a Telegram por módulo
+        // =====================================================
+        VisitaCreada::class => [
+            EnviarNotificacionTelegram::class,
+        ],
+        EncuestaCreada::class => [
+            EnviarNotificacionTelegram::class,
+        ],
+        TamizajeCreado::class => [
+            EnviarNotificacionTelegram::class,
+        ],
+        BrigadaCreada::class => [
+            EnviarNotificacionTelegram::class,
+        ],
+        PlanillaLaboratorioCreada::class => [
+            EnviarNotificacionTelegram::class,
+        ],
+        LaboratorioEstadoActualizado::class => [
+            EnviarNotificacionTelegram::class,
+        ],
+        AfinamientoCreado::class => [
+            EnviarNotificacionTelegram::class,
+        ],
+        FindriskCreado::class => [
+            EnviarNotificacionTelegram::class,
+        ],
+        ModuloError::class => [
+            EnviarNotificacionTelegram::class,
         ],
     ];
 

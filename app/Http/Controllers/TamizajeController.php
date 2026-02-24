@@ -9,6 +9,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
+use App\Events\TamizajeCreado;
+use App\Events\ModuloError;
 
 class TamizajeController extends Controller
 {
@@ -99,6 +101,13 @@ class TamizajeController extends Controller
             // Transformar con validación
             $tamizajeTransformado = $this->transformTamizaje($tamizaje);
 
+            // 🔔 Notificación Telegram
+            event(new TamizajeCreado([
+                'sede'     => optional(optional($tamizaje->paciente)->sede)->nombresede ?? 'N/A',
+                'paciente' => optional($tamizaje->paciente)->nombre . ' ' . optional($tamizaje->paciente)->apellido,
+                'usuario'  => optional($tamizaje->usuario)->nombre ?? 'N/A',
+            ]));
+
             return response()->json([
                 'message' => 'Tamizaje creado exitosamente',
                 'data' => $tamizajeTransformado
@@ -107,6 +116,14 @@ class TamizajeController extends Controller
         } catch (\Exception $e) {
             Log::error('Error al crear tamizaje: ' . $e->getMessage());
             Log::error('Stack trace: ' . $e->getTraceAsString());
+            // 🔔 Notificación error Telegram
+            $usuario = Auth::user();
+            event(new ModuloError([
+                'modulo'  => 'Tamizajes',
+                'mensaje' => $e->getMessage(),
+                'usuario' => optional($usuario)->nombre ?? 'N/A',
+                'sede'    => optional(optional($usuario)->sede)->nombresede ?? 'N/A',
+            ]));
             return response()->json([
                 'error' => 'Error al crear tamizaje',
                 'message' => $e->getMessage()

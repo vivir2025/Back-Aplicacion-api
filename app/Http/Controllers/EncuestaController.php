@@ -9,6 +9,8 @@ use App\Models\Sede;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
+use App\Events\EncuestaCreada;
+use App\Events\ModuloError;
 
 class EncuestaController extends Controller
 {
@@ -73,12 +75,29 @@ class EncuestaController extends Controller
 
             $encuesta = Encuesta::create($data);
 
+            // 🔔 Notificación Telegram
+            $encuestaCompleta = $encuesta->load(['paciente', 'sede', 'usuario']);
+            event(new EncuestaCreada([
+                'sede'     => optional($encuestaCompleta->sede)->nombre ?? 'N/A',
+                'paciente' => optional($encuestaCompleta->paciente)->nombre . ' ' . optional($encuestaCompleta->paciente)->apellido ?? 'N/A',
+                'usuario'  => optional($encuestaCompleta->usuario)->nombre ?? 'N/A',
+                'fecha'    => $encuesta->fecha ?? now()->format('Y-m-d'),
+            ]));
+
             return response()->json([
                 'success' => true,
                 'message' => 'Encuesta creada exitosamente',
-                'data' => $encuesta->load(['paciente', 'sede', 'usuario'])
+                'data' => $encuestaCompleta
             ], 201);
         } catch (\Exception $e) {
+            // 🔔 Notificación error Telegram
+            $usuario = Auth::user();
+            event(new ModuloError([
+                'modulo'  => 'Encuestas',
+                'mensaje' => $e->getMessage(),
+                'usuario' => optional($usuario)->nombre ?? 'N/A',
+                'sede'    => optional(optional($usuario)->sede)->nombre ?? 'N/A',
+            ]));
             return response()->json([
                 'success' => false,
                 'message' => 'Error al crear encuesta: ' . $e->getMessage()

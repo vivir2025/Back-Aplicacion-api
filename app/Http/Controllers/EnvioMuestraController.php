@@ -9,6 +9,9 @@ use App\Models\Usuario;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
+use App\Events\PlanillaLaboratorioCreada;
+use App\Events\LaboratorioEstadoActualizado;
+use App\Events\ModuloError;
 
 class EnvioMuestraController extends Controller
 {
@@ -73,14 +76,33 @@ class EnvioMuestraController extends Controller
 
             DB::commit();
 
-            return response()->json($envioMuestra->load([
+            $resultado = $envioMuestra->load([
                 'sede',
                 'responsableToma',
                 'detalles.paciente'
-            ]), 201);
+            ]);
+
+            // 🔔 Notificación Telegram
+            event(new PlanillaLaboratorioCreada([
+                'sede'    => optional($resultado->sede)->nombre ?? 'N/A',
+                'codigo'  => $envioMuestra->codigo ?? 'N/A',
+                'usuario' => optional(Auth::user())->nombre ?? 'N/A',
+                'fecha'   => optional($envioMuestra->fecha)?->format('Y-m-d') ?? now()->format('Y-m-d'),
+                'enviado' => false, // Recien creada: pendiente
+            ]));
+
+            return response()->json($resultado, 201);
 
         } catch (\Exception $e) {
             DB::rollBack();
+            // 🔔 Notificación error Telegram
+            $usuarioErr = Auth::user();
+            event(new ModuloError([
+                'modulo'  => 'Laboratorios',
+                'mensaje' => $e->getMessage(),
+                'usuario' => optional($usuarioErr)->nombre ?? 'N/A',
+                'sede'    => 'N/A',
+            ]));
             return response()->json([
                 'message' => 'Error al crear el envío de muestras',
                 'error' => $e->getMessage()
@@ -192,12 +214,20 @@ class EnvioMuestraController extends Controller
                 'enviado_por_correo' => $request->enviado_por_correo
             ]);
 
+            // 🔔 Notificación Telegram
+            $resultado = $envioMuestra->load(['sede', 'responsableToma', 'detalles.paciente']);
+            event(new LaboratorioEstadoActualizado([
+                'sede'              => optional($resultado->sede)->nombre ?? 'N/A',
+                'codigo'            => $envioMuestra->codigo ?? 'N/A',
+                'enviado_por_correo' => $request->enviado_por_correo,
+            ]));
+
             return response()->json([
                 'success' => true,
-                'message' => $request->enviado_por_correo 
-                    ? 'Correo marcado como enviado' 
+                'message' => $request->enviado_por_correo
+                    ? 'Correo marcado como enviado'
                     : 'Correo marcado como no enviado',
-                'envio_muestra' => $envioMuestra->load(['sede', 'responsableToma', 'detalles.paciente'])
+                'envio_muestra' => $resultado
             ]);
 
         } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {

@@ -9,7 +9,9 @@ use App\Models\Usuario;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Facades\DB; // ✅ AGREGAR ESTA LÍNEA
+use Illuminate\Support\Facades\DB;
+use App\Events\VisitaCreada;
+use App\Events\ModuloError;
 
 class VisitaController extends Controller
 {
@@ -257,7 +259,16 @@ class VisitaController extends Controller
         DB::commit();
 
         $visitaCompleta = $visita->load(['usuario', 'paciente']);
-        
+
+        // 🔔 Notificación Telegram
+        $usuarioNotif = Usuario::find($visitaCompleta->idusuario);
+        event(new VisitaCreada([
+            'sede'     => optional(optional($usuarioNotif)->sede)->nombresede ?? 'N/A',
+            'paciente' => $visitaCompleta->nombre_apellido ?? 'N/A',
+            'usuario'  => optional($usuarioNotif)->nombre ?? 'N/A',
+            'fecha'    => optional($visitaCompleta->fecha)?->format('Y-m-d') ?? now()->format('Y-m-d'),
+        ]));
+
         return response()->json([
             'success' => true,
             'data' => $visitaCompleta,
@@ -272,7 +283,16 @@ class VisitaController extends Controller
             'line' => $e->getLine(),
             'file' => $e->getFile()
         ]);
-        
+
+        // 🔔 Notificación error Telegram
+        $usuarioErr = $request->user();
+        event(new ModuloError([
+            'modulo'  => 'Visitas',
+            'mensaje' => $e->getMessage(),
+            'usuario' => optional($usuarioErr)->nombre ?? 'N/A',
+            'sede'    => optional(optional($usuarioErr)->sede)->nombresede ?? 'N/A',
+        ]));
+
         return response()->json([
             'success' => false,
             'message' => 'Error al crear visita: ' . $e->getMessage()

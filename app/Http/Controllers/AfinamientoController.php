@@ -8,6 +8,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Carbon\Carbon;
+use App\Events\AfinamientoCreado;
+use App\Events\ModuloError;
 
 class AfinamientoController extends Controller
 {
@@ -108,6 +110,14 @@ class AfinamientoController extends Controller
             $afinamiento->edad_paciente = Carbon::parse($afinamiento->paciente->fecnacimiento)->age;
             $afinamiento->promotor_vida = $afinamiento->usuario->nombre;
 
+            // 🔔 Notificación Telegram
+            $usuarioObj = Auth::user();
+            event(new AfinamientoCreado([
+                'sede'     => optional(optional($usuarioObj)->sede)->nombresede ?? 'N/A',
+                'paciente' => $afinamiento->nombre_paciente,
+                'usuario'  => optional($usuarioObj)->nombre ?? 'N/A',
+            ]));
+
             return response()->json([
                 'message' => 'Afinamiento creado exitosamente',
                 'data' => $afinamiento
@@ -115,6 +125,14 @@ class AfinamientoController extends Controller
 
         } catch (\Exception $e) {
             Log::error('Error al crear afinamiento: ' . $e->getMessage());
+            // 🔔 Notificación error Telegram
+            $usuarioObj = Auth::user();
+            event(new ModuloError([
+                'modulo'  => 'Afinamientos',
+                'mensaje' => $e->getMessage(),
+                'usuario' => optional($usuarioObj)->nombre ?? 'N/A',
+                'sede'    => optional(optional($usuarioObj)->sede)->nombresede ?? 'N/A',
+            ]));
             return response()->json([
                 'error' => 'Error al crear afinamiento',
                 'message' => $e->getMessage()

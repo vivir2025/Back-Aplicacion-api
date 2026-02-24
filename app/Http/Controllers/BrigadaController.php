@@ -11,6 +11,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
+use App\Events\BrigadaCreada;
+use App\Events\ModuloError;
 
 class BrigadaController extends Controller
 {
@@ -243,6 +245,15 @@ class BrigadaController extends Controller
 
             DB::commit();
 
+            // 🔔 Notificación Telegram
+            event(new BrigadaCreada([
+                'lugar'           => $brigada->lugar_evento,
+                'fecha'           => $brigada->fecha_brigada,
+                'usuario'         => optional($usuario)->nombre ?? 'N/A',
+                'total_pacientes' => count($validated['pacientes']),
+                'sede'            => optional(optional($usuario)->sede)->nombresede ?? 'N/A',
+            ]));
+
             return response()->json([
                 'success' => true,
                 'message' => 'Brigada creada exitosamente con medicamentos',
@@ -270,6 +281,14 @@ class BrigadaController extends Controller
                 'success' => false,
                 'message' => 'Error al crear la brigada: ' . $e->getMessage()
             ], 500);
+
+            // 🔔 Notificación error Telegram
+            event(new ModuloError([
+                'modulo'  => 'Brigadas',
+                'mensaje' => $e->getMessage(),
+                'usuario' => optional($usuario)->nombre ?? 'N/A',
+                'sede'    => optional(optional($usuario)->sede)->nombresede ?? 'N/A',
+            ]));
         }
     }
 

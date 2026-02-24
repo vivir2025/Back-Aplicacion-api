@@ -7,6 +7,8 @@ use App\Models\Paciente;
 use App\Models\Sede;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use App\Events\FindriskCreado;
+use App\Events\ModuloError;
 
 class FindriskTestController extends Controller
 {
@@ -80,6 +82,14 @@ class FindriskTestController extends Controller
             // Agregar interpretación del riesgo
             $interpretacion = $findriskTest->interpretarRiesgo($findriskTest->puntaje_final);
 
+            // 🔔 Notificación Telegram
+            event(new FindriskCreado([
+                'sede'     => optional($findriskTest->sede)->nombresede ?? 'N/A',
+                'paciente' => $paciente->nombre . ' ' . $paciente->apellido,
+                'puntaje'  => $findriskTest->puntaje_final . ' - ' . ($interpretacion['nivel'] ?? 'N/A'),
+                'usuario'  => $findriskTest->promotor_vida ?? 'N/A',
+            ]));
+
             return response()->json([
                 'test' => $findriskTest,
                 'interpretacion' => $interpretacion,
@@ -100,6 +110,13 @@ class FindriskTestController extends Controller
 
         } catch (\Exception $e) {
             DB::rollback();
+            // 🔔 Notificación error Telegram
+            event(new ModuloError([
+                'modulo'  => 'Findrisk',
+                'mensaje' => $e->getMessage(),
+                'usuario' => 'N/A',
+                'sede'    => 'N/A',
+            ]));
             return response()->json([
                 'message' => 'Error al crear el test FINDRISK',
                 'error' => $e->getMessage()
