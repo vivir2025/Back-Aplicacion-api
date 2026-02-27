@@ -144,330 +144,171 @@ class LogController extends Controller
         $message = $logEntry['message'];
         $fullContent = $processed['full_content'];
 
-        // === DETECTAR MÉTODO HTTP Y ENDPOINT ===
-        $this->extractHttpInfo($processed, $message, $fullContent);
+        // === NUEVO FORMATO: [MÉTODO] Módulo → Estado {contexto} ===
+        // Ejemplo: [POST] Visita Domiciliaria → Exitosa {"id":"abc","paciente_id":"xyz"}
+        if (preg_match('/^\[(\w+)\]\s+(.+?)\s+→\s+(.+?)(?:\s+(\{.+\}))?$/', $message, $m)) {
+            $httpMethod  = $m[1];
+            $module      = trim($m[2]);
+            $stateRaw    = trim($m[3]);
+            $contextJson = $m[4] ?? null;
 
-        // === DETECTAR INFORMACIÓN DE USUARIO ===
-        $this->extractUserInfo($processed, $message, $fullContent);
+            $processed['http_method'] = $httpMethod;
 
-        // === ANÁLISIS DE VISITAS ===
-        if (strpos($message, 'RECIBIENDO DATOS DE VISITA') !== false) {
-            $processed['type'] = 'visita';
-            $processed['category'] = 'medical';
-            $processed['operation'] = 'recibir_datos';
-            $processed['http_method'] = 'POST';
-            $processed['endpoint'] = '/api/visitas';
-            $processed['status'] = 'processing';
-            $processed['tags'][] = 'data_reception';
-            
-            // Extraer datos de la request
-            $this->extractRequestData($processed, $message);
-        } 
-        elseif (strpos($message, 'Visita creada') !== false) {
-            $processed['type'] = 'visita';
-            $processed['category'] = 'medical';
-            $processed['operation'] = 'crear';
-            $processed['http_method'] = 'POST';
-            $processed['endpoint'] = '/api/visitas';
-            $processed['status'] = 'success';
-            $processed['priority'] = 'high';
-            $processed['tags'][] = 'creation_success';
-            
-            // Extraer ID de la visita y datos de respuesta
-            if (preg_match('/"id":"([^"]+)"/', $message, $matches)) {
-                $processed['entity_id'] = $matches[1];
-                $processed['entity_type'] = 'visita';
-            }
-            $this->extractResponseData($processed, $message);
-        }
-        elseif (strpos($message, 'Error al crear visita') !== false) {
-            $processed['type'] = 'visita';
-            $processed['category'] = 'medical';
-            $processed['operation'] = 'crear';
-            $processed['http_method'] = 'POST';
-            $processed['endpoint'] = '/api/visitas';
-            $processed['status'] = 'error';
-            $processed['priority'] = 'critical';
-            $processed['tags'][] = 'creation_error';
-            $processed['error_details'] = $this->extractErrorDetails($fullContent);
-        }
-        elseif (strpos($message, 'ACTUALIZANDO VISITA') !== false) {
-            $processed['type'] = 'visita';
-            $processed['category'] = 'medical';
-            $processed['operation'] = 'actualizar';
-            $processed['http_method'] = 'PUT';
-            $processed['status'] = 'processing';
-            $processed['tags'][] = 'update_process';
-            
-            // Extraer ID de la visita
-            if (preg_match('/"visita_id":"([^"]+)"/', $message, $matches)) {
-                $processed['entity_id'] = $matches[1];
-                $processed['entity_type'] = 'visita';
-                $processed['endpoint'] = '/api/visitas/' . $matches[1];
-            }
-        }
-        elseif (strpos($message, 'Visita actualizada') !== false) {
-            $processed['type'] = 'visita';
-            $processed['category'] = 'medical';
-            $processed['operation'] = 'actualizar';
-            $processed['http_method'] = 'PUT';
-            $processed['status'] = 'success';
-            $processed['priority'] = 'high';
-            $processed['tags'][] = 'update_success';
-            
-            if (preg_match('/"id":"([^"]+)"/', $message, $matches)) {
-                $processed['entity_id'] = $matches[1];
-                $processed['entity_type'] = 'visita';
-                $processed['endpoint'] = '/api/visitas/' . $matches[1];
-            }
-        }
-        elseif (strpos($message, 'Error al actualizar visita') !== false) {
-            $processed['type'] = 'visita';
-            $processed['category'] = 'medical';
-            $processed['operation'] = 'actualizar';
-            $processed['http_method'] = 'PUT';
-            $processed['status'] = 'error';
-            $processed['priority'] = 'critical';
-            $processed['tags'][] = 'update_error';
-            $processed['error_details'] = $this->extractErrorDetails($fullContent);
-            
-            // Buscar ID en el contenido completo
-            if (preg_match('/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/', $fullContent, $matches)) {
-                $processed['entity_id'] = $matches[0];
-                $processed['entity_type'] = 'visita';
-                $processed['endpoint'] = '/api/visitas/' . $matches[0];
-            }
-        }
-        elseif (strpos($message, 'Datos finales para crear visita') !== false) {
-            $processed['type'] = 'visita';
-            $processed['category'] = 'medical';
-            $processed['operation'] = 'preparar_datos';
-            $processed['status'] = 'processing';
-            $processed['tags'][] = 'data_preparation';
-            
-            // Extraer ID de la visita
-            if (preg_match('/"id":"([^"]+)"/', $message, $matches)) {
-                $processed['entity_id'] = $matches[1];
-                $processed['entity_type'] = 'visita';
-            }
-        }
-        elseif (strpos($message, 'Todos los campos') !== false) {
-            $processed['type'] = 'visita';
-            $processed['category'] = 'validation';
-            $processed['operation'] = 'validar_campos';
-            $processed['status'] = 'processing';
-            $processed['tags'][] = 'field_validation';
-        }
-        elseif (strpos($message, 'Form Data completo') !== false) {
-            $processed['type'] = 'visita';
-            $processed['category'] = 'form';
-            $processed['operation'] = 'procesar_formulario';
-            $processed['status'] = 'processing';
-            $processed['tags'][] = 'form_processing';
-        }
-        elseif (strpos($message, 'Firma subida') !== false) {
-            $processed['type'] = 'visita';
-            $processed['category'] = 'file';
-            $processed['operation'] = 'subir_firma';
-            $processed['http_method'] = 'POST';
-            $processed['endpoint'] = '/api/firmas';
-            $processed['status'] = 'success';
-            $processed['tags'][] = 'file_upload';
-        }
+            // Determinar tipo/categoría/operación según módulo
+            $this->mapModuleToProcessed($processed, $module, $stateRaw);
 
-        // === ANÁLISIS DE COORDENADAS ===
-        elseif (strpos($message, 'Coordenadas del paciente actualizadas') !== false) {
-            $processed['type'] = 'paciente';
-            $processed['category'] = 'location';
-            $processed['operation'] = 'actualizar_coordenadas';
-            $processed['http_method'] = 'PUT';
-            $processed['status'] = 'success';
-            $processed['tags'][] = 'location_update';
-            
-            // Extraer ID del paciente
-            if (preg_match('/"paciente_id":"([^"]+)"/', $message, $matches)) {
-                $processed['entity_id'] = $matches[1];
-                $processed['entity_type'] = 'paciente';
-                $processed['endpoint'] = '/api/pacientes/' . $matches[1] . '/coordenadas';
-            }
-        }
-        elseif (strpos($message, 'DEBUG COORDENADAS') !== false) {
-            $processed['type'] = 'debug';
-            $processed['category'] = 'location';
-            $processed['operation'] = 'coordenadas';
-            $processed['status'] = 'processing';
-            $processed['tags'][] = 'debug';
-        }
-        elseif (strpos($message, 'Coordenadas finales') !== false) {
-            $processed['type'] = 'visita';
-            $processed['category'] = 'location';
-            $processed['operation'] = 'coordenadas_finales';
-            $processed['status'] = 'processing';
-            $processed['tags'][] = 'location_final';
-        }
-
-        // === ANÁLISIS DE BRIGADAS ===
-        elseif (strpos($message, 'Datos recibidos para crear brigada') !== false) {
-            $processed['type'] = 'brigada';
-            $processed['category'] = 'medical';
-            $processed['operation'] = 'crear';
-            $processed['http_method'] = 'POST';
-            $processed['endpoint'] = '/api/brigadas';
-            $processed['status'] = 'processing';
-            $processed['tags'][] = 'data_reception';
-        } 
-        elseif (strpos($message, 'Brigada creada') !== false) {
-            $processed['type'] = 'brigada';
-            $processed['category'] = 'medical';
-            $processed['operation'] = 'crear';
-            $processed['http_method'] = 'POST';
-            $processed['endpoint'] = '/api/brigadas';
-            $processed['status'] = 'success';
-            $processed['priority'] = 'high';
-            $processed['tags'][] = 'creation_success';
-            
-            if (preg_match('/"id":"([^"]+)"/', $message, $matches)) {
-                $processed['entity_id'] = $matches[1];
-                $processed['entity_type'] = 'brigada';
-            }
-        }
-
-        // === ANÁLISIS DE MEDICAMENTOS ===
-        elseif (strpos($message, 'Medicamento guardado') !== false) {
-            $processed['type'] = 'medicamento';
-            $processed['category'] = 'medical';
-            $processed['operation'] = 'asignar';
-            $processed['http_method'] = 'POST';
-            $processed['endpoint'] = '/api/medicamentos';
-            $processed['status'] = 'success';
-            $processed['tags'][] = 'medication_assigned';
-        }
-        elseif (strpos($message, 'Medicamento creado') !== false) {
-            $processed['type'] = 'medicamento';
-            $processed['category'] = 'medical';
-            $processed['operation'] = 'crear';
-            $processed['http_method'] = 'POST';
-            $processed['endpoint'] = '/api/medicamentos';
-            $processed['status'] = 'success';
-            $processed['tags'][] = 'creation_success';
-        }
-        elseif (strpos($message, 'Medicamento actualizado') !== false) {
-            $processed['type'] = 'medicamento';
-            $processed['category'] = 'medical';
-            $processed['operation'] = 'actualizar';
-            $processed['http_method'] = 'PUT';
-            $processed['status'] = 'success';
-            $processed['tags'][] = 'update_success';
-        }
-
-        // === ANÁLISIS DE PACIENTES ===
-        elseif (strpos($message, 'Paciente creado') !== false) {
-            $processed['type'] = 'paciente';
-            $processed['category'] = 'medical';
-            $processed['operation'] = 'crear';
-            $processed['http_method'] = 'POST';
-            $processed['endpoint'] = '/api/pacientes';
-            $processed['status'] = 'success';
-            $processed['priority'] = 'high';
-            $processed['tags'][] = 'creation_success';
-        }
-        elseif (strpos($message, 'Paciente actualizado') !== false) {
-            $processed['type'] = 'paciente';
-            $processed['category'] = 'medical';
-            $processed['operation'] = 'actualizar';
-            $processed['http_method'] = 'PUT';
-            $processed['status'] = 'success';
-            $processed['tags'][] = 'update_success';
-        }
-
-        // === ANÁLISIS DE AUTENTICACIÓN ===
-        elseif (strpos($message, 'Usuario autenticado') !== false || strpos($message, 'Login successful') !== false) {
-            $processed['type'] = 'auth';
-            $processed['category'] = 'security';
-            $processed['operation'] = 'login';
-            $processed['http_method'] = 'POST';
-            $processed['endpoint'] = '/api/auth/login';
-            $processed['status'] = 'success';
-            $processed['tags'][] = 'authentication';
-        }
-        elseif (strpos($message, 'Logout') !== false || strpos($message, 'Usuario desconectado') !== false) {
-            $processed['type'] = 'auth';
-            $processed['category'] = 'security';
-            $processed['operation'] = 'logout';
-            $processed['http_method'] = 'POST';
-            $processed['endpoint'] = '/api/auth/logout';
-            $processed['status'] = 'success';
-            $processed['tags'][] = 'authentication';
-        }
-        elseif (strpos($message, 'Token inválido') !== false || strpos($message, 'Unauthorized') !== false) {
-            $processed['type'] = 'auth';
-            $processed['category'] = 'security';
-            $processed['operation'] = 'token_validation';
-            $processed['status'] = 'error';
-            $processed['priority'] = 'high';
-            $processed['tags'][] = 'authentication_error';
-        }
-
-        // === ANÁLISIS DE ERRORES ESPECÍFICOS ===
-        if ($processed['level'] === 'ERROR') {
-            $processed['status'] = 'error';
-            $processed['priority'] = $processed['priority'] ?? 'high';
-            
-            // Error de duplicado
-            if (strpos($fullContent, 'Duplicate entry') !== false) {
-                $processed['error_details'] = array_merge(
-                    $processed['error_details'] ?? [],
-                    [
-                        'type' => 'duplicate_entry',
-                        'description' => 'Intento de insertar un registro duplicado'
-                    ]
-                );
-                $processed['tags'][] = 'duplicate_error';
-                
-                // Extraer el ID duplicado
-                if (preg_match("/Duplicate entry '([^']+)'/", $fullContent, $matches)) {
-                    $processed['entity_id'] = $matches[1];
+            // Parsear JSON de contexto si existe
+            if ($contextJson) {
+                $ctx = json_decode($contextJson, true);
+                if (json_last_error() === JSON_ERROR_NONE && $ctx) {
+                    // IDs relevantes
+                    foreach (['id', 'visita_id', 'brigada_id', 'tamizaje_id', 'encuesta_id', 'paciente_id', 'muestra_id'] as $key) {
+                        if (!empty($ctx[$key])) {
+                            $processed['entity_id'] = $ctx[$key];
+                            break;
+                        }
+                    }
+                    // Usuario
+                    foreach (['usuario_id', 'user_id', 'idusuario'] as $key) {
+                        if (!empty($ctx[$key])) {
+                            $processed['user_id'] = $ctx[$key];
+                            break;
+                        }
+                    }
+                    $processed['request_data'] = $ctx;
                 }
             }
-            
-            // Error de constraint de integridad
+
+            // Determinar status según estado textual
+            $stateLower = strtolower($stateRaw);
+            if (str_contains($stateLower, 'exitos') || str_contains($stateLower, 'creada') || str_contains($stateLower, 'creado')) {
+                $processed['status']   = 'success';
+                $processed['priority'] = 'high';
+                $processed['tags'][]   = 'success';
+            } elseif (str_contains($stateLower, 'error')) {
+                $processed['status']   = 'error';
+                $processed['priority'] = 'critical';
+                $processed['tags'][]   = 'error';
+                // Extraer mensaje/línea de error del contexto
+                if (isset($ctx['mensaje'])) {
+                    $processed['error_details']['error_message'] = $ctx['mensaje'];
+                }
+                if (isset($ctx['linea'])) {
+                    $processed['error_details']['line'] = $ctx['linea'];
+                }
+            } elseif (str_contains($stateLower, 'advertencia') || str_contains($stateLower, 'advertencia')) {
+                $processed['status']   = 'warning';
+                $processed['priority'] = 'medium';
+                $processed['tags'][]   = 'warning';
+            } elseif (str_contains($stateLower, 'procesando')) {
+                $processed['status']   = 'processing';
+                $processed['priority'] = 'low';
+            }
+
+            return; // Procesado por nuevo formato, salir
+        }
+
+        // === FALLBACK: formato antiguo y logs de sistema ===
+
+        // Detectar método HTTP
+        if (preg_match('/\b(GET|POST|PUT|PATCH|DELETE)\b/', $message, $matches)) {
+            $processed['http_method'] = $matches[1];
+        }
+
+        // Detectar endpoint
+        if (preg_match('/\/api\/[^\s"\']+/', $message, $matches)) {
+            $processed['endpoint'] = $matches[0];
+        }
+
+        // === ANÁLISIS DE ERRORES ===
+        if ($processed['level'] === 'ERROR') {
+            $processed['status']   = 'error';
+            $processed['priority'] = 'critical';
+
+            if (strpos($fullContent, 'Duplicate entry') !== false) {
+                $processed['error_details']['type']        = 'duplicate_entry';
+                $processed['error_details']['description'] = 'Intento de insertar un registro duplicado';
+                $processed['tags'][] = 'duplicate_error';
+                if (preg_match("/Duplicate entry '([^']+)'/", $fullContent, $idMatch)) {
+                    $processed['entity_id'] = $idMatch[1];
+                }
+            }
             if (strpos($fullContent, 'Integrity constraint violation') !== false) {
                 $processed['error_details']['constraint'] = 'integrity_violation';
                 $processed['tags'][] = 'constraint_error';
             }
-            
-            // Error de validación
-            if (strpos($fullContent, 'validation') !== false || strpos($fullContent, 'required') !== false) {
-                $processed['tags'][] = 'validation_error';
-                $processed['category'] = 'validation';
+            // Extraer mensaje/línea del JSON de contexto
+            if (preg_match('/"mensaje":"([^"]+)"/', $message, $msgMatch)) {
+                $processed['error_details']['error_message'] = $msgMatch[1];
+            }
+            if (preg_match('/"linea":(\d+)/', $message, $lineMatch)) {
+                $processed['error_details']['line'] = (int)$lineMatch[1];
             }
         }
 
-        // === EXTRAER IDs ADICIONALES ===
-        // Buscar UUIDs en el mensaje si no se ha encontrado ningún ID
+        // === EXTRAER IDs si no se encontraron ===
         if (!$processed['entity_id'] && preg_match('/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/', $message, $matches)) {
             $processed['entity_id'] = $matches[0];
         }
-        
-        // Buscar IDs numéricos
-        if (!$processed['entity_id'] && preg_match('/"id":(\d+)/', $message, $matches)) {
-            $processed['entity_id'] = $matches[1];
+        if (!$processed['user_id'] && preg_match('/"(?:usuario_id|user_id)":"?([^",}]+)"?/', $message, $matches)) {
+            $processed['user_id'] = $matches[1];
         }
+    }
+
+    /**
+     * Mapea el módulo del log al tipo/categoría/operación/endpoint del log procesado.
+     */
+    private function mapModuleToProcessed(&$processed, string $module, string $state): void
+    {
+        $stateLower = strtolower($state);
+        $isUpdate   = in_array($processed['http_method'], ['PUT', 'PATCH']);
+        $isDelete   = $processed['http_method'] === 'DELETE';
+
+        $operation = $isDelete ? 'eliminar' : ($isUpdate ? 'actualizar' : 'crear');
+        if (str_contains($stateLower, 'consulta') || $processed['http_method'] === 'GET') {
+            $operation = 'consultar';
+        }
+        if (str_contains($stateLower, 'procesando')) {
+            $operation = $isUpdate ? 'actualizar' : 'crear';
+        }
+
+        $moduleMap = [
+            'Visita Domiciliaria'    => ['type' => 'visita',      'category' => 'medical',   'endpoint' => '/api/visitas'],
+            'Brigada'                => ['type' => 'brigada',     'category' => 'medical',   'endpoint' => '/api/brigadas'],
+            'Tamizaje'               => ['type' => 'tamizaje',    'category' => 'medical',   'endpoint' => '/api/tamizajes'],
+            'Encuesta'               => ['type' => 'encuesta',    'category' => 'medical',   'endpoint' => '/api/encuestas'],
+            'Envío de Muestra'       => ['type' => 'muestra',     'category' => 'lab',       'endpoint' => '/api/muestras'],
+            'Findrisk'               => ['type' => 'findrisk',    'category' => 'medical',   'endpoint' => '/api/findrisk'],
+            'Afinamiento'            => ['type' => 'afinamiento', 'category' => 'medical',   'endpoint' => '/api/efinamientos'],
+            'Usuarios'               => ['type' => 'usuario',     'category' => 'admin',     'endpoint' => '/api/usuarios'],
+            'Notificaciones'         => ['type' => 'notificacion','category' => 'system',    'endpoint' => '/api/notificaciones'],
+            'Visita'                 => ['type' => 'visita',      'category' => 'medical',   'endpoint' => '/api/visitas'],
+        ];
+
+        foreach ($moduleMap as $key => $mapping) {
+            if (str_contains($module, $key)) {
+                $processed['type']      = $mapping['type'];
+                $processed['category']  = $mapping['category'];
+                $processed['endpoint']  = $mapping['endpoint'];
+                $processed['operation'] = $operation;
+                return;
+            }
+        }
+
+        // Fallback genérico
+        $processed['type']      = 'general';
+        $processed['category']  = 'system';
+        $processed['operation'] = $operation;
     }
 
     private function extractHttpInfo(&$processed, $message, $fullContent)
     {
-        // Detectar método HTTP en el mensaje
         if (preg_match('/\b(GET|POST|PUT|PATCH|DELETE)\b/', $message, $matches)) {
             $processed['http_method'] = $matches[1];
         }
-        
-        // Detectar endpoint/ruta
         if (preg_match('/\/api\/[^\s"\']+/', $message, $matches)) {
             $processed['endpoint'] = $matches[0];
         }
-        
-        // Detectar duración de request
         if (preg_match('/(\d+)ms/', $message, $matches)) {
             $processed['duration'] = (int)$matches[1];
         }
@@ -475,25 +316,16 @@ class LogController extends Controller
 
     private function extractUserInfo(&$processed, $message, $fullContent)
     {
-        // Extraer user_id
-        if (preg_match('/"user_id":"?([^",}]+)"?/', $message, $matches)) {
+        if (preg_match('/"(?:user_id|usuario_id)":"?([^",}]+)"?/', $message, $matches)) {
             $processed['user_id'] = $matches[1];
         }
-        
-        // Extraer IP
         if (preg_match('/\b(?:\d{1,3}\.){3}\d{1,3}\b/', $message, $matches)) {
             $processed['ip_address'] = $matches[0];
-        }
-        
-        // Extraer User-Agent (simplificado)
-        if (preg_match('/"user_agent":"([^"]+)"/', $message, $matches)) {
-            $processed['user_agent'] = $matches[1];
         }
     }
 
     private function extractRequestData(&$processed, $message)
     {
-        // Extraer datos JSON de la request
         if (preg_match('/\{.*\}/', $message, $matches)) {
             $jsonData = json_decode($matches[0], true);
             if (json_last_error() === JSON_ERROR_NONE) {
@@ -504,7 +336,6 @@ class LogController extends Controller
 
     private function extractResponseData(&$processed, $message)
     {
-        // Extraer datos JSON de la response
         if (preg_match('/\{.*\}/', $message, $matches)) {
             $jsonData = json_decode($matches[0], true);
             if (json_last_error() === JSON_ERROR_NONE) {
@@ -515,48 +346,39 @@ class LogController extends Controller
 
     private function determinePriority($level, $message)
     {
-        if ($level === 'ERROR') {
-            return 'critical';
-        }
-        
-        if (strpos($message, 'creada') !== false || 
-            strpos($message, 'creado') !== false ||
-            strpos($message, 'actualizada') !== false || 
-            strpos($message, 'actualizado') !== false) {
+        if ($level === 'ERROR') return 'critical';
+
+        // Nuevo formato: → Exitosa / → Creada / → Actualizada
+        if (preg_match('/→\s*(Exitosa|Creada|Creado|Actualizada|Actualizado)/i', $message)) {
             return 'high';
         }
-        
-        if (strpos($message, 'DEBUG') !== false) {
-            return 'low';
+        if (preg_match('/→\s*(Advertencia|Advertencia)/i', $message)) {
+            return 'medium';
         }
-        
-        return 'medium';
+        if ($level === 'WARNING') return 'medium';
+
+        return 'low';
     }
 
     private function determineStatus($level, $message)
     {
-        if ($level === 'ERROR') {
-            return 'error';
-        }
-        
-        if (strpos($message, 'creada') !== false || 
-            strpos($message, 'creado') !== false ||
-            strpos($message, 'actualizada') !== false || 
-            strpos($message, 'actualizado') !== false ||
-            strpos($message, 'subida') !== false ||
-            strpos($message, 'guardado') !== false) {
+        if ($level === 'ERROR') return 'error';
+        if ($level === 'WARNING') return 'warning';
+
+        // Nuevo formato
+        if (preg_match('/→\s*(Exitosa|Creada|Creado|Actualizada|Actualizado|Consultadas?|Registrado)/i', $message)) {
             return 'success';
         }
-        
-        if (strpos($message, 'RECIBIENDO') !== false || 
-            strpos($message, 'DEBUG') !== false || 
-            strpos($message, 'procesando') !== false ||
-            strpos($message, 'ACTUALIZANDO') !== false) {
+        if (preg_match('/→\s*(Procesando|Advertencia)/i', $message)) {
             return 'processing';
         }
-        
-        return $level === 'INFO' ? 'success' : 'processing';
+        if (preg_match('/→\s*Error/i', $message)) {
+            return 'error';
+        }
+
+        return 'success';
     }
+
 
     private function extractErrorDetails($content)
     {

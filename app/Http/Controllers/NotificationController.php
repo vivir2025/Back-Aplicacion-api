@@ -43,10 +43,10 @@ class NotificationController extends Controller
                 ]
             );
             
-            Log::info('✅ Token FCM registrado', [
-                'user_id' => $validated['user_id'],
-                'platform' => $validated['platform'],
-                'token_id' => $deviceToken->id
+            Log::info('[POST] Notificaciones → Token registrado', [
+                'user_id'   => $validated['user_id'],
+                'platform'  => $validated['platform'],
+                'token_id'  => $deviceToken->id
             ]);
             
             return response()->json([
@@ -56,9 +56,9 @@ class NotificationController extends Controller
             ]);
             
         } catch (\Exception $e) {
-            Log::error('❌ Error registrando token', [
-                'error' => $e->getMessage(),
-                'user_id' => $validated['user_id']
+            Log::error('[POST] Notificaciones → Error registrando token', [
+                'user_id' => $validated['user_id'],
+                'mensaje' => $e->getMessage(),
             ]);
             
             return response()->json([
@@ -107,11 +107,9 @@ class NotificationController extends Controller
                 ], 404);
             }
             
-            Log::info('📤 Enviando notificación', [
+            Log::info('[POST] Notificaciones → Enviando a usuario', [
                 'user_id' => $validated['user_id'],
-                'usuario' => $usuario->nombre,
                 'devices' => count($tokens),
-                'title' => $validated['title']
             ]);
             
             // Enviar usando Firebase
@@ -132,9 +130,9 @@ class NotificationController extends Controller
             ]);
             
         } catch (\Exception $e) {
-            Log::error('❌ Error enviando notificación', [
+            Log::error('[POST] Notificaciones → Error enviando a usuario', [
                 'user_id' => $validated['user_id'],
-                'error' => $e->getMessage()
+                'mensaje' => $e->getMessage(),
             ]);
             
             return response()->json([
@@ -167,10 +165,9 @@ class NotificationController extends Controller
                 ], 404);
             }
             
-            Log::info('📢 Enviando notificación masiva (broadcast)', [
+            Log::info('[POST] Notificaciones → Broadcast', [
                 'total_devices' => $totalDevices,
-                'title' => $validated['title'],
-                'sent_by' => $request->user()->id ?? 'unknown'
+                'sent_by'       => $request->user()->id ?? 'unknown',
             ]);
             
             // Enviar a todos los dispositivos activos
@@ -190,9 +187,7 @@ class NotificationController extends Controller
             ]);
             
         } catch (\Exception $e) {
-            Log::error('❌ Error enviando notificación masiva', [
-                'error' => $e->getMessage()
-            ]);
+            Log::error('[POST] Notificaciones → Error en broadcast', ['mensaje' => $e->getMessage()]);
             
             return response()->json([
                 'success' => false,
@@ -269,9 +264,7 @@ class NotificationController extends Controller
             ]);
             
         } catch (\Exception $e) {
-            Log::error('❌ Error listando usuarios con tokens', [
-                'error' => $e->getMessage()
-            ]);
+            Log::error('[GET] Notificaciones → Error listando usuarios con tokens', ['mensaje' => $e->getMessage()]);
             
             return response()->json([
                 'success' => false,
@@ -315,9 +308,7 @@ class NotificationController extends Controller
             ]);
             
         } catch (\Exception $e) {
-            Log::error('❌ Error obteniendo estadísticas', [
-                'error' => $e->getMessage()
-            ]);
+            Log::error('[GET] Notificaciones → Error obteniendo estadísticas', ['mensaje' => $e->getMessage()]);
             
             return response()->json([
                 'success' => false,
@@ -370,9 +361,9 @@ class NotificationController extends Controller
             ]);
             
         } catch (\Exception $e) {
-            Log::error('❌ Error obteniendo tokens del usuario', [
+            Log::error('[GET] Notificaciones → Error obteniendo tokens de usuario', [
                 'user_id' => $userId,
-                'error' => $e->getMessage()
+                'mensaje' => $e->getMessage(),
             ]);
             
             return response()->json([
@@ -398,9 +389,9 @@ class NotificationController extends Controller
             if ($deviceToken) {
                 $deviceToken->desactivar();
                 
-                Log::info('🔕 Token desactivado', [
-                    'user_id' => $deviceToken->user_id,
-                    'token_id' => $deviceToken->id
+                Log::info('[POST] Notificaciones → Token desactivado', [
+                    'user_id'  => $deviceToken->user_id,
+                    'token_id' => $deviceToken->id,
                 ]);
             }
             
@@ -410,9 +401,7 @@ class NotificationController extends Controller
             ]);
             
         } catch (\Exception $e) {
-            Log::error('❌ Error desactivando token', [
-                'error' => $e->getMessage()
-            ]);
+            Log::error('[DELETE] Notificaciones → Error desactivando token', ['mensaje' => $e->getMessage()]);
             
             return response()->json([
                 'success' => false,

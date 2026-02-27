@@ -38,7 +38,7 @@ class UsuarioController extends Controller
             
             return response()->json($usuarios);
         } catch (\Exception $e) {
-            Log::error('Error al obtener usuarios: ' . $e->getMessage());
+            Log::error('[GET] Usuarios → Error', ['mensaje' => $e->getMessage()]);
             return response()->json(['error' => 'Error al obtener usuarios'], 500);
         }
     }
@@ -76,7 +76,7 @@ class UsuarioController extends Controller
                 'usuario' => $usuario->load('sede')
             ], 201);
         } catch (\Exception $e) {
-            Log::error('Error al crear usuario: ' . $e->getMessage());
+            Log::error('[POST] Usuarios → Error al crear', ['mensaje' => $e->getMessage()]);
             return response()->json(['error' => 'Error al crear usuario'], 500);
         }
     }
@@ -93,7 +93,7 @@ class UsuarioController extends Controller
             $usuario = Usuario::with('sede')->findOrFail($id);
             return response()->json($usuario);
         } catch (\Exception $e) {
-            Log::error('Error al obtener usuario: ' . $e->getMessage());
+            Log::error('[GET] Usuarios → Error al obtener', ['id' => $id, 'mensaje' => $e->getMessage()]);
             return response()->json(['error' => 'Usuario no encontrado'], 404);
         }
     }
@@ -136,7 +136,7 @@ class UsuarioController extends Controller
                 'usuario' => $usuario->load('sede')
             ]);
         } catch (\Exception $e) {
-            Log::error('Error al actualizar usuario: ' . $e->getMessage());
+            Log::error('[PUT] Usuarios → Error al actualizar', ['id' => $id, 'mensaje' => $e->getMessage()]);
             return response()->json(['error' => 'Error al actualizar usuario'], 500);
         }
     }
@@ -157,7 +157,7 @@ class UsuarioController extends Controller
                 'message' => 'Usuario eliminado correctamente'
             ]);
         } catch (\Exception $e) {
-            Log::error('Error al eliminar usuario: ' . $e->getMessage());
+            Log::error('[DELETE] Usuarios → Error al eliminar', ['id' => $id, 'mensaje' => $e->getMessage()]);
             return response()->json(['error' => 'Error al eliminar usuario'], 500);
         }
     }
@@ -178,7 +178,7 @@ class UsuarioController extends Controller
                 
             return response()->json($usuarios);
         } catch (\Exception $e) {
-            Log::error('Error al obtener usuarios por rol: ' . $e->getMessage());
+            Log::error('[GET] Usuarios → Error por rol', ['rol' => $rol, 'mensaje' => $e->getMessage()]);
             return response()->json(['error' => 'Error al obtener usuarios'], 500);
         }
     }
@@ -198,7 +198,7 @@ class UsuarioController extends Controller
                 
             return response()->json($auxiliares);
         } catch (\Exception $e) {
-            Log::error('Error al obtener auxiliares: ' . $e->getMessage());
+            Log::error('[GET] Usuarios → Error auxiliares', ['mensaje' => $e->getMessage()]);
             return response()->json(['error' => 'Error al obtener auxiliares'], 500);
         }
     }

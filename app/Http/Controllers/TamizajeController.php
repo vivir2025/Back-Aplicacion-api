@@ -114,8 +114,10 @@ class TamizajeController extends Controller
             ], 201);
 
         } catch (\Exception $e) {
-            Log::error('Error al crear tamizaje: ' . $e->getMessage());
-            Log::error('Stack trace: ' . $e->getTraceAsString());
+            Log::error('[POST] Tamizaje → Error', [
+                'mensaje' => $e->getMessage(),
+                'linea'   => $e->getLine(),
+            ]);
             // 🔔 Notificación error Telegram
             $usuario = Auth::user();
             event(new ModuloError([

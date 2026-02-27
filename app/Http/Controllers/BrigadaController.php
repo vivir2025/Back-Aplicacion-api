@@ -60,15 +60,9 @@ class BrigadaController extends Controller
             
             DB::beginTransaction();
             
-            Log::info('📥 [POST] Creando brigada', [
-                'metodo' => 'POST',
+            Log::info('[POST] Brigada → Procesando', [
                 'usuario_id' => $usuario->id ?? 'N/A',
-                'usuario_nombre' => $usuario->name ?? 'N/A',
-                'sede_id' => $usuario->idsede ?? 'N/A',
-                'lugar_evento' => $request->lugar_evento,
-                'fecha_brigada' => $request->fecha_brigada,
-                'total_pacientes' => count($request->pacientes ?? []),
-                'total_medicamentos' => count($request->medicamentos_resumen ?? [])
+                'sede_id'    => $usuario->idsede ?? 'N/A',
             ]);
             
             // Validar datos
@@ -215,20 +209,12 @@ class BrigadaController extends Controller
                             $idPacienteReal = $mapaIdsPacientes[$medicamento['paciente_id']] ?? $medicamento['paciente_id'];
                             
                             BrigadaPacienteMedicamento::create([
-                                'brigada_id' => $brigada->id,
-                                'paciente_id' => $idPacienteReal,
+                                'brigada_id'     => $brigada->id,
+                                'paciente_id'    => $idPacienteReal,
                                 'medicamento_id' => $medicamento['medicamento_id'],
-                                'dosis' => $medicamento['dosis'] ?? '',
-                                'cantidad' => $medicamento['cantidad'],
-                                'indicaciones' => $medicamento['indicaciones'] ?? '',
-                            ]);
-                            
-                            Log::info('💊 [POST] Medicamento asignado', [
-                                'brigada_id' => $brigada->id,
-                                'paciente_id' => $idPacienteReal,
-                                'medicamento_id' => $medicamento['medicamento_id'],
-                                'dosis' => $medicamento['dosis'] ?? 'N/A',
-                                'cantidad' => $medicamento['cantidad']
+                                'dosis'          => $medicamento['dosis'] ?? '',
+                                'cantidad'       => $medicamento['cantidad'],
+                                'indicaciones'   => $medicamento['indicaciones'] ?? '',
                             ]);
                         }
                     }
@@ -297,25 +283,15 @@ class BrigadaController extends Controller
         try {
             $usuario = $request->user();
             
-            Log::info('🔍 [GET] Consultando brigada específica', [
-                'usuario_id' => $usuario->id ?? 'N/A',
-                'brigada_id' => $id
-            ]);
-            
             $brigada = Brigada::with([
                 'pacientes',
                 'medicamentosPacientes.medicamento',
                 'medicamentosPacientes.paciente'
             ])->findOrFail($id);
 
-            Log::info('✅ [GET] Brigada consultada exitosamente', [
-                'brigada_id' => $id,
-                'lugar_evento' => $brigada->lugar_evento
-            ]);
-
             return response()->json([
                 'success' => true,
-                'data' => $brigada
+                'data'    => $brigada
             ]);
         } catch (\Exception $e) {
             Log::error('❌ [GET] Error al consultar brigada', [

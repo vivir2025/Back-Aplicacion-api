@@ -22,44 +22,10 @@ class VisitaController extends Controller
 
   public function store(Request $request)
 {
-    Log::info('=== RECIBIENDO DATOS DE VISITA ===');
-    Log::info('Todos los campos:', $request->all());
-    
-    // ✅ LOGS ESPECÍFICOS PARA COORDENADAS - AGREGAR AQUÍ
-    Log::info('🌍 DEBUG COORDENADAS:', [
-        'latitud_raw' => $request->get('latitud'),
-        'longitud_raw' => $request->get('longitud'),
-        'latitud_exists' => $request->has('latitud'),
-        'longitud_exists' => $request->has('longitud'),
-        'latitud_filled' => $request->filled('latitud'),
-        'longitud_filled' => $request->filled('longitud'),
-        'all_keys' => array_keys($request->all()),
-        'request_method' => $request->method(),
-        'content_type' => $request->header('Content-Type')
+    Log::info('[POST] Visita Domiciliaria → Procesando', [
+        'usuario_id' => $request->idusuario,
+        'paciente_id' => $request->idpaciente,
     ]);
-    
-    // ✅ VERIFICAR SI LAS COORDENADAS ESTÁN EN LOS ARCHIVOS
-    if ($request->hasFile('latitud')) {
-        Log::info('🚨 Latitud viene como archivo!');
-    }
-    if ($request->hasFile('longitud')) {
-        Log::info('🚨 Longitud viene como archivo!');
-    }
-
-    // ✅ VERIFICAR EN FORM DATA
-    Log::info('🔍 Form Data completo:', [
-        'form_data' => $_POST ?? 'No POST data',
-        'files' => $_FILES ?? 'No FILES data'
-    ]);
-    
-    if ($request->has('medicamentos')) {
-        Log::info('Campo medicamentos (raw):', ['medicamentos' => $request->medicamentos]);
-        
-        if (is_string($request->medicamentos)) {
-            $medicamentosDecoded = json_decode($request->medicamentos, true);
-            Log::info('Medicamentos decodificados:', ['medicamentos_decoded' => $medicamentosDecoded]);
-        }
-    }
 
     // ✅ VALIDACIÓN COMPLETA CON COORDENADAS - CAMBIO: idpaciente ahora es nullable
     $request->validate([
@@ -144,10 +110,9 @@ class VisitaController extends Controller
                 $pacientePorIdentificacion = Paciente::where('identificacion', $request->identificacion)->first();
                 
                 if ($pacientePorIdentificacion) {
-                    Log::info('✅ Paciente encontrado por identificación, usando paciente existente:', [
-                        'id_offline' => $request->idpaciente,
+                    Log::warning('[POST] Visita Domiciliaria → Advertencia', [
+                        'detalle' => 'ID de paciente no encontrado, reasignado por cédula',
                         'id_real' => $pacientePorIdentificacion->id,
-                        'identificacion' => $request->identificacion
                     ]);
                     
                     // Usar el paciente encontrado
@@ -157,10 +122,8 @@ class VisitaController extends Controller
                     $visitaData['idpaciente'] = $pacientePorIdentificacion->id;
                 } else {
                     // El paciente NO existe ni por ID ni por identificación, crearlo
-                    Log::warning('⚠️ Paciente no existe, creando automáticamente:', [
-                        'idpaciente' => $request->idpaciente,
-                        'identificacion' => $request->identificacion,
-                        'nombre_apellido' => $request->nombre_apellido
+                    Log::warning('[POST] Visita Domiciliaria → Advertencia', [
+                        'detalle' => 'Paciente no existe, creando automáticamente',
                     ]);
                     
                     try {
@@ -184,11 +147,10 @@ class VisitaController extends Controller
                         // ✅ ACTUALIZAR visitaData con el ID del paciente creado
                         $visitaData['idpaciente'] = $pacienteExiste->id;
                         
-                        Log::info('✅ Paciente creado automáticamente:', ['id' => $pacienteExiste->id]);
+                        Log::info('[POST] Visita Domiciliaria → Paciente auto-creado', ['paciente_id' => $pacienteExiste->id]);
                     } catch (\Exception $e) {
-                        Log::error('❌ Error creando paciente automáticamente:', [
-                            'error' => $e->getMessage(),
-                            'idpaciente' => $request->idpaciente
+                        Log::error('[POST] Visita Domiciliaria → Error al auto-crear paciente', [
+                            'mensaje' => $e->getMessage(),
                         ]);
                         
                         return response()->json([
@@ -200,26 +162,18 @@ class VisitaController extends Controller
             }
         } else {
             // ✅ El paciente ya existe con el ID proporcionado
-            Log::info('✅ Paciente existe con ID proporcionado:', ['id' => $pacienteExiste->id]);
             $visitaData['idpaciente'] = $pacienteExiste->id;
         }
     }
 
-    // ✅ FORZAR COORDENADAS SI NO LLEGAN - AGREGAR AQUÍ
+    // ✅ FORZAR COORDENADAS SI NO LLEGAN
     if (!isset($visitaData['latitud']) || empty($visitaData['latitud'])) {
-        Log::warning('⚠️ Latitud no recibida, usando valor por defecto');
-        $visitaData['latitud'] = null; // o un valor por defecto
+        $visitaData['latitud'] = null;
     }
 
     if (!isset($visitaData['longitud']) || empty($visitaData['longitud'])) {
-        Log::warning('⚠️ Longitud no recibida, usando valor por defecto');
-        $visitaData['longitud'] = null; // o un valor por defecto
+        $visitaData['longitud'] = null;
     }
-
-    Log::info('📍 Coordenadas finales:', [
-        'latitud' => $visitaData['latitud'] ?? 'NULL',
-        'longitud' => $visitaData['longitud'] ?? 'NULL'
-    ]);
 
     // ✅ ASEGURAR VALORES POR DEFECTO
     if (!isset($visitaData['estado']) || empty($visitaData['estado'])) {
@@ -247,9 +201,7 @@ class VisitaController extends Controller
             $this->processSignatureBase64($visitaData, $request->firma_base64);
         }
 
-        Log::info('Datos finales para crear visita:', $visitaData);
         $visita = Visita::create($visitaData);
-        Log::info('Visita creada:', ['id' => $visita->id]);
 
         // ✅ PROCESAR MEDICAMENTOS CON MÉTODO CORREGIDO
         if (!empty($medicamentosData)) {
@@ -259,6 +211,13 @@ class VisitaController extends Controller
         DB::commit();
 
         $visitaCompleta = $visita->load(['usuario', 'paciente']);
+
+        Log::info('[POST] Visita Domiciliaria → Exitosa', [
+            'id'            => $visita->id,
+            'paciente_id'   => $visita->idpaciente,
+            'usuario_id'    => $visita->idusuario,
+            'medicamentos'  => count($medicamentosData),
+        ]);
 
         // 🔔 Notificación Telegram
         $usuarioNotif = Usuario::find($visitaCompleta->idusuario);
@@ -277,11 +236,9 @@ class VisitaController extends Controller
 
     } catch (\Exception $e) {
         DB::rollBack();
-        Log::error('Error al crear visita:', [
-            'error' => $e->getMessage(),
-            'trace' => $e->getTraceAsString(),
-            'line' => $e->getLine(),
-            'file' => $e->getFile()
+        Log::error('[POST] Visita Domiciliaria → Error', [
+            'mensaje' => $e->getMessage(),
+            'linea'   => $e->getLine(),
         ]);
 
         // 🔔 Notificación error Telegram
@@ -313,8 +270,10 @@ public function update(Request $request, $id)
 {
     try {
         $visita = Visita::findOrFail($id);
-        Log::info('=== ACTUALIZANDO VISITA ===', ['visita_id' => $id]);
-        Log::info('Datos recibidos para update:', $request->all());
+        Log::info('[PUT] Visita Domiciliaria → Procesando', [
+            'id'         => $id,
+            'usuario_id' => $request->idusuario,
+        ]);
         
         $request->validate([
             'nombre_apellido' => 'sometimes|required|string',
@@ -371,10 +330,11 @@ public function update(Request $request, $id)
             try {
                 $medicamentosData = json_decode($request->medicamentos, true);
                 if (!is_array($medicamentosData)) {
-                    Log::warning('Medicamentos no es un array válido en update:', ['medicamentos' => $request->medicamentos]);
+                    Log::warning('[PUT] Visita Domiciliaria → Advertencia', [
+                        'detalle' => 'Medicamentos no es un array válido',
+                    ]);
                     $medicamentosData = [];
                 }
-                Log::info('Medicamentos decodificados en update:', ['medicamentos_decoded' => $medicamentosData]);
             } catch (\Exception $e) {
                 Log::error('Error decodificando medicamentos en update:', ['error' => $e->getMessage()]);
                 $medicamentosData = [];
@@ -394,10 +354,9 @@ public function update(Request $request, $id)
                     $pacientePorIdentificacion = Paciente::where('identificacion', $request->identificacion)->first();
                     
                     if ($pacientePorIdentificacion) {
-                        Log::info('✅ Paciente encontrado por identificación en update, usando paciente existente:', [
-                            'id_offline' => $request->idpaciente,
+                        Log::warning('[PUT] Visita Domiciliaria → Advertencia', [
+                            'detalle' => 'ID de paciente no encontrado, reasignado por cédula',
                             'id_real' => $pacientePorIdentificacion->id,
-                            'identificacion' => $request->identificacion
                         ]);
                         
                         // Usar el paciente encontrado
@@ -405,10 +364,8 @@ public function update(Request $request, $id)
                         $request->merge(['idpaciente' => $pacientePorIdentificacion->id]);
                     } else {
                         // El paciente NO existe ni por ID ni por identificación, crearlo
-                        Log::warning('⚠️ Paciente no existe en update, creando automáticamente:', [
-                            'idpaciente' => $request->idpaciente,
-                            'identificacion' => $request->identificacion,
-                            'nombre_apellido' => $request->nombre_apellido
+                        Log::warning('[PUT] Visita Domiciliaria → Advertencia', [
+                            'detalle' => 'Paciente no existe en update, creando automáticamente',
                         ]);
                         
                         try {
@@ -429,11 +386,10 @@ public function update(Request $request, $id)
                                 'idsede' => $idsedeUsuario
                             ]);
                             
-                            Log::info('✅ Paciente creado automáticamente en update:', ['id' => $pacienteExiste->id]);
+                            Log::info('[PUT] Visita Domiciliaria → Paciente auto-creado', ['paciente_id' => $pacienteExiste->id]);
                         } catch (\Exception $e) {
-                            Log::error('❌ Error creando paciente en update:', [
-                                'error' => $e->getMessage(),
-                                'idpaciente' => $request->idpaciente
+                            Log::error('[PUT] Visita Domiciliaria → Error al auto-crear paciente', [
+                                'mensaje' => $e->getMessage(),
                             ]);
                             
                             return response()->json([
@@ -446,28 +402,21 @@ public function update(Request $request, $id)
             }
         }
 
-        // ✅ FORZAR COORDENADAS SI NO LLEGAN (IGUAL QUE EN STORE)
-        if (!isset($visitaData['latitud']) || empty($visitaData['latitud'])) {
-            Log::warning('⚠️ Latitud no recibida en update, manteniendo valor actual');
-            // No sobreescribir si no viene
-            unset($visitaData['latitud']);
-        }
+    // ✅ FORZAR COORDENADAS SI NO LLEGAN (IGUAL QUE EN STORE)
+    if (!isset($visitaData['latitud']) || empty($visitaData['latitud'])) {
+        // No sobreescribir si no viene
+        unset($visitaData['latitud']);
+    }
 
-        if (!isset($visitaData['longitud']) || empty($visitaData['longitud'])) {
-            Log::warning('⚠️ Longitud no recibida en update, manteniendo valor actual');
-            // No sobreescribir si no viene
-            unset($visitaData['longitud']);
-        }
-
-        Log::info('📍 Coordenadas finales en update:', [
-            'latitud' => $visitaData['latitud'] ?? 'NO CAMBIA',
-            'longitud' => $visitaData['longitud'] ?? 'NO CAMBIA'
-        ]);
+    if (!isset($visitaData['longitud']) || empty($visitaData['longitud'])) {
+        // No sobreescribir si no viene
+        unset($visitaData['longitud']);
+    }
 
         // ✅ USAR TRANSACCIÓN EN UPDATE
         DB::beginTransaction();
 
-        // Procesar archivos (mantener tu lógica actual)
+        // Procesar archivos
         if ($request->hasFile('riesgo_fotografico')) {
             $this->deleteExistingFile($visita->riesgo_fotografico);
             $this->processRiskPhotoFile($visitaData, $request->file('riesgo_fotografico'));
@@ -483,38 +432,35 @@ public function update(Request $request, $id)
             $this->deleteExistingFile($visita->firma);
             $this->processSignatureBase64($visitaData, $request->firma_base64);
         }
-        
-        Log::info('Datos finales para actualizar visita:', $visitaData);
-        
+
         // ✅ ACTUALIZAR LA VISITA
         $visita->update($visitaData);
 
-        // ✅ PROCESAR MEDICAMENTOS IGUAL QUE EN STORE (SIN RELACIÓN)
         if (!empty($medicamentosData)) {
             $this->processMedicamentos($visita, $medicamentosData, true);
         }
 
         DB::commit();
 
-        Log::info('Visita actualizada exitosamente:', ['id' => $visita->id]);
-
-        // ✅ CARGAR RELACIONES IGUAL QUE EN STORE
         $visitaCompleta = $visita->load(['usuario', 'paciente']);
+
+        Log::info('[PUT] Visita Domiciliaria → Exitosa', [
+            'id'           => $id,
+            'medicamentos' => count($medicamentosData),
+        ]);
 
         return response()->json([
             'success' => true,
-            'data' => $visitaCompleta,
+            'data'    => $visitaCompleta,
             'message' => 'Visita actualizada exitosamente'
         ]);
 
     } catch (\Exception $e) {
         DB::rollBack();
-        Log::error('Error al actualizar visita:', [
-            'visita_id' => $id,
-            'error' => $e->getMessage(),
-            'trace' => $e->getTraceAsString(),
-            'line' => $e->getLine(),
-            'file' => $e->getFile()
+        Log::error('[PUT] Visita Domiciliaria → Error', [
+            'id'      => $id,
+            'mensaje' => $e->getMessage(),
+            'linea'   => $e->getLine(),
         ]);
         
         return response()->json([
@@ -733,8 +679,6 @@ public function update(Request $request, $id)
         
         $data['riesgo_fotografico'] = $path;
         $data['riesgo_fotografico_url'] = url(Storage::url($path));
-        
-        Log::info('Foto de riesgo subida:', ['ruta' => $path, 'url' => $data['riesgo_fotografico_url']]);
     }
 
     private function processRiskPhotoBase64(&$data, $base64Data)
@@ -756,8 +700,6 @@ public function update(Request $request, $id)
             
             $data['riesgo_fotografico'] = $path;
             $data['riesgo_fotografico_url'] = url(Storage::url($path));
-            
-            Log::info('Foto de riesgo en Base64 procesada:', ['ruta' => $path, 'url' => $data['riesgo_fotografico_url']]);
         } catch (\Exception $e) {
             Log::error('Error procesando foto de riesgo en Base64: ' . $e->getMessage());
             throw $e;
@@ -771,8 +713,6 @@ public function update(Request $request, $id)
         
         $data['firma'] = $path;
         $data['firma_url'] = url(Storage::url($path));
-        
-        Log::info('Firma subida:', ['ruta' => $path, 'url' => $data['firma_url']]);
     }
 
     private function processSignatureBase64(&$data, $base64Data)
@@ -794,69 +734,62 @@ public function update(Request $request, $id)
             
             $data['firma'] = $path;
             $data['firma_url'] = url(Storage::url($path));
-            
-            Log::info('Firma en Base64 procesada:', ['ruta' => $path, 'url' => $data['firma_url']]);
         } catch (\Exception $e) {
             Log::error('Error procesando firma en Base64: ' . $e->getMessage());
             throw $e;
         }
     }
 
-    // ✅ MÉTODO CLAVE CORREGIDO: PROCESAR MEDICAMENTOS SIN TIMESTAMPS
     private function processMedicamentos($visita, $medicamentosData, $isUpdate = false)
     {
         if ($isUpdate) {
-            // Si es actualización, primero eliminamos los registros existentes
             DB::table('medicamento_visita')->where('visita_id', $visita->id)->delete();
         }
         
         $medicamentosGuardados = 0;
+        $medicamentosOmitidos = 0;
         
         foreach ($medicamentosData as $medicamento) {
             try {
                 if (!isset($medicamento['id'])) {
-                    Log::warning('Medicamento sin ID:', ['medicamento' => $medicamento]);
+                    $medicamentosOmitidos++;
                     continue;
                 }
 
-                // Verificar que el medicamento existe
                 $medicamentoExiste = Medicamento::find($medicamento['id']);
                 if (!$medicamentoExiste) {
-                    Log::warning('Medicamento no existe:', ['id' => $medicamento['id']]);
+                    $medicamentosOmitidos++;
                     continue;
                 }
 
-                // ✅ INSERTAR DIRECTAMENTE CON DB::table() SIN TIMESTAMPS
                 DB::table('medicamento_visita')->insert([
                     'medicamento_id' => $medicamento['id'],
-                    'visita_id' => $visita->id,
-                    'indicaciones' => $medicamento['indicaciones'] ?? null
+                    'visita_id'      => $visita->id,
+                    'indicaciones'   => $medicamento['indicaciones'] ?? null
                 ]);
                 
                 $medicamentosGuardados++;
                 
-                Log::info('Medicamento guardado:', [
-                    'visita_id' => $visita->id,
-                    'medicamento_id' => $medicamento['id'],
-                    'indicaciones' => $medicamento['indicaciones'] ?? null
-                ]);
-                
             } catch (\Exception $e) {
-                Log::error('Error guardando medicamento:', [
-                    'medicamento' => $medicamento,
-                    'error' => $e->getMessage()
+                Log::error('[Visita] Error guardando medicamento', [
+                    'medicamento_id' => $medicamento['id'] ?? 'sin_id',
+                    'mensaje'        => $e->getMessage(),
                 ]);
             }
         }
-        
-        Log::info("Total medicamentos guardados: $medicamentosGuardados de " . count($medicamentosData));
+
+        if ($medicamentosOmitidos > 0) {
+            Log::warning('[Visita] Medicamentos omitidos', [
+                'omitidos' => $medicamentosOmitidos,
+                'total'    => count($medicamentosData),
+            ]);
+        }
     }
 
     private function deleteExistingFile($filePath)
     {
         if ($filePath && Storage::disk('public')->exists($filePath)) {
             Storage::disk('public')->delete($filePath);
-            Log::info('Archivo eliminado:', ['ruta' => $filePath]);
         }
     }
 }
