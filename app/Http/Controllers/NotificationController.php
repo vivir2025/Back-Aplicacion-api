@@ -15,6 +15,14 @@ use App\Services\FirebaseNotificationService;
  */
 class NotificationController extends Controller
 {
+    /** @var FirebaseNotificationService */
+    protected $firebaseService;
+
+    public function __construct(FirebaseNotificationService $firebaseService)
+    {
+        $this->firebaseService = $firebaseService;
+    }
+
     /**
      * Registrar dispositivo
      * 
