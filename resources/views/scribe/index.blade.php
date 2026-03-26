@@ -900,6 +900,37 @@
                                                             </div>
                                             </div>
                                     <div class="expandable">
+                        <div title="Estadísticas Públicas (Landing Page)" id="toc-item-estadisticas-publicas-landing-page"
+                             class="sl-flex sl-items-center sl-h-md sl-pr-4 sl-pl-4 sl-bg-canvas-100 hover:sl-bg-canvas-200 sl-cursor-pointer sl-select-none">
+                            <a href="#estadisticas-publicas-landing-page"
+                               class="sl-flex-1 sl-items-center sl-truncate sl-mr-1.5 sl-p-0">Estadísticas Públicas (Landing Page)</a>
+                                                            <div class="sl-flex sl-items-center sl-text-xs expansion-chevrons">
+                                    <svg aria-hidden="true" focusable="false" data-prefix="fas"
+                                         data-icon="chevron-right"
+                                         class="svg-inline--fa fa-chevron-right fa-fw sl-icon sl-text-muted"
+                                         xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512">
+                                        <path fill="currentColor"
+                                              d="M96 480c-8.188 0-16.38-3.125-22.62-9.375c-12.5-12.5-12.5-32.75 0-45.25L242.8 256L73.38 86.63c-12.5-12.5-12.5-32.75 0-45.25s32.75-12.5 45.25 0l192 192c12.5 12.5 12.5 32.75 0 45.25l-192 192C112.4 476.9 104.2 480 96 480z"></path>
+                                    </svg>
+                                </div>
+                                                    </div>
+
+                                                    <div class="children" style="display: none;">
+                                                                    <div class="expandable">
+                                        <div class="sl-flex sl-items-center sl-h-md sl-pr-4 sl-pl-8 sl-bg-canvas-100 hover:sl-bg-canvas-200 sl-cursor-pointer sl-select-none"
+                                             id="toc-item-estadisticas-publicas-landing-page-GETapi-v1-public-mapa-calor">
+                                            <div class="sl-flex-1 sl-items-center sl-truncate sl-mr-1.5 sl-p-0" title="Mapa de Calor (v1)">
+                                                <a class="ElementsTableOfContentsItem sl-block sl-no-underline"
+                                                   href="#estadisticas-publicas-landing-page-GETapi-v1-public-mapa-calor">
+                                                    Mapa de Calor (v1)
+                                                </a>
+                                            </div>
+                                                                                    </div>
+
+                                                                            </div>
+                                                            </div>
+                                            </div>
+                                    <div class="expandable">
                         <div title="Estadísticas y Dashboard" id="toc-item-estadisticas-y-dashboard"
                              class="sl-flex sl-items-center sl-h-md sl-pr-4 sl-pl-4 sl-bg-canvas-100 hover:sl-bg-canvas-200 sl-cursor-pointer sl-select-none">
                             <a href="#estadisticas-y-dashboard"
@@ -2836,7 +2867,7 @@ Los promedios se calculan automáticamente en el servidor.</p>
                 <span>Example:</span> <!-- <span> important for spacing -->
                 <div class="sl-flex sl-flex-1 sl-flex-wrap" style="gap: 4px;">
                     <div class="sl-max-w-full sl-break-all sl-px-1 sl-bg-canvas-tint sl-text-muted sl-rounded sl-border">
-                        2026-03-26T00:38:05
+                        2026-03-26T14:59:44
                     </div>
                 </div>
             </div>
@@ -2911,7 +2942,7 @@ Los promedios se calculan automáticamente en el servidor.</p>
                 <span>Example:</span> <!-- <span> important for spacing -->
                 <div class="sl-flex sl-flex-1 sl-flex-wrap" style="gap: 4px;">
                     <div class="sl-max-w-full sl-break-all sl-px-1 sl-bg-canvas-tint sl-text-muted sl-rounded sl-border">
-                        2026-03-26T00:38:05
+                        2026-03-26T14:59:44
                     </div>
                 </div>
             </div>
@@ -3120,10 +3151,10 @@ Los promedios se calculan automáticamente en el servidor.</p>
     "primer_afinamiento_fecha": "2024-03-26",
     "presion_sistolica_1": 138,
     "presion_diastolica_1": 88,
-    "segundo_afinamiento_fecha": "2026-03-26T00:38:05",
+    "segundo_afinamiento_fecha": "2026-03-26T14:59:44",
     "presion_sistolica_2": 19,
     "presion_diastolica_2": 16,
-    "tercer_afinamiento_fecha": "2026-03-26T00:38:05",
+    "tercer_afinamiento_fecha": "2026-03-26T14:59:44",
     "presion_sistolica_3": 23,
     "presion_diastolica_3": 2,
     "conducta": "consequatur"
@@ -3229,10 +3260,10 @@ You can check the Dev Tools console for debugging information.</p>
     \"primer_afinamiento_fecha\": \"2024-03-26\",
     \"presion_sistolica_1\": 138,
     \"presion_diastolica_1\": 88,
-    \"segundo_afinamiento_fecha\": \"2026-03-26T00:38:05\",
+    \"segundo_afinamiento_fecha\": \"2026-03-26T14:59:44\",
     \"presion_sistolica_2\": 19,
     \"presion_diastolica_2\": 16,
-    \"tercer_afinamiento_fecha\": \"2026-03-26T00:38:05\",
+    \"tercer_afinamiento_fecha\": \"2026-03-26T14:59:44\",
     \"presion_sistolica_3\": 23,
     \"presion_diastolica_3\": 2,
     \"conducta\": \"consequatur\"
@@ -3261,10 +3292,10 @@ let body = {
     "primer_afinamiento_fecha": "2024-03-26",
     "presion_sistolica_1": 138,
     "presion_diastolica_1": 88,
-    "segundo_afinamiento_fecha": "2026-03-26T00:38:05",
+    "segundo_afinamiento_fecha": "2026-03-26T14:59:44",
     "presion_sistolica_2": 19,
     "presion_diastolica_2": 16,
-    "tercer_afinamiento_fecha": "2026-03-26T00:38:05",
+    "tercer_afinamiento_fecha": "2026-03-26T14:59:44",
     "presion_sistolica_3": 23,
     "presion_diastolica_3": 2,
     "conducta": "consequatur"
@@ -3922,7 +3953,7 @@ fetch(url, {
                 <span>Example:</span> <!-- <span> important for spacing -->
                 <div class="sl-flex sl-flex-1 sl-flex-wrap" style="gap: 4px;">
                     <div class="sl-max-w-full sl-break-all sl-px-1 sl-bg-canvas-tint sl-text-muted sl-rounded sl-border">
-                        2026-03-26T00:38:05
+                        2026-03-26T14:59:44
                     </div>
                 </div>
             </div>
@@ -3972,7 +4003,7 @@ fetch(url, {
                 <span>Example:</span> <!-- <span> important for spacing -->
                 <div class="sl-flex sl-flex-1 sl-flex-wrap" style="gap: 4px;">
                     <div class="sl-max-w-full sl-break-all sl-px-1 sl-bg-canvas-tint sl-text-muted sl-rounded sl-border">
-                        2026-03-26T00:38:05
+                        2026-03-26T14:59:44
                     </div>
                 </div>
             </div>
@@ -4047,7 +4078,7 @@ fetch(url, {
                 <span>Example:</span> <!-- <span> important for spacing -->
                 <div class="sl-flex sl-flex-1 sl-flex-wrap" style="gap: 4px;">
                     <div class="sl-max-w-full sl-break-all sl-px-1 sl-bg-canvas-tint sl-text-muted sl-rounded sl-border">
-                        2026-03-26T00:38:05
+                        2026-03-26T14:59:44
                     </div>
                 </div>
             </div>
@@ -4122,7 +4153,7 @@ fetch(url, {
                 <span>Example:</span> <!-- <span> important for spacing -->
                 <div class="sl-flex sl-flex-1 sl-flex-wrap" style="gap: 4px;">
                     <div class="sl-max-w-full sl-break-all sl-px-1 sl-bg-canvas-tint sl-text-muted sl-rounded sl-border">
-                        2026-03-26T00:38:05
+                        2026-03-26T14:59:44
                     </div>
                 </div>
             </div>
@@ -4359,15 +4390,15 @@ fetch(url, {
                                 >{
     "idpaciente": null,
     "procedencia": "vmqeopfuudtdsufvyvddq",
-    "fecha_tamizaje": "2026-03-26T00:38:05",
+    "fecha_tamizaje": "2026-03-26T14:59:44",
     "presion_arterial_tamiz": "amniihfqcoynlazgh",
-    "primer_afinamiento_fecha": "2026-03-26T00:38:05",
+    "primer_afinamiento_fecha": "2026-03-26T14:59:44",
     "presion_sistolica_1": 4,
     "presion_diastolica_1": 19,
-    "segundo_afinamiento_fecha": "2026-03-26T00:38:05",
+    "segundo_afinamiento_fecha": "2026-03-26T14:59:44",
     "presion_sistolica_2": 135,
     "presion_diastolica_2": 19,
-    "tercer_afinamiento_fecha": "2026-03-26T00:38:05",
+    "tercer_afinamiento_fecha": "2026-03-26T14:59:44",
     "presion_sistolica_3": 16,
     "presion_diastolica_3": 23,
     "conducta": "consequatur"
@@ -4467,15 +4498,15 @@ You can check the Dev Tools console for debugging information.</p>
     --header "Accept: application/json" \
     --data "{
     \"procedencia\": \"vmqeopfuudtdsufvyvddq\",
-    \"fecha_tamizaje\": \"2026-03-26T00:38:05\",
+    \"fecha_tamizaje\": \"2026-03-26T14:59:44\",
     \"presion_arterial_tamiz\": \"amniihfqcoynlazgh\",
-    \"primer_afinamiento_fecha\": \"2026-03-26T00:38:05\",
+    \"primer_afinamiento_fecha\": \"2026-03-26T14:59:44\",
     \"presion_sistolica_1\": 4,
     \"presion_diastolica_1\": 19,
-    \"segundo_afinamiento_fecha\": \"2026-03-26T00:38:05\",
+    \"segundo_afinamiento_fecha\": \"2026-03-26T14:59:44\",
     \"presion_sistolica_2\": 135,
     \"presion_diastolica_2\": 19,
-    \"tercer_afinamiento_fecha\": \"2026-03-26T00:38:05\",
+    \"tercer_afinamiento_fecha\": \"2026-03-26T14:59:44\",
     \"presion_sistolica_3\": 16,
     \"presion_diastolica_3\": 23,
     \"conducta\": \"consequatur\"
@@ -4498,15 +4529,15 @@ const headers = {
 
 let body = {
     "procedencia": "vmqeopfuudtdsufvyvddq",
-    "fecha_tamizaje": "2026-03-26T00:38:05",
+    "fecha_tamizaje": "2026-03-26T14:59:44",
     "presion_arterial_tamiz": "amniihfqcoynlazgh",
-    "primer_afinamiento_fecha": "2026-03-26T00:38:05",
+    "primer_afinamiento_fecha": "2026-03-26T14:59:44",
     "presion_sistolica_1": 4,
     "presion_diastolica_1": 19,
-    "segundo_afinamiento_fecha": "2026-03-26T00:38:05",
+    "segundo_afinamiento_fecha": "2026-03-26T14:59:44",
     "presion_sistolica_2": 135,
     "presion_diastolica_2": 19,
-    "tercer_afinamiento_fecha": "2026-03-26T00:38:05",
+    "tercer_afinamiento_fecha": "2026-03-26T14:59:44",
     "presion_sistolica_3": 16,
     "presion_diastolica_3": 23,
     "conducta": "consequatur"
@@ -11266,7 +11297,7 @@ access-control-allow-origin: *</code></pre>
                 <span>Example:</span> <!-- <span> important for spacing -->
                 <div class="sl-flex sl-flex-1 sl-flex-wrap" style="gap: 4px;">
                     <div class="sl-max-w-full sl-break-all sl-px-1 sl-bg-canvas-tint sl-text-muted sl-rounded sl-border">
-                        2026-03-26T00:38:05
+                        2026-03-26T14:59:43
                     </div>
                 </div>
             </div>
@@ -11484,7 +11515,7 @@ access-control-allow-origin: *</code></pre>
     "idsede": "1",
     "domicilio": "mqeopfuudtdsufvyvddqa",
     "entidad_afiliada": "mniihfqcoynlazghdtqtq",
-    "fecha": "2026-03-26T00:38:05",
+    "fecha": "2026-03-26T14:59:43",
     "respuestas_calificacion": "[\"Excelente\", \"Bueno\"]",
     "respuestas_adicionales": "{\"pregunta1\": \"Respuesta\"}",
     "sugerencias": "mqeopfuudtdsufvyvddqa"
@@ -11588,7 +11619,7 @@ You can check the Dev Tools console for debugging information.</p>
     \"idsede\": \"1\",
     \"domicilio\": \"mqeopfuudtdsufvyvddqa\",
     \"entidad_afiliada\": \"mniihfqcoynlazghdtqtq\",
-    \"fecha\": \"2026-03-26T00:38:05\",
+    \"fecha\": \"2026-03-26T14:59:43\",
     \"respuestas_calificacion\": \"[\\\"Excelente\\\", \\\"Bueno\\\"]\",
     \"respuestas_adicionales\": \"{\\\"pregunta1\\\": \\\"Respuesta\\\"}\",
     \"sugerencias\": \"mqeopfuudtdsufvyvddqa\"
@@ -11615,7 +11646,7 @@ let body = {
     "idsede": "1",
     "domicilio": "mqeopfuudtdsufvyvddqa",
     "entidad_afiliada": "mniihfqcoynlazghdtqtq",
-    "fecha": "2026-03-26T00:38:05",
+    "fecha": "2026-03-26T14:59:43",
     "respuestas_calificacion": "[\"Excelente\", \"Bueno\"]",
     "respuestas_adicionales": "{\"pregunta1\": \"Respuesta\"}",
     "sugerencias": "mqeopfuudtdsufvyvddqa"
@@ -14827,7 +14858,7 @@ fetch(url, {
                                                         class="example-response-GETapi-health-toggle sl-text-base"
                                                         aria-label="Response sample"
                                                         onchange="switchExampleResponse('GETapi-health', event.target.value);">
-                                                                                                            <option value="0">200</option>
+                                                                                                            <option value="0">500</option>
                                                                                                     </select></div>
                                         </div>
                                     </div>
@@ -14865,15 +14896,12 @@ fetch(url, {
                                                 </summary>
                                                                                                 <pre><code class="language-http">cache-control: no-cache, private
 content-type: application/json
-x-ratelimit-limit: 60
-x-ratelimit-remaining: 59
 access-control-allow-origin: *</code></pre>
                                             </details>
                                                                                                                                                                         
                                             <pre><code style="max-height: 300px;"
                                                        class="language-json sl-overflow-x-auto sl-overflow-y-auto">{
-    &quot;status&quot;: &quot;ok&quot;,
-    &quot;timestamp&quot;: &quot;2026-03-26T00:38:04.862304Z&quot;
+    &quot;message&quot;: &quot;Server Error&quot;
 }</code></pre>
                                                                             </div>
                                 </div>
@@ -16430,7 +16458,7 @@ access-control-allow-origin: *</code></pre>
                 <span>Example:</span> <!-- <span> important for spacing -->
                 <div class="sl-flex sl-flex-1 sl-flex-wrap" style="gap: 4px;">
                     <div class="sl-max-w-full sl-break-all sl-px-1 sl-bg-canvas-tint sl-text-muted sl-rounded sl-border">
-                        2026-03-26T00:38:05
+                        2026-03-26T14:59:43
                     </div>
                 </div>
             </div>
@@ -16624,7 +16652,7 @@ access-control-allow-origin: *</code></pre>
                                      id="json-body-PUTapi-envio-muestras--id-"
                                      style="font-family: var(--font-code); font-size: 12px; line-height: var(--lh-code);"
                                 >{
-    "fecha": "2026-03-26T00:38:05",
+    "fecha": "2026-03-26T14:59:43",
     "idsede": null,
     "responsable_transporte_id": "vmqeopfuudtdsufvyvddq",
     "responsable_recepcion_id": "amniihfqcoynlazghdtqt"
@@ -16723,7 +16751,7 @@ You can check the Dev Tools console for debugging information.</p>
     --header "Content-Type: application/json" \
     --header "Accept: application/json" \
     --data "{
-    \"fecha\": \"2026-03-26T00:38:05\",
+    \"fecha\": \"2026-03-26T14:59:43\",
     \"responsable_transporte_id\": \"vmqeopfuudtdsufvyvddq\",
     \"responsable_recepcion_id\": \"amniihfqcoynlazghdtqt\"
 }"
@@ -16744,7 +16772,7 @@ const headers = {
 };
 
 let body = {
-    "fecha": "2026-03-26T00:38:05",
+    "fecha": "2026-03-26T14:59:43",
     "responsable_transporte_id": "vmqeopfuudtdsufvyvddq",
     "responsable_recepcion_id": "amniihfqcoynlazghdtqt"
 };
@@ -18178,6 +18206,336 @@ fetch(url, {
                                 </div>
                                                     </div>
                     
+                            </div>
+    </div>
+</div>
+
+                <h1 id="estadisticas-publicas-landing-page"
+        class="sl-text-5xl sl-leading-tight sl-font-prose sl-text-heading"
+    >
+        Estadísticas Públicas (Landing Page)
+    </h1>
+
+    <p>Endpoints sin autenticación para mostrar el impacto en la landing page.</p>
+
+                                <div class="sl-stack sl-stack--vertical sl-stack--8 HttpOperation sl-flex sl-flex-col sl-items-stretch sl-w-full">
+    <div class="sl-stack sl-stack--vertical sl-stack--5 sl-flex sl-flex-col sl-items-stretch">
+        <div class="sl-relative">
+            <div class="sl-stack sl-stack--horizontal sl-stack--5 sl-flex sl-flex-row sl-items-center">
+                <h2 class="sl-text-3xl sl-leading-tight sl-font-prose sl-text-heading sl-mt-5 sl-mb-1"
+                    id="estadisticas-publicas-landing-page-GETapi-v1-public-mapa-calor">
+                    Mapa de Calor (v1)
+                </h2>
+            </div>
+        </div>
+
+        <div class="sl-relative">
+            <div title="http://localhost/api/v1/public/mapa-calor"
+                     class="sl-stack sl-stack--horizontal sl-stack--3 sl-inline-flex sl-flex-row sl-items-center sl-max-w-full sl-font-mono sl-py-2 sl-pr-4 sl-bg-canvas-50 sl-rounded-lg"
+                >
+                                            <div class="sl-text-lg sl-font-semibold sl-px-2.5 sl-py-1 sl-text-on-primary sl-rounded-lg"
+                             style="background-color: green;"
+                        >
+                            GET
+                        </div>
+                                        <div class="sl-flex sl-overflow-x-hidden sl-text-lg sl-select-all">
+                        <div dir="rtl"
+                             class="sl-overflow-x-hidden sl-truncate sl-text-muted">http://localhost</div>
+                        <div class="sl-flex-1 sl-font-semibold">/api/v1/public/mapa-calor</div>
+                    </div>
+
+                                                                                    </div>
+        </div>
+
+        <p>Retorna los puntos geográficos agrupados por zona de visita y sede para el mapa de calor de la landing.
+Los datos están cacheados por 1 hora con Redis.</p>
+    </div>
+    <div class="sl-flex">
+        <div data-testid="two-column-left" class="sl-flex-1 sl-w-0">
+            <div class="sl-stack sl-stack--vertical sl-stack--10 sl-flex sl-flex-col sl-items-stretch">
+                <div class="sl-stack sl-stack--vertical sl-stack--8 sl-flex sl-flex-col sl-items-stretch">
+                                            <div class="sl-stack sl-stack--vertical sl-stack--5 sl-flex sl-flex-col sl-items-stretch">
+                            <h3 class="sl-text-2xl sl-leading-snug sl-font-prose">
+                                Headers
+                            </h3>
+                            <div class="sl-text-sm">
+                                                                    <div class="sl-flex sl-relative sl-max-w-full sl-py-2 sl-pl-3">
+    <div class="sl-w-1 sl-mt-2 sl-mr-3 sl--ml-3 sl-border-t"></div>
+    <div class="sl-stack sl-stack--vertical sl-stack--1 sl-flex sl-flex-1 sl-flex-col sl-items-stretch sl-max-w-full sl-ml-2 ">
+        <div class="sl-flex sl-items-center sl-max-w-full">
+                                        <div class="sl-flex sl-items-baseline sl-text-base">
+                    <div class="sl-font-mono sl-font-semibold sl-mr-2">Content-Type</div>
+                                    </div>
+                                        </div>
+                                            <div class="sl-stack sl-stack--horizontal sl-stack--2 sl-flex sl-flex-row sl-items-baseline sl-text-muted">
+                <span>Example:</span> <!-- <span> important for spacing -->
+                <div class="sl-flex sl-flex-1 sl-flex-wrap" style="gap: 4px;">
+                    <div class="sl-max-w-full sl-break-all sl-px-1 sl-bg-canvas-tint sl-text-muted sl-rounded sl-border">
+                        application/json
+                    </div>
+                </div>
+            </div>
+            </div>
+</div>
+                                                                    <div class="sl-flex sl-relative sl-max-w-full sl-py-2 sl-pl-3">
+    <div class="sl-w-1 sl-mt-2 sl-mr-3 sl--ml-3 sl-border-t"></div>
+    <div class="sl-stack sl-stack--vertical sl-stack--1 sl-flex sl-flex-1 sl-flex-col sl-items-stretch sl-max-w-full sl-ml-2 ">
+        <div class="sl-flex sl-items-center sl-max-w-full">
+                                        <div class="sl-flex sl-items-baseline sl-text-base">
+                    <div class="sl-font-mono sl-font-semibold sl-mr-2">Accept</div>
+                                    </div>
+                                        </div>
+                                            <div class="sl-stack sl-stack--horizontal sl-stack--2 sl-flex sl-flex-row sl-items-baseline sl-text-muted">
+                <span>Example:</span> <!-- <span> important for spacing -->
+                <div class="sl-flex sl-flex-1 sl-flex-wrap" style="gap: 4px;">
+                    <div class="sl-max-w-full sl-break-all sl-px-1 sl-bg-canvas-tint sl-text-muted sl-rounded sl-border">
+                        application/json
+                    </div>
+                </div>
+            </div>
+            </div>
+</div>
+                                                            </div>
+                        </div>
+                    
+                    
+
+                    
+                    
+                                    </div>
+            </div>
+        </div>
+
+        <div data-testid="two-column-right" class="sl-relative sl-w-2/5 sl-ml-16" style="max-width: 500px;">
+            <div class="sl-stack sl-stack--vertical sl-stack--6 sl-flex sl-flex-col sl-items-stretch">
+
+                                    <div class="sl-inverted">
+    <div class="sl-overflow-y-hidden sl-rounded-lg">
+        <form class="TryItPanel sl-bg-canvas-100 sl-rounded-lg"
+              data-method="GET"
+              data-path="api/v1/public/mapa-calor"
+              data-hasfiles="0"
+              data-hasjsonbody="0">
+            
+                            <div class="sl-panel sl-outline-none sl-w-full expandable">
+                    <div class="sl-panel__titlebar sl-flex sl-items-center sl-relative focus:sl-z-10 sl-text-base sl-leading-none sl-pr-4 sl-pl-3 sl-bg-canvas-200 sl-text-body sl-border-input focus:sl-border-primary sl-cursor-pointer sl-select-none"
+                         role="button">
+                        <div class="sl-flex sl-flex-1 sl-items-center sl-h-lg">
+                            <div class="sl-flex sl-items-center sl-mr-1.5 expansion-chevrons expansion-chevrons-solid expanded">
+                                <svg aria-hidden="true" focusable="false" data-prefix="fas"
+                                     data-icon="caret-down"
+                                     class="svg-inline--fa fa-caret-down fa-fw sl-icon" role="img"
+                                     xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512">
+                                    <path fill="currentColor"
+                                          d="M310.6 246.6l-127.1 128C176.4 380.9 168.2 384 160 384s-16.38-3.125-22.63-9.375l-127.1-128C.2244 237.5-2.516 223.7 2.438 211.8S19.07 192 32 192h255.1c12.94 0 24.62 7.781 29.58 19.75S319.8 237.5 310.6 246.6z"></path>
+                                </svg>
+                            </div>
+                            Headers
+                        </div>
+                    </div>
+                    <div class="sl-panel__content-wrapper sl-bg-canvas-100 children" role="region">
+                        <div class="ParameterGrid sl-p-4">
+                                                                                            <label aria-hidden="true"
+                                       for="header-GETapi-v1-public-mapa-calor-Content-Type">Content-Type</label>
+                                <span class="sl-mx-3">:</span>
+                                <div class="sl-flex sl-flex-1">
+                                    <div class="sl-input sl-flex-1 sl-relative">
+                                        <input aria-label="Content-Type" name="Content-Type"
+                                               id="header-GETapi-v1-public-mapa-calor-Content-Type"
+                                               value="application/json" data-component="header"
+                                               class="sl-relative sl-w-full sl-h-md sl-text-base sl-pr-2.5 sl-pl-2.5 sl-rounded sl-border-transparent hover:sl-border-input focus:sl-border-primary sl-border">
+                                    </div>
+                                </div>
+                                                                                            <label aria-hidden="true"
+                                       for="header-GETapi-v1-public-mapa-calor-Accept">Accept</label>
+                                <span class="sl-mx-3">:</span>
+                                <div class="sl-flex sl-flex-1">
+                                    <div class="sl-input sl-flex-1 sl-relative">
+                                        <input aria-label="Accept" name="Accept"
+                                               id="header-GETapi-v1-public-mapa-calor-Accept"
+                                               value="application/json" data-component="header"
+                                               class="sl-relative sl-w-full sl-h-md sl-text-base sl-pr-2.5 sl-pl-2.5 sl-rounded sl-border-transparent hover:sl-border-input focus:sl-border-primary sl-border">
+                                    </div>
+                                </div>
+                                                    </div>
+                    </div>
+                </div>
+            
+            
+            
+            
+            <div class="SendButtonHolder sl-mt-4 sl-p-4 sl-pt-0">
+                <div class="sl-stack sl-stack--horizontal sl-stack--2 sl-flex sl-flex-row sl-items-center">
+                    <button type="button" data-endpoint="GETapi-v1-public-mapa-calor"
+                            class="tryItOut-btn sl-button sl-h-sm sl-text-base sl-font-medium sl-px-1.5 sl-bg-primary hover:sl-bg-primary-dark active:sl-bg-primary-darker disabled:sl-bg-canvas-100 sl-text-on-primary disabled:sl-text-body sl-rounded sl-border-transparent sl-border disabled:sl-opacity-70"
+                    >
+                        Send Request 💥
+                    </button>
+                </div>
+            </div>
+
+            <div data-endpoint="GETapi-v1-public-mapa-calor"
+                 class="tryItOut-error expandable sl-panel sl-outline-none sl-w-full" hidden>
+                <div class="sl-panel__titlebar sl-flex sl-items-center sl-relative focus:sl-z-10 sl-text-base sl-leading-none sl-pr-4 sl-pl-3 sl-bg-canvas-200 sl-text-body sl-border-input focus:sl-border-primary sl-cursor-pointer sl-select-none"
+                     role="button">
+                    <div class="sl-flex sl-flex-1 sl-items-center sl-h-lg">
+                        <div class="sl-flex sl-items-center sl-mr-1.5 expansion-chevrons expansion-chevrons-solid expanded">
+                            <svg aria-hidden="true" focusable="false" data-prefix="fas"
+                                 data-icon="caret-down"
+                                 class="svg-inline--fa fa-caret-down fa-fw sl-icon" role="img"
+                                 xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512">
+                                <path fill="currentColor"
+                                      d="M310.6 246.6l-127.1 128C176.4 380.9 168.2 384 160 384s-16.38-3.125-22.63-9.375l-127.1-128C.2244 237.5-2.516 223.7 2.438 211.8S19.07 192 32 192h255.1c12.94 0 24.62 7.781 29.58 19.75S319.8 237.5 310.6 246.6z"></path>
+                            </svg>
+                        </div>
+                        Request failed with error
+                    </div>
+                </div>
+                <div class="sl-panel__content-wrapper sl-bg-canvas-100 children" role="region">
+                    <div class="sl-panel__content sl-p-4">
+                        <p class="sl-pb-2"><strong class="error-message"></strong></p>
+                        <p class="sl-pb-2">Tip: Check that you&#039;re properly connected to the network.
+If you&#039;re a maintainer of ths API, verify that your API is running and you&#039;ve enabled CORS.
+You can check the Dev Tools console for debugging information.</p>
+                    </div>
+                </div>
+            </div>
+
+                <div data-endpoint="GETapi-v1-public-mapa-calor"
+                     class="tryItOut-response expandable sl-panel sl-outline-none sl-w-full" hidden>
+                    <div class="sl-panel__titlebar sl-flex sl-items-center sl-relative focus:sl-z-10 sl-text-base sl-leading-none sl-pr-4 sl-pl-3 sl-bg-canvas-200 sl-text-body sl-border-input focus:sl-border-primary sl-cursor-pointer sl-select-none"
+                         role="button">
+                        <div class="sl-flex sl-flex-1 sl-items-center sl-h-lg">
+                            <div class="sl-flex sl-items-center sl-mr-1.5 expansion-chevrons expansion-chevrons-solid expanded">
+                                <svg aria-hidden="true" focusable="false" data-prefix="fas"
+                                     data-icon="caret-down"
+                                     class="svg-inline--fa fa-caret-down fa-fw sl-icon" role="img"
+                                     xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512">
+                                    <path fill="currentColor"
+                                          d="M310.6 246.6l-127.1 128C176.4 380.9 168.2 384 160 384s-16.38-3.125-22.63-9.375l-127.1-128C.2244 237.5-2.516 223.7 2.438 211.8S19.07 192 32 192h255.1c12.94 0 24.62 7.781 29.58 19.75S319.8 237.5 310.6 246.6z"></path>
+                                </svg>
+                            </div>
+                            Received response
+                        </div>
+                    </div>
+                    <div class="sl-panel__content-wrapper sl-bg-canvas-100 children" role="region">
+                        <div class="sl-panel__content sl-p-4">
+                            <p class="sl-pb-2 response-status"></p>
+                            <pre><code class="sl-pb-2 response-content language-json"
+                                       data-empty-response-text="<Empty response>"
+                                       style="max-height: 300px;"></code></pre>
+                        </div>
+                    </div>
+                </div>
+        </form>
+    </div>
+</div>
+                
+                                            <div class="sl-panel sl-outline-none sl-w-full sl-rounded-lg">
+                            <div class="sl-panel__titlebar sl-flex sl-items-center sl-relative focus:sl-z-10 sl-text-base sl-leading-none sl-pr-3 sl-pl-4 sl-bg-canvas-200 sl-text-body sl-border-input focus:sl-border-primary sl-select-none">
+                                <div class="sl-flex sl-flex-1 sl-items-center sl-h-lg">
+                                    <div class="sl--ml-2">
+                                        Example request:
+                                        <select class="example-request-lang-toggle sl-text-base"
+                                                aria-label="Request Sample Language"
+                                                onchange="switchExampleLanguage(event.target.value);">
+                                                                                            <option>bash</option>
+                                                                                            <option>javascript</option>
+                                                                                    </select>
+                                    </div>
+                                </div>
+                            </div>
+                                                            <div class="sl-bg-canvas-100 example-request example-request-bash"
+                                     style="">
+                                    <div class="sl-px-0 sl-py-1">
+                                        <div style="max-height: 400px;" class="sl-overflow-y-auto sl-rounded">
+                                            <pre><code class="language-bash">curl --request GET \
+    --get "http://localhost/api/v1/public/mapa-calor" \
+    --header "Content-Type: application/json" \
+    --header "Accept: application/json"</code></pre>                                        </div>
+                                    </div>
+                                </div>
+                                                            <div class="sl-bg-canvas-100 example-request example-request-javascript"
+                                     style="display: none;">
+                                    <div class="sl-px-0 sl-py-1">
+                                        <div style="max-height: 400px;" class="sl-overflow-y-auto sl-rounded">
+                                            <pre><code class="language-javascript">const url = new URL(
+    "http://localhost/api/v1/public/mapa-calor"
+);
+
+const headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+
+fetch(url, {
+    method: "GET",
+    headers,
+}).then(response =&gt; response.json());</code></pre>                                        </div>
+                                    </div>
+                                </div>
+                                                    </div>
+                    
+                                            <div class="sl-panel sl-outline-none sl-w-full sl-rounded-lg">
+                            <div class="sl-panel__titlebar sl-flex sl-items-center sl-relative focus:sl-z-10 sl-text-base sl-leading-none sl-pr-3 sl-pl-4 sl-bg-canvas-200 sl-text-body sl-border-input focus:sl-border-primary sl-select-none">
+                                <div class="sl-flex sl-flex-1 sl-items-center sl-py-2">
+                                    <div class="sl--ml-2">
+                                        <div class="sl-h-sm sl-text-base sl-font-medium sl-px-1.5 sl-text-muted sl-rounded sl-border-transparent sl-border">
+                                            <div class="sl-mb-2 sl-inline-block">Example response:</div>
+                                            <div class="sl-mb-2 sl-inline-block">
+                                                <select
+                                                        class="example-response-GETapi-v1-public-mapa-calor-toggle sl-text-base"
+                                                        aria-label="Response sample"
+                                                        onchange="switchExampleResponse('GETapi-v1-public-mapa-calor', event.target.value);">
+                                                                                                            <option value="0">500</option>
+                                                                                                    </select></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <button type="button"
+                                        class="sl-button sl-h-sm sl-text-base sl-font-medium sl-px-1.5 hover:sl-bg-canvas-50 active:sl-bg-canvas-100 sl-text-muted hover:sl-text-body focus:sl-text-body sl-rounded sl-border-transparent sl-border disabled:sl-opacity-70">
+                                    <div class="sl-mx-0">
+                                        <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="copy"
+                                             class="svg-inline--fa fa-copy fa-fw fa-sm sl-icon" role="img"
+                                             xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+                                            <path fill="currentColor"
+                                                  d="M384 96L384 0h-112c-26.51 0-48 21.49-48 48v288c0 26.51 21.49 48 48 48H464c26.51 0 48-21.49 48-48V128h-95.1C398.4 128 384 113.6 384 96zM416 0v96h96L416 0zM192 352V128h-144c-26.51 0-48 21.49-48 48v288c0 26.51 21.49 48 48 48h192c26.51 0 48-21.49 48-48L288 416h-32C220.7 416 192 387.3 192 352z"></path>
+                                        </svg>
+                                    </div>
+                                </button>
+                            </div>
+                                                            <div class="sl-panel__content-wrapper sl-bg-canvas-100 example-response-GETapi-v1-public-mapa-calor example-response-GETapi-v1-public-mapa-calor-0"
+                                     style=" "
+                                >
+                                    <div class="sl-panel__content sl-p-0">                                            <details class="sl-pl-2">
+                                                <summary style="cursor: pointer; list-style: none;">
+                                                    <small>
+                                                        <span class="expansion-chevrons">
+
+    <svg aria-hidden="true" focusable="false" data-prefix="fas"
+         data-icon="chevron-right"
+         class="svg-inline--fa fa-chevron-right fa-fw sl-icon sl-text-muted"
+         xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512">
+        <path fill="currentColor"
+              d="M96 480c-8.188 0-16.38-3.125-22.62-9.375c-12.5-12.5-12.5-32.75 0-45.25L242.8 256L73.38 86.63c-12.5-12.5-12.5-32.75 0-45.25s32.75-12.5 45.25 0l192 192c12.5 12.5 12.5 32.75 0 45.25l-192 192C112.4 476.9 104.2 480 96 480z"></path>
+    </svg>
+                                                            </span>
+                                                        Headers
+                                                    </small>
+                                                </summary>
+                                                                                                <pre><code class="language-http">cache-control: no-cache, private
+content-type: application/json
+access-control-allow-origin: *</code></pre>
+                                            </details>
+                                                                                                                                                                        
+                                            <pre><code style="max-height: 300px;"
+                                                       class="language-json sl-overflow-x-auto sl-overflow-y-auto">{
+    &quot;message&quot;: &quot;Server Error&quot;
+}</code></pre>
+                                                                            </div>
+                                </div>
+                                                    </div>
                             </div>
     </div>
 </div>
@@ -20555,7 +20913,7 @@ access-control-allow-origin: *</code></pre>
                 <span>Example:</span> <!-- <span> important for spacing -->
                 <div class="sl-flex sl-flex-1 sl-flex-wrap" style="gap: 4px;">
                     <div class="sl-max-w-full sl-break-all sl-px-1 sl-bg-canvas-tint sl-text-muted sl-rounded sl-border">
-                        2026-03-26T00:38:05
+                        2026-03-26T14:59:43
                     </div>
                 </div>
             </div>
@@ -20778,7 +21136,7 @@ access-control-allow-origin: *</code></pre>
                                      style="font-family: var(--font-code); font-size: 12px; line-height: var(--lh-code);"
                                 >{
     "identificacion": null,
-    "fecnacimiento": "2026-03-26T00:38:05",
+    "fecnacimiento": "2026-03-26T14:59:43",
     "nombre": null,
     "apellido": null,
     "genero": null,
@@ -20878,7 +21236,7 @@ You can check the Dev Tools console for debugging information.</p>
     --header "Content-Type: application/json" \
     --header "Accept: application/json" \
     --data "{
-    \"fecnacimiento\": \"2026-03-26T00:38:05\"
+    \"fecnacimiento\": \"2026-03-26T14:59:43\"
 }"
 </code></pre>                                        </div>
                                     </div>
@@ -20897,7 +21255,7 @@ const headers = {
 };
 
 let body = {
-    "fecnacimiento": "2026-03-26T00:38:05"
+    "fecnacimiento": "2026-03-26T14:59:43"
 };
 
 fetch(url, {
@@ -31490,7 +31848,7 @@ fetch(url, {
                                                         class="example-response-GETapi-notifications-users-with-tokens-toggle sl-text-base"
                                                         aria-label="Response sample"
                                                         onchange="switchExampleResponse('GETapi-notifications-users-with-tokens', event.target.value);">
-                                                                                                            <option value="0">401</option>
+                                                                                                            <option value="0">500</option>
                                                                                                     </select></div>
                                         </div>
                                     </div>
@@ -31533,7 +31891,7 @@ access-control-allow-origin: *</code></pre>
                                                                                                                                                                         
                                             <pre><code style="max-height: 300px;"
                                                        class="language-json sl-overflow-x-auto sl-overflow-y-auto">{
-    &quot;message&quot;: &quot;Unauthenticated.&quot;
+    &quot;message&quot;: &quot;Server Error&quot;
 }</code></pre>
                                                                             </div>
                                 </div>
@@ -31811,7 +32169,7 @@ fetch(url, {
                                                         class="example-response-GETapi-notifications-stats-toggle sl-text-base"
                                                         aria-label="Response sample"
                                                         onchange="switchExampleResponse('GETapi-notifications-stats', event.target.value);">
-                                                                                                            <option value="0">401</option>
+                                                                                                            <option value="0">500</option>
                                                                                                     </select></div>
                                         </div>
                                     </div>
@@ -31854,7 +32212,7 @@ access-control-allow-origin: *</code></pre>
                                                                                                                                                                         
                                             <pre><code style="max-height: 300px;"
                                                        class="language-json sl-overflow-x-auto sl-overflow-y-auto">{
-    &quot;message&quot;: &quot;Unauthenticated.&quot;
+    &quot;message&quot;: &quot;Server Error&quot;
 }</code></pre>
                                                                             </div>
                                 </div>
@@ -32194,7 +32552,7 @@ fetch(url, {
                                                         class="example-response-GETapi-notifications-user--userId--tokens-toggle sl-text-base"
                                                         aria-label="Response sample"
                                                         onchange="switchExampleResponse('GETapi-notifications-user--userId--tokens', event.target.value);">
-                                                                                                            <option value="0">401</option>
+                                                                                                            <option value="0">500</option>
                                                                                                     </select></div>
                                         </div>
                                     </div>
@@ -32237,7 +32595,7 @@ access-control-allow-origin: *</code></pre>
                                                                                                                                                                         
                                             <pre><code style="max-height: 300px;"
                                                        class="language-json sl-overflow-x-auto sl-overflow-y-auto">{
-    &quot;message&quot;: &quot;Unauthenticated.&quot;
+    &quot;message&quot;: &quot;Server Error&quot;
 }</code></pre>
                                                                             </div>
                                 </div>
@@ -36874,7 +37232,7 @@ access-control-allow-origin: *</code></pre>
                 <span>Example:</span> <!-- <span> important for spacing -->
                 <div class="sl-flex sl-flex-1 sl-flex-wrap" style="gap: 4px;">
                     <div class="sl-max-w-full sl-break-all sl-px-1 sl-bg-canvas-tint sl-text-muted sl-rounded sl-border">
-                        2026-03-26T00:38:05
+                        2026-03-26T14:59:44
                     </div>
                 </div>
             </div>
@@ -37117,7 +37475,7 @@ access-control-allow-origin: *</code></pre>
     "brazo_toma": "izquierdo",
     "posicion_persona": "acostado",
     "reposo_cinco_minutos": "no",
-    "fecha_primera_toma": "2026-03-26T00:38:05",
+    "fecha_primera_toma": "2026-03-26T14:59:44",
     "pa_sistolica": 19,
     "pa_diastolica": 16,
     "conducta": "xbajwbpilpmufinllwloa"
@@ -37221,7 +37579,7 @@ You can check the Dev Tools console for debugging information.</p>
     \"brazo_toma\": \"izquierdo\",
     \"posicion_persona\": \"acostado\",
     \"reposo_cinco_minutos\": \"no\",
-    \"fecha_primera_toma\": \"2026-03-26T00:38:05\",
+    \"fecha_primera_toma\": \"2026-03-26T14:59:44\",
     \"pa_sistolica\": 19,
     \"pa_diastolica\": 16,
     \"conducta\": \"xbajwbpilpmufinllwloa\"
@@ -37248,7 +37606,7 @@ let body = {
     "brazo_toma": "izquierdo",
     "posicion_persona": "acostado",
     "reposo_cinco_minutos": "no",
-    "fecha_primera_toma": "2026-03-26T00:38:05",
+    "fecha_primera_toma": "2026-03-26T14:59:44",
     "pa_sistolica": 19,
     "pa_diastolica": 16,
     "conducta": "xbajwbpilpmufinllwloa"
@@ -42456,7 +42814,7 @@ access-control-allow-origin: *</code></pre>
                                                                                     </div>
         </div>
 
-        
+        <p>Permite filtrar las visitas por rango de fechas, usuario que realizó la visita y sede asociada al paciente.</p>
     </div>
     <div class="sl-flex">
         <div data-testid="two-column-left" class="sl-flex-1 sl-w-0">
@@ -42508,6 +42866,100 @@ access-control-allow-origin: *</code></pre>
                     
                     
 
+                                                <div class="sl-stack sl-stack--vertical sl-stack--6 sl-flex sl-flex-col sl-items-stretch">
+                                <h3 class="sl-text-2xl sl-leading-snug sl-font-prose">Query Parameters</h3>
+
+                                <div class="sl-text-sm">
+                                                                            <div class="sl-flex sl-relative sl-max-w-full sl-py-2 sl-pl-3">
+    <div class="sl-w-1 sl-mt-2 sl-mr-3 sl--ml-3 sl-border-t"></div>
+    <div class="sl-stack sl-stack--vertical sl-stack--1 sl-flex sl-flex-1 sl-flex-col sl-items-stretch sl-max-w-full sl-ml-2 ">
+        <div class="sl-flex sl-items-center sl-max-w-full">
+                                        <div class="sl-flex sl-items-baseline sl-text-base">
+                    <div class="sl-font-mono sl-font-semibold sl-mr-2">fecha_desde</div>
+                                            <span class="sl-truncate sl-text-muted">string</span>
+                                    </div>
+                                        </div>
+                <div class="sl-prose sl-markdown-viewer" style="font-size: 12px;">
+            <p>date optional Filtrar visitas desde esta fecha.</p>
+        </div>
+                                            <div class="sl-stack sl-stack--horizontal sl-stack--2 sl-flex sl-flex-row sl-items-baseline sl-text-muted">
+                <span>Example:</span> <!-- <span> important for spacing -->
+                <div class="sl-flex sl-flex-1 sl-flex-wrap" style="gap: 4px;">
+                    <div class="sl-max-w-full sl-break-all sl-px-1 sl-bg-canvas-tint sl-text-muted sl-rounded sl-border">
+                        2024-01-01
+                    </div>
+                </div>
+            </div>
+            </div>
+</div>
+                                                                            <div class="sl-flex sl-relative sl-max-w-full sl-py-2 sl-pl-3">
+    <div class="sl-w-1 sl-mt-2 sl-mr-3 sl--ml-3 sl-border-t"></div>
+    <div class="sl-stack sl-stack--vertical sl-stack--1 sl-flex sl-flex-1 sl-flex-col sl-items-stretch sl-max-w-full sl-ml-2 ">
+        <div class="sl-flex sl-items-center sl-max-w-full">
+                                        <div class="sl-flex sl-items-baseline sl-text-base">
+                    <div class="sl-font-mono sl-font-semibold sl-mr-2">fecha_hasta</div>
+                                            <span class="sl-truncate sl-text-muted">string</span>
+                                    </div>
+                                        </div>
+                <div class="sl-prose sl-markdown-viewer" style="font-size: 12px;">
+            <p>date optional Filtrar visitas hasta esta fecha.</p>
+        </div>
+                                            <div class="sl-stack sl-stack--horizontal sl-stack--2 sl-flex sl-flex-row sl-items-baseline sl-text-muted">
+                <span>Example:</span> <!-- <span> important for spacing -->
+                <div class="sl-flex sl-flex-1 sl-flex-wrap" style="gap: 4px;">
+                    <div class="sl-max-w-full sl-break-all sl-px-1 sl-bg-canvas-tint sl-text-muted sl-rounded sl-border">
+                        2024-12-31
+                    </div>
+                </div>
+            </div>
+            </div>
+</div>
+                                                                            <div class="sl-flex sl-relative sl-max-w-full sl-py-2 sl-pl-3">
+    <div class="sl-w-1 sl-mt-2 sl-mr-3 sl--ml-3 sl-border-t"></div>
+    <div class="sl-stack sl-stack--vertical sl-stack--1 sl-flex sl-flex-1 sl-flex-col sl-items-stretch sl-max-w-full sl-ml-2 ">
+        <div class="sl-flex sl-items-center sl-max-w-full">
+                                        <div class="sl-flex sl-items-baseline sl-text-base">
+                    <div class="sl-font-mono sl-font-semibold sl-mr-2">idusuario</div>
+                                            <span class="sl-truncate sl-text-muted">string</span>
+                                    </div>
+                                        </div>
+                <div class="sl-prose sl-markdown-viewer" style="font-size: 12px;">
+            <p>optional Filtrar por el ID del usuario que realizó la visita.</p>
+        </div>
+                                            <div class="sl-stack sl-stack--horizontal sl-stack--2 sl-flex sl-flex-row sl-items-baseline sl-text-muted">
+                <span>Example:</span> <!-- <span> important for spacing -->
+                <div class="sl-flex sl-flex-1 sl-flex-wrap" style="gap: 4px;">
+                    <div class="sl-max-w-full sl-break-all sl-px-1 sl-bg-canvas-tint sl-text-muted sl-rounded sl-border">
+                        consequatur
+                    </div>
+                </div>
+            </div>
+            </div>
+</div>
+                                                                            <div class="sl-flex sl-relative sl-max-w-full sl-py-2 sl-pl-3">
+    <div class="sl-w-1 sl-mt-2 sl-mr-3 sl--ml-3 sl-border-t"></div>
+    <div class="sl-stack sl-stack--vertical sl-stack--1 sl-flex sl-flex-1 sl-flex-col sl-items-stretch sl-max-w-full sl-ml-2 ">
+        <div class="sl-flex sl-items-center sl-max-w-full">
+                                        <div class="sl-flex sl-items-baseline sl-text-base">
+                    <div class="sl-font-mono sl-font-semibold sl-mr-2">idsede</div>
+                                            <span class="sl-truncate sl-text-muted">string</span>
+                                    </div>
+                                        </div>
+                <div class="sl-prose sl-markdown-viewer" style="font-size: 12px;">
+            <p>optional Filtrar por el ID de la sede a la que pertenece el paciente.</p>
+        </div>
+                                            <div class="sl-stack sl-stack--horizontal sl-stack--2 sl-flex sl-flex-row sl-items-baseline sl-text-muted">
+                <span>Example:</span> <!-- <span> important for spacing -->
+                <div class="sl-flex sl-flex-1 sl-flex-wrap" style="gap: 4px;">
+                    <div class="sl-max-w-full sl-break-all sl-px-1 sl-bg-canvas-tint sl-text-muted sl-rounded sl-border">
+                        consequatur
+                    </div>
+                </div>
+            </div>
+            </div>
+</div>
+                                                                </div>
+                        </div>
                     
                     
                                     </div>
@@ -42606,6 +43058,79 @@ access-control-allow-origin: *</code></pre>
                 </div>
             
             
+                            <div class="sl-panel sl-outline-none sl-w-full expandable">
+                    <div class="sl-panel__titlebar sl-flex sl-items-center sl-relative focus:sl-z-10 sl-text-base sl-leading-none sl-pr-4 sl-pl-3 sl-bg-canvas-200 sl-text-body sl-border-input focus:sl-border-primary sl-cursor-pointer sl-select-none"
+                         role="button">
+                        <div class="sl-flex sl-flex-1 sl-items-center sl-h-lg">
+                            <div class="sl-flex sl-items-center sl-mr-1.5 expansion-chevrons expansion-chevrons-solid expanded">
+                                <svg aria-hidden="true" focusable="false" data-prefix="fas"
+                                     data-icon="caret-down"
+                                     class="svg-inline--fa fa-caret-down fa-fw sl-icon" role="img"
+                                     xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512">
+                                    <path fill="currentColor"
+                                          d="M310.6 246.6l-127.1 128C176.4 380.9 168.2 384 160 384s-16.38-3.125-22.63-9.375l-127.1-128C.2244 237.5-2.516 223.7 2.438 211.8S19.07 192 32 192h255.1c12.94 0 24.62 7.781 29.58 19.75S319.8 237.5 310.6 246.6z"></path>
+                                </svg>
+                            </div>
+                            Query Parameters
+                        </div>
+                    </div>
+                    <div class="sl-panel__content-wrapper sl-bg-canvas-100 children" role="region">
+                        <div class="ParameterGrid sl-p-4">
+                                                                                            <label aria-hidden="true"
+                                       for="queryparam-GETapi-visitas-fecha_desde">fecha_desde</label>
+                                <span class="sl-mx-3">:</span>
+                                <div class="sl-flex sl-flex-1">
+                                    <div class="sl-input sl-flex-1 sl-relative">
+                                                                                    <input aria-label="fecha_desde" name="fecha_desde"
+                                                   id="queryparam-GETapi-visitas-fecha_desde"
+                                                   placeholder="date optional Filtrar visitas desde esta fecha."
+                                                   value="2024-01-01" data-component="query"
+                                                   class="sl-relative sl-w-full sl-h-md sl-text-base sl-pr-2.5 sl-pl-2.5 sl-rounded sl-border-transparent hover:sl-border-input focus:sl-border-primary sl-border"
+                                            >
+                                                                            </div>
+                                </div>
+                                                                                            <label aria-hidden="true"
+                                       for="queryparam-GETapi-visitas-fecha_hasta">fecha_hasta</label>
+                                <span class="sl-mx-3">:</span>
+                                <div class="sl-flex sl-flex-1">
+                                    <div class="sl-input sl-flex-1 sl-relative">
+                                                                                    <input aria-label="fecha_hasta" name="fecha_hasta"
+                                                   id="queryparam-GETapi-visitas-fecha_hasta"
+                                                   placeholder="date optional Filtrar visitas hasta esta fecha."
+                                                   value="2024-12-31" data-component="query"
+                                                   class="sl-relative sl-w-full sl-h-md sl-text-base sl-pr-2.5 sl-pl-2.5 sl-rounded sl-border-transparent hover:sl-border-input focus:sl-border-primary sl-border"
+                                            >
+                                                                            </div>
+                                </div>
+                                                                                            <label aria-hidden="true"
+                                       for="queryparam-GETapi-visitas-idusuario">idusuario</label>
+                                <span class="sl-mx-3">:</span>
+                                <div class="sl-flex sl-flex-1">
+                                    <div class="sl-input sl-flex-1 sl-relative">
+                                                                                    <input aria-label="idusuario" name="idusuario"
+                                                   id="queryparam-GETapi-visitas-idusuario"
+                                                   placeholder="optional Filtrar por el ID del usuario que realizó la visita."
+                                                   value="consequatur" data-component="query"
+                                                   class="sl-relative sl-w-full sl-h-md sl-text-base sl-pr-2.5 sl-pl-2.5 sl-rounded sl-border-transparent hover:sl-border-input focus:sl-border-primary sl-border"
+                                            >
+                                                                            </div>
+                                </div>
+                                                                                            <label aria-hidden="true"
+                                       for="queryparam-GETapi-visitas-idsede">idsede</label>
+                                <span class="sl-mx-3">:</span>
+                                <div class="sl-flex sl-flex-1">
+                                    <div class="sl-input sl-flex-1 sl-relative">
+                                                                                    <input aria-label="idsede" name="idsede"
+                                                   id="queryparam-GETapi-visitas-idsede"
+                                                   placeholder="optional Filtrar por el ID de la sede a la que pertenece el paciente."
+                                                   value="consequatur" data-component="query"
+                                                   class="sl-relative sl-w-full sl-h-md sl-text-base sl-pr-2.5 sl-pl-2.5 sl-rounded sl-border-transparent hover:sl-border-input focus:sl-border-primary sl-border"
+                                            >
+                                                                            </div>
+                                </div>
+                                                    </div>
+                    </div>
+                </div>
             
             
             <div class="SendButtonHolder sl-mt-4 sl-p-4 sl-pt-0">
@@ -42694,7 +43219,7 @@ You can check the Dev Tools console for debugging information.</p>
                                     <div class="sl-px-0 sl-py-1">
                                         <div style="max-height: 400px;" class="sl-overflow-y-auto sl-rounded">
                                             <pre><code class="language-bash">curl --request GET \
-    --get "http://localhost/api/visitas" \
+    --get "http://localhost/api/visitas?fecha_desde=2024-01-01&amp;fecha_hasta=2024-12-31&amp;idusuario=consequatur&amp;idsede=consequatur" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre>                                        </div>
                                     </div>
@@ -42706,6 +43231,15 @@ You can check the Dev Tools console for debugging information.</p>
                                             <pre><code class="language-javascript">const url = new URL(
     "http://localhost/api/visitas"
 );
+
+const params = {
+    "fecha_desde": "2024-01-01",
+    "fecha_hasta": "2024-12-31",
+    "idusuario": "consequatur",
+    "idsede": "consequatur",
+};
+Object.keys(params)
+    .forEach(key =&gt; url.searchParams.append(key, params[key]));
 
 const headers = {
     "Content-Type": "application/json",
@@ -43516,7 +44050,7 @@ Campos opcionales.</p>
                 <span>Example:</span> <!-- <span> important for spacing -->
                 <div class="sl-flex sl-flex-1 sl-flex-wrap" style="gap: 4px;">
                     <div class="sl-max-w-full sl-break-all sl-px-1 sl-bg-canvas-tint sl-text-muted sl-rounded sl-border">
-                        C:\Users\Sistemas\AppData\Local\Temp\php3684.tmp
+                        C:\Users\Sistemas\AppData\Local\Temp\php12B3.tmp
                     </div>
                 </div>
             </div>
@@ -43698,7 +44232,7 @@ Campos opcionales.</p>
                 <span>Example:</span> <!-- <span> important for spacing -->
                 <div class="sl-flex sl-flex-1 sl-flex-wrap" style="gap: 4px;">
                     <div class="sl-max-w-full sl-break-all sl-px-1 sl-bg-canvas-tint sl-text-muted sl-rounded sl-border">
-                        2026-03-26T00:38:05
+                        2026-03-26T14:59:43
                     </div>
                 </div>
             </div>
@@ -43723,7 +44257,7 @@ Campos opcionales.</p>
                 <span>Example:</span> <!-- <span> important for spacing -->
                 <div class="sl-flex sl-flex-1 sl-flex-wrap" style="gap: 4px;">
                     <div class="sl-max-w-full sl-break-all sl-px-1 sl-bg-canvas-tint sl-text-muted sl-rounded sl-border">
-                        C:\Users\Sistemas\AppData\Local\Temp\php3695.tmp
+                        C:\Users\Sistemas\AppData\Local\Temp\php12B4.tmp
                     </div>
                 </div>
             </div>
@@ -44371,7 +44905,7 @@ Campos opcionales."
                                                                                             <input aria-label="proximo_control" name="proximo_control"
                                                        id="bodyparam-POSTapi-visitas-proximo_control"
                                                        placeholder="Must be a valid date."
-                                                       value="2026-03-26T00:38:05" data-component="body"
+                                                       value="2026-03-26T14:59:43" data-component="body"
                                                        class="sl-relative sl-w-full sl-h-md sl-text-base sl-pr-2.5 sl-pl-2.5 sl-rounded sl-border-transparent hover:sl-border-input focus:sl-border-primary sl-border"
                                                 >
                                                                                     </div>
@@ -44553,12 +45087,12 @@ You can check the Dev Tools console for debugging information.</p>
     --form "factores=consequatur"\
     --form "conductas=consequatur"\
     --form "novedades=consequatur"\
-    --form "proximo_control=2026-03-26T00:38:05"\
+    --form "proximo_control=2026-03-26T14:59:43"\
     --form "firma_url=http://kunze.biz/iste-laborum-eius-est-dolor.html"\
     --form "firma_base64=consequatur"\
     --form "medicamentos=[{"id": 1, "indicaciones": "Cena"}]"\
-    --form "riesgo_fotografico=@C:\Users\Sistemas\AppData\Local\Temp\php3684.tmp" \
-    --form "firma=@C:\Users\Sistemas\AppData\Local\Temp\php3695.tmp" </code></pre>                                        </div>
+    --form "riesgo_fotografico=@C:\Users\Sistemas\AppData\Local\Temp\php12B3.tmp" \
+    --form "firma=@C:\Users\Sistemas\AppData\Local\Temp\php12B4.tmp" </code></pre>                                        </div>
                                     </div>
                                 </div>
                                                             <div class="sl-bg-canvas-100 example-request example-request-javascript"
@@ -44608,7 +45142,7 @@ body.append('motivo', 'consequatur');
 body.append('factores', 'consequatur');
 body.append('conductas', 'consequatur');
 body.append('novedades', 'consequatur');
-body.append('proximo_control', '2026-03-26T00:38:05');
+body.append('proximo_control', '2026-03-26T14:59:43');
 body.append('firma_url', 'http://kunze.biz/iste-laborum-eius-est-dolor.html');
 body.append('firma_base64', 'consequatur');
 body.append('medicamentos', '[{"id": 1, "indicaciones": "Cena"}]');

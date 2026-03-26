@@ -1,298 +1,23 @@
-name: 'Notificaciones Push (FCM)'
+name: 'Tamizajes de Presión Arterial (PA)'
 description: |-
 
-  Gestión de tokens de dispositivo y envío de notificaciones push a través de Firebase Cloud Messaging (FCM).
+  Módulo para el tamizaje primario de pacientes, captura de signos básicos y conducta inicial.
 endpoints:
   -
     custom: []
     httpMethods:
-      - POST
-    uri: api/notifications/register-device
-    metadata:
-      custom: []
-      groupName: 'Notificaciones Push (FCM)'
-      groupDescription: |-
-
-        Gestión de tokens de dispositivo y envío de notificaciones push a través de Firebase Cloud Messaging (FCM).
-      subgroup: ''
-      subgroupDescription: ''
-      title: 'Registrar dispositivo'
-      description: 'Registra el token FCM del dispositivo para recibir notificaciones push.'
-      authenticated: true
-      deprecated: false
-    headers:
-      Content-Type: application/json
-      Accept: application/json
-    urlParameters: []
-    cleanUrlParameters: []
-    queryParameters: []
-    cleanQueryParameters: []
-    bodyParameters:
-      user_id:
-        custom: []
-        name: user_id
-        description: 'ID del usuario.'
-        required: true
-        example: consequatur
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        deprecated: false
-      fcm_token:
-        custom: []
-        name: fcm_token
-        description: 'Token generado por Firebase en el móvil.'
-        required: true
-        example: consequatur
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        deprecated: false
-      platform:
-        custom: []
-        name: platform
-        description: 'android, ios, web.'
-        required: true
-        example: android
-        type: string
-        enumValues: []
-        exampleWasSpecified: true
-        nullable: false
-        deprecated: false
-      device_name:
-        custom: []
-        name: device_name
-        description: ''
-        required: false
-        example: consequatur
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: true
-        deprecated: false
-    cleanBodyParameters:
-      user_id: consequatur
-      fcm_token: consequatur
-      platform: android
-      device_name: consequatur
-    fileParameters: []
-    responses: []
-    responseFields: []
-    auth: []
-    controller: null
-    method: null
-    route: null
-  -
-    custom: []
-    httpMethods:
-      - POST
-    uri: api/notifications/send-to-user
-    metadata:
-      custom: []
-      groupName: 'Notificaciones Push (FCM)'
-      groupDescription: |-
-
-        Gestión de tokens de dispositivo y envío de notificaciones push a través de Firebase Cloud Messaging (FCM).
-      subgroup: ''
-      subgroupDescription: ''
-      title: ''
-      description: ''
-      authenticated: false
-      deprecated: false
-    headers:
-      Content-Type: application/json
-      Accept: application/json
-    urlParameters: []
-    cleanUrlParameters: []
-    queryParameters: []
-    cleanQueryParameters: []
-    bodyParameters:
-      user_id:
-        custom: []
-        name: user_id
-        description: 'The <code>id</code> of an existing record in the usuarios table.'
-        required: true
-        example: consequatur
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        deprecated: false
-      title:
-        custom: []
-        name: title
-        description: 'Must not be greater than 255 characters.'
-        required: true
-        example: mqeopfuudtdsufvyvddqa
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        deprecated: false
-      body:
-        custom: []
-        name: body
-        description: ''
-        required: true
-        example: consequatur
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        deprecated: false
-      data:
-        custom: []
-        name: data
-        description: ''
-        required: false
-        example: null
-        type: object
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: true
-        deprecated: false
-    cleanBodyParameters:
-      user_id: consequatur
-      title: mqeopfuudtdsufvyvddqa
-      body: consequatur
-    fileParameters: []
-    responses: []
-    responseFields: []
-    auth: []
-    controller: null
-    method: null
-    route: null
-  -
-    custom: []
-    httpMethods:
-      - POST
-    uri: api/notifications/send-to-all
-    metadata:
-      custom: []
-      groupName: 'Notificaciones Push (FCM)'
-      groupDescription: |-
-
-        Gestión de tokens de dispositivo y envío de notificaciones push a través de Firebase Cloud Messaging (FCM).
-      subgroup: ''
-      subgroupDescription: ''
-      title: 'Notificación masiva (Broadcast)'
-      description: 'Envía una notificación push a todos los dispositivos registrados en el sistema.'
-      authenticated: true
-      deprecated: false
-    headers:
-      Content-Type: application/json
-      Accept: application/json
-    urlParameters: []
-    cleanUrlParameters: []
-    queryParameters: []
-    cleanQueryParameters: []
-    bodyParameters:
-      title:
-        custom: []
-        name: title
-        description: 'Título de la notificación.'
-        required: true
-        example: consequatur
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        deprecated: false
-      body:
-        custom: []
-        name: body
-        description: 'Contenido del mensaje.'
-        required: true
-        example: consequatur
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        deprecated: false
-      data:
-        custom: []
-        name: data
-        description: 'Datos adicionales (key-value).'
-        required: false
-        example: []
-        type: object
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: true
-        deprecated: false
-    cleanBodyParameters:
-      title: consequatur
-      body: consequatur
-      data: []
-    fileParameters: []
-    responses: []
-    responseFields: []
-    auth: []
-    controller: null
-    method: null
-    route: null
-  -
-    custom: []
-    httpMethods:
-      - POST
-    uri: api/notifications/unregister-device
-    metadata:
-      custom: []
-      groupName: 'Notificaciones Push (FCM)'
-      groupDescription: |-
-
-        Gestión de tokens de dispositivo y envío de notificaciones push a través de Firebase Cloud Messaging (FCM).
-      subgroup: ''
-      subgroupDescription: ''
-      title: ''
-      description: ''
-      authenticated: false
-      deprecated: false
-    headers:
-      Content-Type: application/json
-      Accept: application/json
-    urlParameters: []
-    cleanUrlParameters: []
-    queryParameters: []
-    cleanQueryParameters: []
-    bodyParameters:
-      fcm_token:
-        custom: []
-        name: fcm_token
-        description: ''
-        required: true
-        example: consequatur
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        deprecated: false
-    cleanBodyParameters:
-      fcm_token: consequatur
-    fileParameters: []
-    responses: []
-    responseFields: []
-    auth: []
-    controller: null
-    method: null
-    route: null
-  -
-    custom: []
-    httpMethods:
       - GET
-    uri: api/notifications/users-with-tokens
+    uri: api/tamizajes
     metadata:
       custom: []
-      groupName: 'Notificaciones Push (FCM)'
+      groupName: 'Tamizajes de Presión Arterial (PA)'
       groupDescription: |-
 
-        Gestión de tokens de dispositivo y envío de notificaciones push a través de Firebase Cloud Messaging (FCM).
+        Módulo para el tamizaje primario de pacientes, captura de signos básicos y conducta inicial.
       subgroup: ''
       subgroupDescription: ''
-      title: 'Listar usuarios con tokens'
-      description: 'Obtiene una lista paginada de usuarios que tienen tokens de FCM registrados.'
+      title: 'Listar tamizajes'
+      description: ''
       authenticated: true
       deprecated: false
     headers:
@@ -301,21 +26,10 @@ endpoints:
     urlParameters: []
     cleanUrlParameters: []
     queryParameters:
-      per_page:
+      paciente_id:
         custom: []
-        name: per_page
-        description: 'Resultados por página. Default: 15.'
-        required: false
-        example: 17
-        type: integer
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        deprecated: false
-      search:
-        custom: []
-        name: search
-        description: 'Buscar por nombre, correo o usuario.'
+        name: paciente_id
+        description: 'Filtrar por paciente.'
         required: false
         example: consequatur
         type: string
@@ -323,10 +37,10 @@ endpoints:
         exampleWasSpecified: false
         nullable: false
         deprecated: false
-      platform:
+      usuario_id:
         custom: []
-        name: platform
-        description: 'Filtrar por plataforma (android, ios, web).'
+        name: usuario_id
+        description: 'Filtrar por usuario/promotor.'
         required: false
         example: consequatur
         type: string
@@ -335,9 +49,8 @@ endpoints:
         nullable: false
         deprecated: false
     cleanQueryParameters:
-      per_page: 17
-      search: consequatur
-      platform: consequatur
+      paciente_id: consequatur
+      usuario_id: consequatur
     bodyParameters: []
     cleanBodyParameters: []
     fileParameters: []
@@ -359,17 +72,170 @@ endpoints:
   -
     custom: []
     httpMethods:
-      - GET
-    uri: api/notifications/stats
+      - POST
+    uri: api/tamizajes
     metadata:
       custom: []
-      groupName: 'Notificaciones Push (FCM)'
+      groupName: 'Tamizajes de Presión Arterial (PA)'
       groupDescription: |-
 
-        Gestión de tokens de dispositivo y envío de notificaciones push a través de Firebase Cloud Messaging (FCM).
+        Módulo para el tamizaje primario de pacientes, captura de signos básicos y conducta inicial.
       subgroup: ''
       subgroupDescription: ''
-      title: ''
+      title: 'Crear tamizaje'
+      description: ''
+      authenticated: true
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      idpaciente:
+        custom: []
+        name: idpaciente
+        description: 'ID del paciente.'
+        required: true
+        example: id-paciente
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        deprecated: false
+      vereda_residencia:
+        custom: []
+        name: vereda_residencia
+        description: Vereda.
+        required: true
+        example: 'Vereda Norte'
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        deprecated: false
+      telefono:
+        custom: []
+        name: telefono
+        description: 'Must not be greater than 20 characters.'
+        required: false
+        example: mniihfqcoynlazghd
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+      brazo_toma:
+        custom: []
+        name: brazo_toma
+        description: 'izquierdo o derecho.'
+        required: true
+        example: izquierdo
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        deprecated: false
+      posicion_persona:
+        custom: []
+        name: posicion_persona
+        description: 'de_pie, acostado, sentado.'
+        required: true
+        example: sentado
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        deprecated: false
+      reposo_cinco_minutos:
+        custom: []
+        name: reposo_cinco_minutos
+        description: 'si o no.'
+        required: true
+        example: si
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        deprecated: false
+      fecha_primera_toma:
+        custom: []
+        name: fecha_primera_toma
+        description: 'Fecha de la toma.'
+        required: true
+        example: consequatur
+        type: date
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      pa_sistolica:
+        custom: []
+        name: pa_sistolica
+        description: Sistólica.
+        required: true
+        example: 120
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        deprecated: false
+      pa_diastolica:
+        custom: []
+        name: pa_diastolica
+        description: Diastólica.
+        required: true
+        example: 80
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        deprecated: false
+      conducta:
+        custom: []
+        name: conducta
+        description: 'Must not be greater than 1000 characters.'
+        required: false
+        example: bajwbpilpmufinllwloau
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+    cleanBodyParameters:
+      idpaciente: id-paciente
+      vereda_residencia: 'Vereda Norte'
+      telefono: mniihfqcoynlazghd
+      brazo_toma: izquierdo
+      posicion_persona: sentado
+      reposo_cinco_minutos: si
+      fecha_primera_toma: consequatur
+      pa_sistolica: 120
+      pa_diastolica: 80
+      conducta: bajwbpilpmufinllwloau
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - GET
+    uri: api/tamizajes/estadisticas
+    metadata:
+      custom: []
+      groupName: 'Tamizajes de Presión Arterial (PA)'
+      groupDescription: |-
+
+        Módulo para el tamizaje primario de pacientes, captura de signos básicos y conducta inicial.
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Obtener estadísticas de tamizajes del usuario logueado'
       description: ''
       authenticated: false
       deprecated: false
@@ -402,16 +268,16 @@ endpoints:
     custom: []
     httpMethods:
       - GET
-    uri: 'api/notifications/user/{userId}/tokens'
+    uri: 'api/tamizajes/paciente/{pacienteId}'
     metadata:
       custom: []
-      groupName: 'Notificaciones Push (FCM)'
+      groupName: 'Tamizajes de Presión Arterial (PA)'
       groupDescription: |-
 
-        Gestión de tokens de dispositivo y envío de notificaciones push a través de Firebase Cloud Messaging (FCM).
+        Módulo para el tamizaje primario de pacientes, captura de signos básicos y conducta inicial.
       subgroup: ''
       subgroupDescription: ''
-      title: ''
+      title: 'Obtener tamizajes por paciente'
       description: ''
       authenticated: false
       deprecated: false
@@ -419,9 +285,9 @@ endpoints:
       Content-Type: application/json
       Accept: application/json
     urlParameters:
-      userId:
+      pacienteId:
         custom: []
-        name: userId
+        name: pacienteId
         description: ''
         required: true
         example: consequatur
@@ -431,7 +297,7 @@ endpoints:
         nullable: false
         deprecated: false
     cleanUrlParameters:
-      userId: consequatur
+      pacienteId: consequatur
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []
@@ -447,6 +313,307 @@ endpoints:
           content-type: application/json
           access-control-allow-origin: '*'
         description: null
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - GET
+    uri: api/tamizajes/mis-tamizajes
+    metadata:
+      custom: []
+      groupName: 'Tamizajes de Presión Arterial (PA)'
+      groupDescription: |-
+
+        Módulo para el tamizaje primario de pacientes, captura de signos básicos y conducta inicial.
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Obtener tamizajes del usuario autenticado'
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 401
+        content: '{"message":"Unauthenticated."}'
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          access-control-allow-origin: '*'
+        description: null
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - GET
+    uri: 'api/tamizajes/{id}'
+    metadata:
+      custom: []
+      groupName: 'Tamizajes de Presión Arterial (PA)'
+      groupDescription: |-
+
+        Módulo para el tamizaje primario de pacientes, captura de signos básicos y conducta inicial.
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Consultar tamizaje'
+      description: ''
+      authenticated: true
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      id:
+        custom: []
+        name: id
+        description: 'ID del tamizaje.'
+        required: true
+        example: consequatur
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      id: consequatur
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 401
+        content: '{"message":"Unauthenticated."}'
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          access-control-allow-origin: '*'
+        description: null
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - PUT
+    uri: 'api/tamizajes/{id}'
+    metadata:
+      custom: []
+      groupName: 'Tamizajes de Presión Arterial (PA)'
+      groupDescription: |-
+
+        Módulo para el tamizaje primario de pacientes, captura de signos básicos y conducta inicial.
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Actualizar tamizaje'
+      description: ''
+      authenticated: true
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      id:
+        custom: []
+        name: id
+        description: 'ID del tamizaje.'
+        required: true
+        example: consequatur
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      id: consequatur
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      vereda_residencia:
+        custom: []
+        name: vereda_residencia
+        description: 'Must not be greater than 100 characters.'
+        required: false
+        example: vmqeopfuudtdsufvyvddq
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      telefono:
+        custom: []
+        name: telefono
+        description: 'Must not be greater than 20 characters.'
+        required: false
+        example: amniihfqcoynlazgh
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+      brazo_toma:
+        custom: []
+        name: brazo_toma
+        description: ''
+        required: false
+        example: izquierdo
+        type: string
+        enumValues:
+          - izquierdo
+          - derecho
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      posicion_persona:
+        custom: []
+        name: posicion_persona
+        description: ''
+        required: false
+        example: acostado
+        type: string
+        enumValues:
+          - de_pie
+          - acostado
+          - sentado
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      reposo_cinco_minutos:
+        custom: []
+        name: reposo_cinco_minutos
+        description: ''
+        required: false
+        example: 'no'
+        type: string
+        enumValues:
+          - si
+          - 'no'
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      fecha_primera_toma:
+        custom: []
+        name: fecha_primera_toma
+        description: 'Must be a valid date.'
+        required: false
+        example: '2026-03-26T14:59:44'
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      pa_sistolica:
+        custom: []
+        name: pa_sistolica
+        description: 'Must be at least 50. Must not be greater than 300.'
+        required: false
+        example: 19
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      pa_diastolica:
+        custom: []
+        name: pa_diastolica
+        description: 'Must be at least 30. Must not be greater than 200.'
+        required: false
+        example: 16
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      conducta:
+        custom: []
+        name: conducta
+        description: 'Must not be greater than 1000 characters.'
+        required: false
+        example: xbajwbpilpmufinllwloa
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+    cleanBodyParameters:
+      vereda_residencia: vmqeopfuudtdsufvyvddq
+      telefono: amniihfqcoynlazgh
+      brazo_toma: izquierdo
+      posicion_persona: acostado
+      reposo_cinco_minutos: 'no'
+      fecha_primera_toma: '2026-03-26T14:59:44'
+      pa_sistolica: 19
+      pa_diastolica: 16
+      conducta: xbajwbpilpmufinllwloa
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - DELETE
+    uri: 'api/tamizajes/{id}'
+    metadata:
+      custom: []
+      groupName: 'Tamizajes de Presión Arterial (PA)'
+      groupDescription: |-
+
+        Módulo para el tamizaje primario de pacientes, captura de signos básicos y conducta inicial.
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Eliminar un tamizaje'
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      id:
+        custom: []
+        name: id
+        description: 'The ID of the tamizaje.'
+        required: true
+        example: consequatur
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      id: consequatur
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses: []
     responseFields: []
     auth: []
     controller: null

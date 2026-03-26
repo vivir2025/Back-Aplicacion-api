@@ -1,23 +1,23 @@
-name: 'Envíos de Muestras (Laboratorio)'
+name: 'Visitas Domiciliarias'
 description: |-
 
-  Gestión de planillas de remisión de muestras de laboratorio desde las sedes.
+  Gestión de visitas realizadas a pacientes en su domicilio, incluyendo toma de signos vitales, fotos y firmas.
 endpoints:
   -
     custom: []
     httpMethods:
       - GET
-    uri: api/envio-muestras
+    uri: api/visitas
     metadata:
       custom: []
-      groupName: 'Envíos de Muestras (Laboratorio)'
+      groupName: 'Visitas Domiciliarias'
       groupDescription: |-
 
-        Gestión de planillas de remisión de muestras de laboratorio desde las sedes.
+        Gestión de visitas realizadas a pacientes en su domicilio, incluyendo toma de signos vitales, fotos y firmas.
       subgroup: ''
       subgroupDescription: ''
-      title: 'Listar envíos de muestras'
-      description: ''
+      title: 'Listar todas las visitas'
+      description: 'Permite filtrar las visitas por rango de fechas, usuario que realizó la visita y sede asociada al paciente.'
       authenticated: true
       deprecated: false
     headers:
@@ -25,8 +25,56 @@ endpoints:
       Accept: application/json
     urlParameters: []
     cleanUrlParameters: []
-    queryParameters: []
-    cleanQueryParameters: []
+    queryParameters:
+      fecha_desde:
+        custom: []
+        name: fecha_desde
+        description: 'date optional Filtrar visitas desde esta fecha.'
+        required: false
+        example: '2024-01-01'
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        deprecated: false
+      fecha_hasta:
+        custom: []
+        name: fecha_hasta
+        description: 'date optional Filtrar visitas hasta esta fecha.'
+        required: false
+        example: '2024-12-31'
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        deprecated: false
+      idusuario:
+        custom: []
+        name: idusuario
+        description: 'optional Filtrar por el ID del usuario que realizó la visita.'
+        required: false
+        example: consequatur
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      idsede:
+        custom: []
+        name: idsede
+        description: 'optional Filtrar por el ID de la sede a la que pertenece el paciente.'
+        required: false
+        example: consequatur
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanQueryParameters:
+      fecha_desde: '2024-01-01'
+      fecha_hasta: '2024-12-31'
+      idusuario: consequatur
+      idsede: consequatur
     bodyParameters: []
     cleanBodyParameters: []
     fileParameters: []
@@ -49,31 +97,53 @@ endpoints:
     custom: []
     httpMethods:
       - POST
-    uri: api/envio-muestras
+    uri: api/visitas
     metadata:
       custom: []
-      groupName: 'Envíos de Muestras (Laboratorio)'
+      groupName: 'Visitas Domiciliarias'
       groupDescription: |-
 
-        Gestión de planillas de remisión de muestras de laboratorio desde las sedes.
+        Gestión de visitas realizadas a pacientes en su domicilio, incluyendo toma de signos vitales, fotos y firmas.
       subgroup: ''
       subgroupDescription: ''
-      title: 'Crear planilla de envío'
-      description: 'Permite registrar una nueva planilla de remisión de muestras a laboratorio.'
+      title: 'Crear visita domiciliaria'
+      description: 'Permite registrar una visita, procesando coordenadas, fotos de riesgo y firmas en archivos o Base64.'
       authenticated: true
       deprecated: false
     headers:
-      Content-Type: application/json
+      Content-Type: multipart/form-data
       Accept: application/json
     urlParameters: []
     cleanUrlParameters: []
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters:
+      nombre_apellido:
+        custom: []
+        name: nombre_apellido
+        description: 'Nombre del paciente contactado.'
+        required: true
+        example: consequatur
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      identificacion:
+        custom: []
+        name: identificacion
+        description: 'Cédula del paciente.'
+        required: true
+        example: consequatur
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
       fecha:
         custom: []
         name: fecha
-        description: 'Fecha del envío.'
+        description: 'Fecha de la visita.'
         required: true
         example: consequatur
         type: date
@@ -81,10 +151,10 @@ endpoints:
         exampleWasSpecified: false
         nullable: false
         deprecated: false
-      idsede:
+      idusuario:
         custom: []
-        name: idsede
-        description: 'ID de la sede remitente.'
+        name: idusuario
+        description: 'ID del usuario (Hacedor).'
         required: true
         example: consequatur
         type: string
@@ -92,94 +162,434 @@ endpoints:
         exampleWasSpecified: false
         nullable: false
         deprecated: false
-      detalles:
+      idpaciente:
         custom: []
-        name: detalles
-        description: 'Lista de muestras por paciente.'
-        required: true
-        example:
-          - []
-        type: 'object[]'
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        deprecated: false
-      responsable_transporte_id:
-        custom: []
-        name: responsable_transporte_id
-        description: 'Must not be greater than 255 characters.'
+        name: idpaciente
+        description: 'ID del paciente (opcional, se busca por cédula si falta).'
         required: false
-        example: vmqeopfuudtdsufvyvddq
+        example: consequatur
         type: string
         enumValues: []
         exampleWasSpecified: false
         nullable: true
         deprecated: false
-      responsable_recepcion_id:
+      id:
         custom: []
-        name: responsable_recepcion_id
-        description: 'Must not be greater than 255 characters.'
+        name: id
+        description: |-
+          ✅ CAMBIADO: Ya no requiere que exista en la BD
+          Campos opcionales.
         required: false
-        example: amniihfqcoynlazghdtqt
+        example: consequatur
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      hta:
+        custom: []
+        name: hta
+        description: 'Presión arterial (si/no).'
+        required: false
+        example: consequatur
         type: string
         enumValues: []
         exampleWasSpecified: false
         nullable: true
         deprecated: false
-      'detalles[].paciente_id':
+      dm:
         custom: []
-        name: 'detalles[].paciente_id'
-        description: 'The <code>id</code> of an existing record in the pacientes table.'
-        required: true
+        name: dm
+        description: 'Diabetes (si/no).'
+        required: false
         example: consequatur
         type: string
         enumValues: []
         exampleWasSpecified: false
-        nullable: false
+        nullable: true
         deprecated: false
-      'detalles[].numero_orden':
+      telefono:
         custom: []
-        name: 'detalles[].numero_orden'
-        description: 'Must be at least 1.'
-        required: true
-        example: 45
-        type: integer
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        deprecated: false
-      'detalles.*.paciente_id':
-        custom: []
-        name: 'detalles.*.paciente_id'
-        description: 'ID del paciente.'
-        required: true
+        name: telefono
+        description: ''
+        required: false
         example: consequatur
         type: string
         enumValues: []
         exampleWasSpecified: false
-        nullable: false
+        nullable: true
         deprecated: false
-      'detalles.*.numero_orden':
+      zona:
         custom: []
-        name: 'detalles.*.numero_orden'
-        description: 'Número de orden de laboratorio.'
-        required: true
+        name: zona
+        description: ''
+        required: false
+        example: consequatur
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+      peso:
+        custom: []
+        name: peso
+        description: 'Peso (kg).'
+        required: false
+        example: 11613.31890586
+        type: number
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+      talla:
+        custom: []
+        name: talla
+        description: 'Talla (cm).'
+        required: false
+        example: 11613.31890586
+        type: number
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+      imc:
+        custom: []
+        name: imc
+        description: ''
+        required: false
+        example: 11613.31890586
+        type: number
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+      perimetro_abdominal:
+        custom: []
+        name: perimetro_abdominal
+        description: ''
+        required: false
+        example: 11613.31890586
+        type: number
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+      frecuencia_cardiaca:
+        custom: []
+        name: frecuencia_cardiaca
+        description: ''
+        required: false
         example: 17
         type: integer
         enumValues: []
         exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+      frecuencia_respiratoria:
+        custom: []
+        name: frecuencia_respiratoria
+        description: ''
+        required: false
+        example: 17
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+      tension_arterial:
+        custom: []
+        name: tension_arterial
+        description: 'Valor TA (e.g. 120/80).'
+        required: false
+        example: consequatur
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+      glucometria:
+        custom: []
+        name: glucometria
+        description: ''
+        required: false
+        example: 11613.31890586
+        type: number
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+      temperatura:
+        custom: []
+        name: temperatura
+        description: ''
+        required: false
+        example: 11613.31890586
+        type: number
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+      familiar:
+        custom: []
+        name: familiar
+        description: ''
+        required: false
+        example: consequatur
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+      latitud:
+        custom: []
+        name: latitud
+        description: '✅ AGREGAR VALIDACIONES FALTANTES.'
+        required: false
+        example: 11613.31890586
+        type: number
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+      longitud:
+        custom: []
+        name: longitud
+        description: ''
+        required: false
+        example: 11613.31890586
+        type: number
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+      estado:
+        custom: []
+        name: estado
+        description: ''
+        required: false
+        example: consequatur
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+      sync_status:
+        custom: []
+        name: sync_status
+        description: ''
+        required: false
+        example: 17
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+      observaciones_adicionales:
+        custom: []
+        name: observaciones_adicionales
+        description: ''
+        required: false
+        example: consequatur
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+      tipo_visita:
+        custom: []
+        name: tipo_visita
+        description: ''
+        required: false
+        example: consequatur
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+      riesgo_fotografico:
+        custom: []
+        name: riesgo_fotografico
+        description: 'Archivos. Must be a file. Must be an image. Must not be greater than 2048 kilobytes.'
+        required: false
+        example: null
+        type: file
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+      riesgo_fotografico_url:
+        custom: []
+        name: riesgo_fotografico_url
+        description: ''
+        required: false
+        example: 'http://kunze.biz/iste-laborum-eius-est-dolor.html'
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+      riesgo_fotografico_base64:
+        custom: []
+        name: riesgo_fotografico_base64
+        description: 'Imagen del riesgo en Base64.'
+        required: false
+        example: consequatur
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+      abandono_social:
+        custom: []
+        name: abandono_social
+        description: ''
+        required: false
+        example: consequatur
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+      motivo:
+        custom: []
+        name: motivo
+        description: ''
+        required: false
+        example: consequatur
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+      factores:
+        custom: []
+        name: factores
+        description: ''
+        required: false
+        example: consequatur
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+      conductas:
+        custom: []
+        name: conductas
+        description: ''
+        required: false
+        example: consequatur
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+      novedades:
+        custom: []
+        name: novedades
+        description: ''
+        required: false
+        example: consequatur
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+      proximo_control:
+        custom: []
+        name: proximo_control
+        description: 'Must be a valid date.'
+        required: false
+        example: '2026-03-26T14:59:43'
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+      firma:
+        custom: []
+        name: firma
+        description: 'Must be a file. Must be an image. Must not be greater than 2048 kilobytes.'
+        required: false
+        example: null
+        type: file
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+      firma_url:
+        custom: []
+        name: firma_url
+        description: ''
+        required: false
+        example: 'http://kunze.biz/iste-laborum-eius-est-dolor.html'
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+      firma_base64:
+        custom: []
+        name: firma_base64
+        description: 'Firma en Base64.'
+        required: false
+        example: consequatur
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+      medicamentos:
+        custom: []
+        name: medicamentos
+        description: 'JSON con lista de medicamentos e indicaciones.'
+        required: false
+        example: '[{"id": 1, "indicaciones": "Cena"}]'
+        type: json
+        enumValues: []
+        exampleWasSpecified: true
         nullable: false
         deprecated: false
     cleanBodyParameters:
+      nombre_apellido: consequatur
+      identificacion: consequatur
       fecha: consequatur
-      idsede: consequatur
-      detalles:
-        -
-          paciente_id: consequatur
-          numero_orden: 45
-      responsable_transporte_id: vmqeopfuudtdsufvyvddq
-      responsable_recepcion_id: amniihfqcoynlazghdtqt
-    fileParameters: []
+      idusuario: consequatur
+      idpaciente: consequatur
+      id: consequatur
+      hta: consequatur
+      dm: consequatur
+      telefono: consequatur
+      zona: consequatur
+      peso: 11613.31890586
+      talla: 11613.31890586
+      imc: 11613.31890586
+      perimetro_abdominal: 11613.31890586
+      frecuencia_cardiaca: 17
+      frecuencia_respiratoria: 17
+      tension_arterial: consequatur
+      glucometria: 11613.31890586
+      temperatura: 11613.31890586
+      familiar: consequatur
+      latitud: 11613.31890586
+      longitud: 11613.31890586
+      estado: consequatur
+      sync_status: 17
+      observaciones_adicionales: consequatur
+      tipo_visita: consequatur
+      riesgo_fotografico_url: 'http://kunze.biz/iste-laborum-eius-est-dolor.html'
+      riesgo_fotografico_base64: consequatur
+      abandono_social: consequatur
+      motivo: consequatur
+      factores: consequatur
+      conductas: consequatur
+      novedades: consequatur
+      proximo_control: '2026-03-26T14:59:43'
+      firma_url: 'http://kunze.biz/iste-laborum-eius-est-dolor.html'
+      firma_base64: consequatur
+      medicamentos: '[{"id": 1, "indicaciones": "Cena"}]'
+    fileParameters:
+      riesgo_fotografico: null
+      firma: null
     responses: []
     responseFields: []
     auth: []
@@ -190,13 +600,13 @@ endpoints:
     custom: []
     httpMethods:
       - GET
-    uri: 'api/envio-muestras/{id}'
+    uri: 'api/visitas/{id}'
     metadata:
       custom: []
-      groupName: 'Envíos de Muestras (Laboratorio)'
+      groupName: 'Visitas Domiciliarias'
       groupDescription: |-
 
-        Gestión de planillas de remisión de muestras de laboratorio desde las sedes.
+        Gestión de visitas realizadas a pacientes en su domicilio, incluyendo toma de signos vitales, fotos y firmas.
       subgroup: ''
       subgroupDescription: ''
       title: ''
@@ -210,7 +620,7 @@ endpoints:
       id:
         custom: []
         name: id
-        description: 'The ID of the envio muestra.'
+        description: 'The ID of the visita.'
         required: true
         example: consequatur
         type: string
@@ -245,18 +655,18 @@ endpoints:
     httpMethods:
       - PUT
       - PATCH
-    uri: 'api/envio-muestras/{id}'
+    uri: 'api/visitas/{id}'
     metadata:
       custom: []
-      groupName: 'Envíos de Muestras (Laboratorio)'
+      groupName: 'Visitas Domiciliarias'
       groupDescription: |-
 
-        Gestión de planillas de remisión de muestras de laboratorio desde las sedes.
+        Gestión de visitas realizadas a pacientes en su domicilio, incluyendo toma de signos vitales, fotos y firmas.
       subgroup: ''
       subgroupDescription: ''
-      title: ''
+      title: 'Actualizar visita'
       description: ''
-      authenticated: false
+      authenticated: true
       deprecated: false
     headers:
       Content-Type: application/json
@@ -265,7 +675,7 @@ endpoints:
       id:
         custom: []
         name: id
-        description: 'The ID of the envio muestra.'
+        description: 'ID de la visita.'
         required: true
         example: consequatur
         type: string
@@ -277,55 +687,8 @@ endpoints:
       id: consequatur
     queryParameters: []
     cleanQueryParameters: []
-    bodyParameters:
-      fecha:
-        custom: []
-        name: fecha
-        description: 'Must be a valid date.'
-        required: false
-        example: '2026-03-26T00:38:05'
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        deprecated: false
-      idsede:
-        custom: []
-        name: idsede
-        description: 'The <code>id</code> of an existing record in the sedes table.'
-        required: false
-        example: null
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        deprecated: false
-      responsable_transporte_id:
-        custom: []
-        name: responsable_transporte_id
-        description: 'Must not be greater than 255 characters.'
-        required: false
-        example: vmqeopfuudtdsufvyvddq
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: true
-        deprecated: false
-      responsable_recepcion_id:
-        custom: []
-        name: responsable_recepcion_id
-        description: 'Must not be greater than 255 characters.'
-        required: false
-        example: amniihfqcoynlazghdtqt
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: true
-        deprecated: false
-    cleanBodyParameters:
-      fecha: '2026-03-26T00:38:05'
-      responsable_transporte_id: vmqeopfuudtdsufvyvddq
-      responsable_recepcion_id: amniihfqcoynlazghdtqt
+    bodyParameters: []
+    cleanBodyParameters: []
     fileParameters: []
     responses: []
     responseFields: []
@@ -337,13 +700,13 @@ endpoints:
     custom: []
     httpMethods:
       - DELETE
-    uri: 'api/envio-muestras/{id}'
+    uri: 'api/visitas/{id}'
     metadata:
       custom: []
-      groupName: 'Envíos de Muestras (Laboratorio)'
+      groupName: 'Visitas Domiciliarias'
       groupDescription: |-
 
-        Gestión de planillas de remisión de muestras de laboratorio desde las sedes.
+        Gestión de visitas realizadas a pacientes en su domicilio, incluyendo toma de signos vitales, fotos y firmas.
       subgroup: ''
       subgroupDescription: ''
       title: ''
@@ -357,7 +720,7 @@ endpoints:
       id:
         custom: []
         name: id
-        description: 'The ID of the envio muestra.'
+        description: 'The ID of the visita.'
         required: true
         example: consequatur
         type: string
@@ -382,13 +745,13 @@ endpoints:
     custom: []
     httpMethods:
       - GET
-    uri: 'api/envio-muestras/sede/{sedeId}'
+    uri: 'api/visitas/{id}'
     metadata:
       custom: []
-      groupName: 'Envíos de Muestras (Laboratorio)'
+      groupName: 'Visitas Domiciliarias'
       groupDescription: |-
 
-        Gestión de planillas de remisión de muestras de laboratorio desde las sedes.
+        Gestión de visitas realizadas a pacientes en su domicilio, incluyendo toma de signos vitales, fotos y firmas.
       subgroup: ''
       subgroupDescription: ''
       title: ''
@@ -399,10 +762,10 @@ endpoints:
       Content-Type: application/json
       Accept: application/json
     urlParameters:
-      sedeId:
+      id:
         custom: []
-        name: sedeId
-        description: ''
+        name: id
+        description: 'The ID of the visita.'
         required: true
         example: consequatur
         type: string
@@ -411,61 +774,7 @@ endpoints:
         nullable: false
         deprecated: false
     cleanUrlParameters:
-      sedeId: consequatur
-    queryParameters: []
-    cleanQueryParameters: []
-    bodyParameters: []
-    cleanBodyParameters: []
-    fileParameters: []
-    responses:
-      -
-        custom: []
-        status: 401
-        content: '{"message":"Unauthenticated."}'
-        headers:
-          cache-control: 'no-cache, private'
-          content-type: application/json
-          access-control-allow-origin: '*'
-        description: null
-    responseFields: []
-    auth: []
-    controller: null
-    method: null
-    route: null
-  -
-    custom: []
-    httpMethods:
-      - GET
-    uri: 'api/envio-muestras/por-fecha-salida/{fecha}'
-    metadata:
-      custom: []
-      groupName: 'Envíos de Muestras (Laboratorio)'
-      groupDescription: |-
-
-        Gestión de planillas de remisión de muestras de laboratorio desde las sedes.
-      subgroup: ''
-      subgroupDescription: ''
-      title: ''
-      description: ''
-      authenticated: false
-      deprecated: false
-    headers:
-      Content-Type: application/json
-      Accept: application/json
-    urlParameters:
-      fecha:
-        custom: []
-        name: fecha
-        description: ''
-        required: true
-        example: consequatur
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        deprecated: false
-    cleanUrlParameters:
-      fecha: consequatur
+      id: consequatur
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []
@@ -490,16 +799,61 @@ endpoints:
     custom: []
     httpMethods:
       - PUT
-    uri: 'api/envio-muestras/{id}/actualizar-estado-correo'
+    uri: 'api/visitas/{id}'
     metadata:
       custom: []
-      groupName: 'Envíos de Muestras (Laboratorio)'
+      groupName: 'Visitas Domiciliarias'
       groupDescription: |-
 
-        Gestión de planillas de remisión de muestras de laboratorio desde las sedes.
+        Gestión de visitas realizadas a pacientes en su domicilio, incluyendo toma de signos vitales, fotos y firmas.
       subgroup: ''
       subgroupDescription: ''
-      title: 'Actualizar estado de correo (marcar como enviado/no enviado)'
+      title: 'Actualizar visita'
+      description: ''
+      authenticated: true
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      id:
+        custom: []
+        name: id
+        description: 'ID de la visita.'
+        required: true
+        example: consequatur
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      id: consequatur
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - DELETE
+    uri: 'api/visitas/{id}'
+    metadata:
+      custom: []
+      groupName: 'Visitas Domiciliarias'
+      groupDescription: |-
+
+        Gestión de visitas realizadas a pacientes en su domicilio, incluyendo toma de signos vitales, fotos y firmas.
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
       description: ''
       authenticated: false
       deprecated: false
@@ -510,7 +864,7 @@ endpoints:
       id:
         custom: []
         name: id
-        description: 'The ID of the envio muestra.'
+        description: 'The ID of the visita.'
         required: true
         example: consequatur
         type: string
@@ -520,6 +874,225 @@ endpoints:
         deprecated: false
     cleanUrlParameters:
       id: consequatur
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - GET
+    uri: 'api/visitas/buscar-paciente/{identificacion}'
+    metadata:
+      custom: []
+      groupName: 'Visitas Domiciliarias'
+      groupDescription: |-
+
+        Gestión de visitas realizadas a pacientes en su domicilio, incluyendo toma de signos vitales, fotos y firmas.
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      identificacion:
+        custom: []
+        name: identificacion
+        description: ''
+        required: true
+        example: consequatur
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      identificacion: consequatur
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 401
+        content: '{"message":"Unauthenticated."}'
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          access-control-allow-origin: '*'
+        description: null
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - POST
+    uri: api/upload-risk-photo
+    metadata:
+      custom: []
+      groupName: 'Visitas Domiciliarias'
+      groupDescription: |-
+
+        Gestión de visitas realizadas a pacientes en su domicilio, incluyendo toma de signos vitales, fotos y firmas.
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - POST
+    uri: api/upload-signature
+    metadata:
+      custom: []
+      groupName: 'Visitas Domiciliarias'
+      groupDescription: |-
+
+        Gestión de visitas realizadas a pacientes en su domicilio, incluyendo toma de signos vitales, fotos y firmas.
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - POST
+    uri: api/upload-photo
+    metadata:
+      custom: []
+      groupName: 'Visitas Domiciliarias'
+      groupDescription: |-
+
+        Gestión de visitas realizadas a pacientes en su domicilio, incluyendo toma de signos vitales, fotos y firmas.
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - POST
+    uri: api/visitas/upload-risk-photo-base64
+    metadata:
+      custom: []
+      groupName: 'Visitas Domiciliarias'
+      groupDescription: |-
+
+        Gestión de visitas realizadas a pacientes en su domicilio, incluyendo toma de signos vitales, fotos y firmas.
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - POST
+    uri: api/visitas/upload-signature-base64
+    metadata:
+      custom: []
+      groupName: 'Visitas Domiciliarias'
+      groupDescription: |-
+
+        Gestión de visitas realizadas a pacientes en su domicilio, incluyendo toma de signos vitales, fotos y firmas.
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []

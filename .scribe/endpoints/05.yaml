@@ -1,22 +1,22 @@
-name: Sedes
+name: 'Gestión de Usuarios'
 description: |-
 
-  Gestión de las sedes de atención en salud disponibles en el sistema.
+  Administración de los usuarios del sistema, sus roles (admin, auxiliar, supervisor) y sedes de pertenencia.
 endpoints:
   -
     custom: []
     httpMethods:
       - GET
-    uri: api/sedes
+    uri: api/usuarios
     metadata:
       custom: []
-      groupName: Sedes
+      groupName: 'Gestión de Usuarios'
       groupDescription: |-
 
-        Gestión de las sedes de atención en salud disponibles en el sistema.
+        Administración de los usuarios del sistema, sus roles (admin, auxiliar, supervisor) y sedes de pertenencia.
       subgroup: ''
       subgroupDescription: ''
-      title: 'Listar sedes'
+      title: 'Listar usuarios'
       description: ''
       authenticated: true
       deprecated: false
@@ -25,8 +25,32 @@ endpoints:
       Accept: application/json
     urlParameters: []
     cleanUrlParameters: []
-    queryParameters: []
-    cleanQueryParameters: []
+    queryParameters:
+      rol:
+        custom: []
+        name: rol
+        description: 'Filtrar por rol (admin, auxiliar, supervisor).'
+        required: false
+        example: consequatur
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      sede_id:
+        custom: []
+        name: sede_id
+        description: 'Filtrar por ID de sede.'
+        required: false
+        example: consequatur
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanQueryParameters:
+      rol: consequatur
+      sede_id: consequatur
     bodyParameters: []
     cleanBodyParameters: []
     fileParameters: []
@@ -49,16 +73,16 @@ endpoints:
     custom: []
     httpMethods:
       - POST
-    uri: api/sedes
+    uri: api/usuarios
     metadata:
       custom: []
-      groupName: Sedes
+      groupName: 'Gestión de Usuarios'
       groupDescription: |-
 
-        Gestión de las sedes de atención en salud disponibles en el sistema.
+        Administración de los usuarios del sistema, sus roles (admin, auxiliar, supervisor) y sedes de pertenencia.
       subgroup: ''
       subgroupDescription: ''
-      title: ''
+      title: 'Almacenar un nuevo usuario.'
       description: ''
       authenticated: false
       deprecated: false
@@ -70,10 +94,69 @@ endpoints:
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters:
-      nombresede:
+      nombre:
         custom: []
-        name: nombresede
+        name: nombre
+        description: 'Must not be greater than 255 characters.'
+        required: true
+        example: vmqeopfuudtdsufvyvddq
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      usuario:
+        custom: []
+        name: usuario
+        description: 'Must not be greater than 50 characters.'
+        required: true
+        example: amniihfqcoynlazghdtqt
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      correo:
+        custom: []
+        name: correo
+        description: 'Must be a valid email address.'
+        required: true
+        example: andreanne00@example.org
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      contrasena:
+        custom: []
+        name: contrasena
+        description: 'Must be at least 6 characters.'
+        required: true
+        example: wbpilpmufinllwloauydlsmsjuryvojcybzvrbyickznkygloigmkwxphlvazjrcnfbaqywuxh
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      rol:
+        custom: []
+        name: rol
         description: ''
+        required: true
+        example: aux
+        type: string
+        enumValues:
+          - admin
+          - auxiliar
+          - aux
+          - supervisor
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      sede_id:
+        custom: []
+        name: sede_id
+        description: 'The <code>id</code> of an existing record in the sedes table.'
         required: true
         example: consequatur
         type: string
@@ -82,7 +165,12 @@ endpoints:
         nullable: false
         deprecated: false
     cleanBodyParameters:
-      nombresede: consequatur
+      nombre: vmqeopfuudtdsufvyvddq
+      usuario: amniihfqcoynlazghdtqt
+      correo: andreanne00@example.org
+      contrasena: wbpilpmufinllwloauydlsmsjuryvojcybzvrbyickznkygloigmkwxphlvazjrcnfbaqywuxh
+      rol: aux
+      sede_id: consequatur
     fileParameters: []
     responses: []
     responseFields: []
@@ -94,16 +182,16 @@ endpoints:
     custom: []
     httpMethods:
       - GET
-    uri: 'api/sedes/{id}'
+    uri: 'api/usuarios/{id}'
     metadata:
       custom: []
-      groupName: Sedes
+      groupName: 'Gestión de Usuarios'
       groupDescription: |-
 
-        Gestión de las sedes de atención en salud disponibles en el sistema.
+        Administración de los usuarios del sistema, sus roles (admin, auxiliar, supervisor) y sedes de pertenencia.
       subgroup: ''
       subgroupDescription: ''
-      title: ''
+      title: 'Mostrar un usuario específico.'
       description: ''
       authenticated: false
       deprecated: false
@@ -114,7 +202,7 @@ endpoints:
       id:
         custom: []
         name: id
-        description: 'The ID of the sede.'
+        description: 'The ID of the usuario.'
         required: true
         example: consequatur
         type: string
@@ -149,16 +237,16 @@ endpoints:
     httpMethods:
       - PUT
       - PATCH
-    uri: 'api/sedes/{id}'
+    uri: 'api/usuarios/{id}'
     metadata:
       custom: []
-      groupName: Sedes
+      groupName: 'Gestión de Usuarios'
       groupDescription: |-
 
-        Gestión de las sedes de atención en salud disponibles en el sistema.
+        Administración de los usuarios del sistema, sus roles (admin, auxiliar, supervisor) y sedes de pertenencia.
       subgroup: ''
       subgroupDescription: ''
-      title: ''
+      title: 'Actualizar un usuario específico.'
       description: ''
       authenticated: false
       deprecated: false
@@ -169,63 +257,7 @@ endpoints:
       id:
         custom: []
         name: id
-        description: 'The ID of the sede.'
-        required: true
-        example: consequatur
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        deprecated: false
-    cleanUrlParameters:
-      id: consequatur
-    queryParameters: []
-    cleanQueryParameters: []
-    bodyParameters:
-      nombresede:
-        custom: []
-        name: nombresede
-        description: ''
-        required: false
-        example: null
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        deprecated: false
-    cleanBodyParameters: []
-    fileParameters: []
-    responses: []
-    responseFields: []
-    auth: []
-    controller: null
-    method: null
-    route: null
-  -
-    custom: []
-    httpMethods:
-      - DELETE
-    uri: 'api/sedes/{id}'
-    metadata:
-      custom: []
-      groupName: Sedes
-      groupDescription: |-
-
-        Gestión de las sedes de atención en salud disponibles en el sistema.
-      subgroup: ''
-      subgroupDescription: ''
-      title: ''
-      description: ''
-      authenticated: false
-      deprecated: false
-    headers:
-      Content-Type: application/json
-      Accept: application/json
-    urlParameters:
-      id:
-        custom: []
-        name: id
-        description: 'The ID of the sede.'
+        description: 'The ID of the usuario.'
         required: true
         example: consequatur
         type: string
@@ -241,6 +273,147 @@ endpoints:
     cleanBodyParameters: []
     fileParameters: []
     responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - DELETE
+    uri: 'api/usuarios/{id}'
+    metadata:
+      custom: []
+      groupName: 'Gestión de Usuarios'
+      groupDescription: |-
+
+        Administración de los usuarios del sistema, sus roles (admin, auxiliar, supervisor) y sedes de pertenencia.
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Eliminar un usuario específico.'
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      id:
+        custom: []
+        name: id
+        description: 'The ID of the usuario.'
+        required: true
+        example: consequatur
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      id: consequatur
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - GET
+    uri: 'api/usuarios/rol/{rol}'
+    metadata:
+      custom: []
+      groupName: 'Gestión de Usuarios'
+      groupDescription: |-
+
+        Administración de los usuarios del sistema, sus roles (admin, auxiliar, supervisor) y sedes de pertenencia.
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Obtener usuarios por rol.'
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      rol:
+        custom: []
+        name: rol
+        description: 'The rol.'
+        required: true
+        example: consequatur
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      rol: consequatur
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 401
+        content: '{"message":"Unauthenticated."}'
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          access-control-allow-origin: '*'
+        description: null
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - GET
+    uri: api/auxiliares
+    metadata:
+      custom: []
+      groupName: 'Gestión de Usuarios'
+      groupDescription: |-
+
+        Administración de los usuarios del sistema, sus roles (admin, auxiliar, supervisor) y sedes de pertenencia.
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Obtener auxiliares (método específico).'
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 401
+        content: '{"message":"Unauthenticated."}'
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          access-control-allow-origin: '*'
+        description: null
     responseFields: []
     auth: []
     controller: null

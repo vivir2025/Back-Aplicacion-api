@@ -1,23 +1,23 @@
-name: 'Gestión de Pacientes'
+name: Sedes
 description: |-
 
-  Endpoints para el registro, consulta y actualización de pacientes en el sistema.
+  Gestión de las sedes de atención en salud disponibles en el sistema.
 endpoints:
   -
     custom: []
     httpMethods:
       - GET
-    uri: api/pacientes
+    uri: api/sedes
     metadata:
       custom: []
-      groupName: 'Gestión de Pacientes'
+      groupName: Sedes
       groupDescription: |-
 
-        Endpoints para el registro, consulta y actualización de pacientes en el sistema.
+        Gestión de las sedes de atención en salud disponibles en el sistema.
       subgroup: ''
       subgroupDescription: ''
-      title: 'Listar pacientes'
-      description: 'Obtiene todos los pacientes registrados con su sede asociada.'
+      title: 'Listar sedes'
+      description: ''
       authenticated: true
       deprecated: false
     headers:
@@ -33,19 +33,13 @@ endpoints:
     responses:
       -
         custom: []
-        status: 200
-        content: |-
-          [
-           {
-            "id": "uuid-1234",
-            "identificacion": "102030",
-            "nombre": "Juan",
-            "apellido": "Perez",
-            "sede": {"id": 1, "nombre": "Sede Central"}
-           }
-          ]
-        headers: []
-        description: ''
+        status: 401
+        content: '{"message":"Unauthenticated."}'
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          access-control-allow-origin: '*'
+        description: null
     responseFields: []
     auth: []
     controller: null
@@ -55,18 +49,18 @@ endpoints:
     custom: []
     httpMethods:
       - POST
-    uri: api/pacientes
+    uri: api/sedes
     metadata:
       custom: []
-      groupName: 'Gestión de Pacientes'
+      groupName: Sedes
       groupDescription: |-
 
-        Endpoints para el registro, consulta y actualización de pacientes en el sistema.
+        Gestión de las sedes de atención en salud disponibles en el sistema.
       subgroup: ''
       subgroupDescription: ''
-      title: 'Registrar paciente'
-      description: 'Crea un nuevo registro de paciente.'
-      authenticated: true
+      title: ''
+      description: ''
+      authenticated: false
       deprecated: false
     headers:
       Content-Type: application/json
@@ -76,93 +70,21 @@ endpoints:
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters:
-      identificacion:
+      nombresede:
         custom: []
-        name: identificacion
-        description: 'El documento de identidad.'
+        name: nombresede
+        description: ''
         required: true
-        example: '10203040'
+        example: consequatur
         type: string
         enumValues: []
-        exampleWasSpecified: true
-        nullable: false
-        deprecated: false
-      fecnacimiento:
-        custom: []
-        name: fecnacimiento
-        description: 'Fecha de nacimiento (Y-m-d).'
-        required: true
-        example: '1990-05-15'
-        type: string
-        enumValues: []
-        exampleWasSpecified: true
-        nullable: false
-        deprecated: false
-      nombre:
-        custom: []
-        name: nombre
-        description: 'Nombres del paciente.'
-        required: true
-        example: Carlos
-        type: string
-        enumValues: []
-        exampleWasSpecified: true
-        nullable: false
-        deprecated: false
-      apellido:
-        custom: []
-        name: apellido
-        description: 'Apellidos del paciente.'
-        required: true
-        example: Rodriguez
-        type: string
-        enumValues: []
-        exampleWasSpecified: true
-        nullable: false
-        deprecated: false
-      genero:
-        custom: []
-        name: genero
-        description: 'Género (Masculino/Femenino/Otro).'
-        required: true
-        example: Masculino
-        type: string
-        enumValues: []
-        exampleWasSpecified: true
-        nullable: false
-        deprecated: false
-      idsede:
-        custom: []
-        name: idsede
-        description: 'ID de la sede a la que pertenece.'
-        required: true
-        example: '1'
-        type: string
-        enumValues: []
-        exampleWasSpecified: true
+        exampleWasSpecified: false
         nullable: false
         deprecated: false
     cleanBodyParameters:
-      identificacion: '10203040'
-      fecnacimiento: '1990-05-15'
-      nombre: Carlos
-      apellido: Rodriguez
-      genero: Masculino
-      idsede: '1'
+      nombresede: consequatur
     fileParameters: []
-    responses:
-      -
-        custom: []
-        status: 201
-        content: |-
-          {
-           "id": "uuid-5678",
-           "identificacion": "10203040",
-           "nombre": "Carlos",
-           "estado": "activo"
-          }
-        headers: []
-        description: ''
+    responses: []
     responseFields: []
     auth: []
     controller: null
@@ -172,18 +94,18 @@ endpoints:
     custom: []
     httpMethods:
       - GET
-    uri: 'api/pacientes/{id}'
+    uri: 'api/sedes/{id}'
     metadata:
       custom: []
-      groupName: 'Gestión de Pacientes'
+      groupName: Sedes
       groupDescription: |-
 
-        Endpoints para el registro, consulta y actualización de pacientes en el sistema.
+        Gestión de las sedes de atención en salud disponibles en el sistema.
       subgroup: ''
       subgroupDescription: ''
-      title: 'Consultar paciente'
+      title: ''
       description: ''
-      authenticated: true
+      authenticated: false
       deprecated: false
     headers:
       Content-Type: application/json
@@ -192,7 +114,7 @@ endpoints:
       id:
         custom: []
         name: id
-        description: 'ID del paciente.'
+        description: 'The ID of the sede.'
         required: true
         example: consequatur
         type: string
@@ -227,18 +149,18 @@ endpoints:
     httpMethods:
       - PUT
       - PATCH
-    uri: 'api/pacientes/{id}'
+    uri: 'api/sedes/{id}'
     metadata:
       custom: []
-      groupName: 'Gestión de Pacientes'
+      groupName: Sedes
       groupDescription: |-
 
-        Endpoints para el registro, consulta y actualización de pacientes en el sistema.
+        Gestión de las sedes de atención en salud disponibles en el sistema.
       subgroup: ''
       subgroupDescription: ''
-      title: 'Actualizar paciente'
+      title: ''
       description: ''
-      authenticated: true
+      authenticated: false
       deprecated: false
     headers:
       Content-Type: application/json
@@ -247,7 +169,7 @@ endpoints:
       id:
         custom: []
         name: id
-        description: 'ID del paciente.'
+        description: 'The ID of the sede.'
         required: true
         example: consequatur
         type: string
@@ -260,9 +182,9 @@ endpoints:
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters:
-      identificacion:
+      nombresede:
         custom: []
-        name: identificacion
+        name: nombresede
         description: ''
         required: false
         example: null
@@ -271,63 +193,7 @@ endpoints:
         exampleWasSpecified: false
         nullable: false
         deprecated: false
-      fecnacimiento:
-        custom: []
-        name: fecnacimiento
-        description: 'Must be a valid date.'
-        required: false
-        example: '2026-03-26T00:38:05'
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        deprecated: false
-      nombre:
-        custom: []
-        name: nombre
-        description: ''
-        required: false
-        example: null
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        deprecated: false
-      apellido:
-        custom: []
-        name: apellido
-        description: ''
-        required: false
-        example: null
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        deprecated: false
-      genero:
-        custom: []
-        name: genero
-        description: ''
-        required: false
-        example: null
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        deprecated: false
-      idsede:
-        custom: []
-        name: idsede
-        description: 'The <code>id</code> of an existing record in the sedes table.'
-        required: false
-        example: null
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        deprecated: false
-    cleanBodyParameters:
-      fecnacimiento: '2026-03-26T00:38:05'
+    cleanBodyParameters: []
     fileParameters: []
     responses: []
     responseFields: []
@@ -339,18 +205,18 @@ endpoints:
     custom: []
     httpMethods:
       - DELETE
-    uri: 'api/pacientes/{id}'
+    uri: 'api/sedes/{id}'
     metadata:
       custom: []
-      groupName: 'Gestión de Pacientes'
+      groupName: Sedes
       groupDescription: |-
 
-        Endpoints para el registro, consulta y actualización de pacientes en el sistema.
+        Gestión de las sedes de atención en salud disponibles en el sistema.
       subgroup: ''
       subgroupDescription: ''
-      title: 'Eliminar paciente'
+      title: ''
       description: ''
-      authenticated: true
+      authenticated: false
       deprecated: false
     headers:
       Content-Type: application/json
@@ -359,7 +225,7 @@ endpoints:
       id:
         custom: []
         name: id
-        description: 'ID del paciente.'
+        description: 'The ID of the sede.'
         required: true
         example: consequatur
         type: string
@@ -375,273 +241,6 @@ endpoints:
     cleanBodyParameters: []
     fileParameters: []
     responses: []
-    responseFields: []
-    auth: []
-    controller: null
-    method: null
-    route: null
-  -
-    custom: []
-    httpMethods:
-      - GET
-    uri: 'api/pacientes/buscar/{identificacion}'
-    metadata:
-      custom: []
-      groupName: 'Gestión de Pacientes'
-      groupDescription: |-
-
-        Endpoints para el registro, consulta y actualización de pacientes en el sistema.
-      subgroup: ''
-      subgroupDescription: ''
-      title: 'Buscar por identificación'
-      description: 'Encuentra un paciente usando su número de documento.'
-      authenticated: true
-      deprecated: false
-    headers:
-      Content-Type: application/json
-      Accept: application/json
-    urlParameters:
-      identificacion:
-        custom: []
-        name: identificacion
-        description: 'El número del documento.'
-        required: true
-        example: '102030'
-        type: string
-        enumValues: []
-        exampleWasSpecified: true
-        nullable: false
-        deprecated: false
-    cleanUrlParameters:
-      identificacion: '102030'
-    queryParameters: []
-    cleanQueryParameters: []
-    bodyParameters: []
-    cleanBodyParameters: []
-    fileParameters: []
-    responses:
-      -
-        custom: []
-        status: 200
-        content: |-
-          {
-           "id": "uuid-1234",
-           "identificacion": "102030",
-           "nombre": "Juan"
-          }
-        headers: []
-        description: ''
-      -
-        custom: []
-        status: 404
-        content: |-
-          {
-           "message": "Paciente no encontrado"
-          }
-        headers: []
-        description: ''
-    responseFields: []
-    auth: []
-    controller: null
-    method: null
-    route: null
-  -
-    custom: []
-    httpMethods:
-      - POST
-    uri: api/pacientes/sync-batch
-    metadata:
-      custom: []
-      groupName: 'Gestión de Pacientes'
-      groupDescription: |-
-
-        Endpoints para la sincronización masiva de datos entre dispositivos y el servidor.
-      subgroup: ''
-      subgroupDescription: ''
-      title: 'Sincronización masiva (Offline-first)'
-      description: 'Permite sincronizar un lote de pacientes desde la aplicación móvil. El sistema identifica si debe crear o actualizar basándose en el ID.'
-      authenticated: true
-      deprecated: false
-    headers:
-      Content-Type: application/json
-      Accept: application/json
-    urlParameters: []
-    cleanUrlParameters: []
-    queryParameters: []
-    cleanQueryParameters: []
-    bodyParameters:
-      pacientes:
-        custom: []
-        name: pacientes
-        description: 'Lista de pacientes a sincronizar.'
-        required: true
-        example:
-          - []
-        type: 'object[]'
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        deprecated: false
-      'pacientes[].id':
-        custom: []
-        name: 'pacientes[].id'
-        description: 'UUID del paciente en el dispositivo.'
-        required: true
-        example: uuid-mobile-1
-        type: string
-        enumValues: []
-        exampleWasSpecified: true
-        nullable: false
-        deprecated: false
-      'pacientes[].identificacion':
-        custom: []
-        name: 'pacientes[].identificacion'
-        description: Documento.
-        required: true
-        example: '12345'
-        type: string
-        enumValues: []
-        exampleWasSpecified: true
-        nullable: false
-        deprecated: false
-      'pacientes[].nombre':
-        custom: []
-        name: 'pacientes[].nombre'
-        description: Nombre.
-        required: true
-        example: Pedro
-        type: string
-        enumValues: []
-        exampleWasSpecified: true
-        nullable: false
-        deprecated: false
-      'pacientes[].apellido':
-        custom: []
-        name: 'pacientes[].apellido'
-        description: Apellido.
-        required: true
-        example: Picapiedra
-        type: string
-        enumValues: []
-        exampleWasSpecified: true
-        nullable: false
-        deprecated: false
-      'pacientes[].fecnacimiento':
-        custom: []
-        name: 'pacientes[].fecnacimiento'
-        description: 'Fecha (Y-m-d).'
-        required: false
-        example: '1980-01-01'
-        type: string
-        enumValues: []
-        exampleWasSpecified: true
-        nullable: false
-        deprecated: false
-    cleanBodyParameters:
-      pacientes:
-        -
-          id: uuid-mobile-1
-          identificacion: '12345'
-          nombre: Pedro
-          apellido: Picapiedra
-          fecnacimiento: '1980-01-01'
-    fileParameters: []
-    responses:
-      -
-        custom: []
-        status: 200
-        content: |-
-          {
-           "success": true,
-           "message": "Sincronización completada",
-           "resultados": {
-             "creados": 1,
-             "actualizados": 0,
-             "errores": []
-           }
-          }
-        headers: []
-        description: ''
-    responseFields: []
-    auth: []
-    controller: null
-    method: null
-    route: null
-  -
-    custom: []
-    httpMethods:
-      - PUT
-    uri: 'api/pacientes/{id}/coordenadas'
-    metadata:
-      custom: []
-      groupName: 'Gestión de Pacientes'
-      groupDescription: |-
-
-        Endpoints para el registro, consulta y actualización de pacientes en el sistema.
-      subgroup: ''
-      subgroupDescription: ''
-      title: 'Actualizar coordenadas'
-      description: 'Actualiza la ubicación geográfica (Latitud/Longitud) del paciente.'
-      authenticated: true
-      deprecated: false
-    headers:
-      Content-Type: application/json
-      Accept: application/json
-    urlParameters:
-      id:
-        custom: []
-        name: id
-        description: 'The ID of the paciente.'
-        required: true
-        example: consequatur
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        deprecated: false
-    cleanUrlParameters:
-      id: consequatur
-    queryParameters: []
-    cleanQueryParameters: []
-    bodyParameters:
-      latitud:
-        custom: []
-        name: latitud
-        description: 'Latitud entre -90 y 90.'
-        required: true
-        example: 6.2442
-        type: number
-        enumValues: []
-        exampleWasSpecified: true
-        nullable: false
-        deprecated: false
-      longitud:
-        custom: []
-        name: longitud
-        description: 'Longitud entre -180 y 180.'
-        required: true
-        example: -75.5812
-        type: number
-        enumValues: []
-        exampleWasSpecified: true
-        nullable: false
-        deprecated: false
-    cleanBodyParameters:
-      latitud: 6.2442
-      longitud: -75.5812
-    fileParameters: []
-    responses:
-      -
-        custom: []
-        status: 200
-        content: |-
-          {
-           "success": true,
-           "message": "Coordenadas actualizadas exitosamente",
-           "data": {"id": "uuid-123", "latitud": 6.2442, "longitud": -75.5812}
-          }
-        headers: []
-        description: ''
     responseFields: []
     auth: []
     controller: null

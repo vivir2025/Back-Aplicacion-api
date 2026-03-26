@@ -1,23 +1,23 @@
-name: 'Afinamientos y Seguimiento'
+name: 'Tests FINDRISK'
 description: |-
 
-  Gestión de afinamientos de presión arterial para pacientes con sospecha de HTA.
+  Evaluación de riesgo de padecer diabetes tipo 2 mediante el cuestionario FINDRISK.
 endpoints:
   -
     custom: []
     httpMethods:
       - GET
-    uri: api/afinamientos
+    uri: api/findrisk
     metadata:
       custom: []
-      groupName: 'Afinamientos y Seguimiento'
+      groupName: 'Tests FINDRISK'
       groupDescription: |-
 
-        Gestión de afinamientos de presión arterial para pacientes con sospecha de HTA.
+        Evaluación de riesgo de padecer diabetes tipo 2 mediante el cuestionario FINDRISK.
       subgroup: ''
       subgroupDescription: ''
-      title: 'Listar afinamientos'
-      description: 'Permite obtener el histórico de afinamientos realizados, filtrando por usuario, paciente o rango de fechas.'
+      title: 'Listar tests realizados'
+      description: ''
       authenticated: true
       deprecated: false
     headers:
@@ -25,82 +25,21 @@ endpoints:
       Accept: application/json
     urlParameters: []
     cleanUrlParameters: []
-    queryParameters:
-      usuario_id:
-        custom: []
-        name: usuario_id
-        description: 'ID del usuario promotor.'
-        required: false
-        example: '4044680601076201931'
-        type: string
-        enumValues: []
-        exampleWasSpecified: true
-        nullable: false
-        deprecated: false
-      paciente_id:
-        custom: []
-        name: paciente_id
-        description: 'ID del paciente.'
-        required: false
-        example: 550e8400-e29b-41d4-a716-446655440000
-        type: string
-        enumValues: []
-        exampleWasSpecified: true
-        nullable: false
-        deprecated: false
-      fecha_desde:
-        custom: []
-        name: fecha_desde
-        description: 'date Fecha inicial (Y-m-d).'
-        required: false
-        example: '2024-01-01'
-        type: string
-        enumValues: []
-        exampleWasSpecified: true
-        nullable: false
-        deprecated: false
-      fecha_hasta:
-        custom: []
-        name: fecha_hasta
-        description: 'date Fecha final (Y-m-d).'
-        required: false
-        example: '2024-12-31'
-        type: string
-        enumValues: []
-        exampleWasSpecified: true
-        nullable: false
-        deprecated: false
-    cleanQueryParameters:
-      usuario_id: '4044680601076201931'
-      paciente_id: 550e8400-e29b-41d4-a716-446655440000
-      fecha_desde: '2024-01-01'
-      fecha_hasta: '2024-12-31'
+    queryParameters: []
+    cleanQueryParameters: []
     bodyParameters: []
     cleanBodyParameters: []
     fileParameters: []
     responses:
       -
         custom: []
-        status: 200
-        content: |-
-          [
-           {
-             "id": "uuid-123",
-             "idpaciente": "uuid-pac",
-             "idusuario": "uuid-user",
-             "fecha_tamizaje": "2024-03-25",
-             "presion_arterial_tamiz": "145/95",
-             "promedio_sistolica": 138,
-             "promedio_diastolica": 88,
-             "conducta": "Seguimiento en 3 meses",
-             "nombre_paciente": "Juan Pérez",
-             "identificacion_paciente": "12345678",
-             "edad_paciente": 45,
-             "promotor_vida": "Maria Gomez"
-           }
-          ]
-        headers: []
-        description: success
+        status: 401
+        content: '{"message":"Unauthenticated."}'
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          access-control-allow-origin: '*'
+        description: null
     responseFields: []
     auth: []
     controller: null
@@ -110,19 +49,17 @@ endpoints:
     custom: []
     httpMethods:
       - POST
-    uri: api/afinamientos
+    uri: api/findrisk
     metadata:
       custom: []
-      groupName: 'Afinamientos y Seguimiento'
+      groupName: 'Tests FINDRISK'
       groupDescription: |-
 
-        Gestión de afinamientos de presión arterial para pacientes con sospecha de HTA.
+        Evaluación de riesgo de padecer diabetes tipo 2 mediante el cuestionario FINDRISK.
       subgroup: ''
       subgroupDescription: ''
-      title: 'Crear afinamiento'
-      description: |-
-        Registra un nuevo ciclo de 3 tomas de afinamiento de presión arterial.
-        Los promedios se calculan automáticamente en el servidor.
+      title: 'Crear test FINDRISK'
+      description: ''
       authenticated: true
       deprecated: false
     headers:
@@ -138,143 +75,132 @@ endpoints:
         name: idpaciente
         description: 'ID del paciente.'
         required: true
-        example: uuid-paciente
+        example: 550e8400-e29b-41d4-a716-446655440000
         type: string
         enumValues: []
         exampleWasSpecified: true
         nullable: false
         deprecated: false
-      procedencia:
+      idsede:
         custom: []
-        name: procedencia
-        description: 'Origen/Barrio del paciente.'
+        name: idsede
+        description: 'ID de la sede.'
         required: true
-        example: Centro
+        example: '4044680601076201931'
         type: string
         enumValues: []
         exampleWasSpecified: true
         nullable: false
         deprecated: false
-      fecha_tamizaje:
+      vereda:
         custom: []
-        name: fecha_tamizaje
-        description: 'Fecha del tamizaje inicial.'
+        name: vereda
+        description: 'Must not be greater than 100 characters.'
+        required: false
+        example: mqeopfuudtdsufvyvddqa
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+      telefono:
+        custom: []
+        name: telefono
+        description: 'Must not be greater than 20 characters.'
+        required: false
+        example: mniihfqcoynlazghd
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+      actividad_fisica:
+        custom: []
+        name: actividad_fisica
+        description: '"si" o "no".'
         required: true
-        example: '2024-03-25'
-        type: date
+        example: si
+        type: string
         enumValues: []
         exampleWasSpecified: true
         nullable: false
         deprecated: false
-      presion_arterial_tamiz:
+      medicamentos_hipertension:
         custom: []
-        name: presion_arterial_tamiz
-        description: 'Cifra PA inicial.'
+        name: medicamentos_hipertension
+        description: '"si" o "no".'
         required: true
-        example: 145/95
+        example: si
         type: string
         enumValues: []
         exampleWasSpecified: true
         nullable: false
         deprecated: false
-      primer_afinamiento_fecha:
+      frecuencia_frutas_verduras:
         custom: []
-        name: primer_afinamiento_fecha
-        description: 'Fecha 1era toma.'
-        required: false
-        example: '2024-03-26'
-        type: date
-        enumValues: []
-        exampleWasSpecified: true
-        nullable: true
-        deprecated: false
-      presion_sistolica_1:
-        custom: []
-        name: presion_sistolica_1
-        description: 'Presión 1era toma.'
-        required: false
-        example: 138
-        type: integer
-        enumValues: []
-        exampleWasSpecified: true
-        nullable: true
-        deprecated: false
-      presion_diastolica_1:
-        custom: []
-        name: presion_diastolica_1
-        description: 'Presión 1era toma.'
-        required: false
-        example: 88
-        type: integer
-        enumValues: []
-        exampleWasSpecified: true
-        nullable: true
-        deprecated: false
-      segundo_afinamiento_fecha:
-        custom: []
-        name: segundo_afinamiento_fecha
-        description: 'Segundo afinamiento (opcional). Must be a valid date.'
-        required: false
-        example: '2026-03-26T00:38:05'
+        name: frecuencia_frutas_verduras
+        description: '"diariamente" o "no_diariamente".'
+        required: true
+        example: diariamente
         type: string
         enumValues: []
-        exampleWasSpecified: false
-        nullable: true
+        exampleWasSpecified: true
+        nullable: false
         deprecated: false
-      presion_sistolica_2:
+      azucar_alto_detectado:
         custom: []
-        name: presion_sistolica_2
-        description: 'Must be at least 50. Must not be greater than 300.'
-        required: false
-        example: 19
-        type: integer
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: true
-        deprecated: false
-      presion_diastolica_2:
-        custom: []
-        name: presion_diastolica_2
-        description: 'Must be at least 30. Must not be greater than 200.'
-        required: false
-        example: 16
-        type: integer
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: true
-        deprecated: false
-      tercer_afinamiento_fecha:
-        custom: []
-        name: tercer_afinamiento_fecha
-        description: 'Tercer afinamiento (opcional). Must be a valid date.'
-        required: false
-        example: '2026-03-26T00:38:05'
+        name: azucar_alto_detectado
+        description: '"si" o "no".'
+        required: true
+        example: si
         type: string
         enumValues: []
-        exampleWasSpecified: false
-        nullable: true
+        exampleWasSpecified: true
+        nullable: false
         deprecated: false
-      presion_sistolica_3:
+      peso:
         custom: []
-        name: presion_sistolica_3
-        description: 'Must be at least 50. Must not be greater than 300.'
-        required: false
-        example: 23
-        type: integer
+        name: peso
+        description: 'Peso en kg.'
+        required: true
+        example: 85.0
+        type: number
         enumValues: []
-        exampleWasSpecified: false
-        nullable: true
+        exampleWasSpecified: true
+        nullable: false
         deprecated: false
-      presion_diastolica_3:
+      talla:
         custom: []
-        name: presion_diastolica_3
-        description: 'Must be at least 30. Must not be greater than 200.'
-        required: false
-        example: 2
-        type: integer
+        name: talla
+        description: 'Talla en cm.'
+        required: true
+        example: 175.0
+        type: number
         enumValues: []
-        exampleWasSpecified: false
-        nullable: true
+        exampleWasSpecified: true
+        nullable: false
+        deprecated: false
+      perimetro_abdominal:
+        custom: []
+        name: perimetro_abdominal
+        description: 'Perímetro abdominal en cm.'
+        required: true
+        example: 102.0
+        type: number
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        deprecated: false
+      antecedentes_familiares:
+        custom: []
+        name: antecedentes_familiares
+        description: '(no, abuelos_tios_primos, padres_hermanos_hijos).'
+        required: true
+        example: 'no'
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
         deprecated: false
       conducta:
         custom: []
@@ -287,33 +213,34 @@ endpoints:
         exampleWasSpecified: false
         nullable: true
         deprecated: false
-    cleanBodyParameters:
-      idpaciente: uuid-paciente
-      procedencia: Centro
-      fecha_tamizaje: '2024-03-25'
-      presion_arterial_tamiz: 145/95
-      primer_afinamiento_fecha: '2024-03-26'
-      presion_sistolica_1: 138
-      presion_diastolica_1: 88
-      segundo_afinamiento_fecha: '2026-03-26T00:38:05'
-      presion_sistolica_2: 19
-      presion_diastolica_2: 16
-      tercer_afinamiento_fecha: '2026-03-26T00:38:05'
-      presion_sistolica_3: 23
-      presion_diastolica_3: 2
-      conducta: consequatur
-    fileParameters: []
-    responses:
-      -
+      promotor_vida:
         custom: []
-        status: 200
-        content: |-
-          {
-            "message": "Afinamiento creado exitosamente",
-            "data": { "id": "uuid-001", "promedio_sistolica": 138, "promedio_diastolica": 88 }
-          }
-        headers: []
-        description: 'success creation'
+        name: promotor_vida
+        description: 'Must not be greater than 100 characters.'
+        required: false
+        example: mqeopfuudtdsufvyvddqa
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+    cleanBodyParameters:
+      idpaciente: 550e8400-e29b-41d4-a716-446655440000
+      idsede: '4044680601076201931'
+      vereda: mqeopfuudtdsufvyvddqa
+      telefono: mniihfqcoynlazghd
+      actividad_fisica: si
+      medicamentos_hipertension: si
+      frecuencia_frutas_verduras: diariamente
+      azucar_alto_detectado: si
+      peso: 85.0
+      talla: 175.0
+      perimetro_abdominal: 102.0
+      antecedentes_familiares: 'no'
+      conducta: consequatur
+      promotor_vida: mqeopfuudtdsufvyvddqa
+    fileParameters: []
+    responses: []
     responseFields: []
     auth: []
     controller: null
@@ -323,17 +250,17 @@ endpoints:
     custom: []
     httpMethods:
       - GET
-    uri: 'api/afinamientos/{id}'
+    uri: 'api/findrisk/{id}'
     metadata:
       custom: []
-      groupName: 'Afinamientos y Seguimiento'
+      groupName: 'Tests FINDRISK'
       groupDescription: |-
 
-        Gestión de afinamientos de presión arterial para pacientes con sospecha de HTA.
+        Evaluación de riesgo de padecer diabetes tipo 2 mediante el cuestionario FINDRISK.
       subgroup: ''
       subgroupDescription: ''
-      title: 'Consultar afinamiento'
-      description: 'Obtiene los detalles de un registro específico de afinamiento.'
+      title: 'Consultar test FINDRISK'
+      description: ''
       authenticated: true
       deprecated: false
     headers:
@@ -343,16 +270,16 @@ endpoints:
       id:
         custom: []
         name: id
-        description: 'ID del afinamiento.'
+        description: 'ID del test.'
         required: true
-        example: uuid-123
+        example: '1'
         type: string
         enumValues: []
         exampleWasSpecified: true
         nullable: false
         deprecated: false
     cleanUrlParameters:
-      id: uuid-123
+      id: '1'
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []
@@ -361,16 +288,13 @@ endpoints:
     responses:
       -
         custom: []
-        status: 200
-        content: |-
-          {
-            "id": "uuid-123",
-            "nombre_paciente": "Juan Pérez",
-            "promedio_sistolica": 140,
-            "promedio_diastolica": 90
-          }
-        headers: []
-        description: success
+        status: 401
+        content: '{"message":"Unauthenticated."}'
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          access-control-allow-origin: '*'
+        description: null
     responseFields: []
     auth: []
     controller: null
@@ -381,17 +305,17 @@ endpoints:
     httpMethods:
       - PUT
       - PATCH
-    uri: 'api/afinamientos/{id}'
+    uri: 'api/findrisk/{id}'
     metadata:
       custom: []
-      groupName: 'Afinamientos y Seguimiento'
+      groupName: 'Tests FINDRISK'
       groupDescription: |-
 
-        Gestión de afinamientos de presión arterial para pacientes con sospecha de HTA.
+        Evaluación de riesgo de padecer diabetes tipo 2 mediante el cuestionario FINDRISK.
       subgroup: ''
       subgroupDescription: ''
-      title: 'Actualizar afinamiento'
-      description: 'Permite modificar datos de tomas previas o agregar nuevas tomas al ciclo.'
+      title: 'Actualizar test FINDRISK'
+      description: ''
       authenticated: true
       deprecated: false
     headers:
@@ -401,7 +325,7 @@ endpoints:
       id:
         custom: []
         name: id
-        description: 'ID del afinamiento.'
+        description: 'ID del test.'
         required: true
         example: consequatur
         type: string
@@ -414,10 +338,10 @@ endpoints:
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters:
-      idpaciente:
+      idsede:
         custom: []
-        name: idpaciente
-        description: 'The <code>id</code> of an existing record in the pacientes table.'
+        name: idsede
+        description: 'The <code>id</code> of an existing record in the sedes table.'
         required: false
         example: null
         type: string
@@ -425,137 +349,126 @@ endpoints:
         exampleWasSpecified: false
         nullable: false
         deprecated: false
-      procedencia:
+      vereda:
         custom: []
-        name: procedencia
+        name: vereda
         description: 'Must not be greater than 100 characters.'
         required: false
         example: vmqeopfuudtdsufvyvddq
         type: string
         enumValues: []
         exampleWasSpecified: false
-        nullable: false
+        nullable: true
         deprecated: false
-      fecha_tamizaje:
+      telefono:
         custom: []
-        name: fecha_tamizaje
-        description: 'Must be a valid date.'
-        required: false
-        example: '2026-03-26T00:38:05'
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        deprecated: false
-      presion_arterial_tamiz:
-        custom: []
-        name: presion_arterial_tamiz
+        name: telefono
         description: 'Must not be greater than 20 characters.'
         required: false
         example: amniihfqcoynlazgh
         type: string
         enumValues: []
         exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+      actividad_fisica:
+        custom: []
+        name: actividad_fisica
+        description: ''
+        required: false
+        example: si
+        type: string
+        enumValues:
+          - si
+          - 'no'
+        exampleWasSpecified: false
         nullable: false
         deprecated: false
-      primer_afinamiento_fecha:
+      medicamentos_hipertension:
         custom: []
-        name: primer_afinamiento_fecha
-        description: 'Must be a valid date.'
+        name: medicamentos_hipertension
+        description: ''
         required: false
-        example: '2026-03-26T00:38:05'
+        example: 'no'
         type: string
-        enumValues: []
+        enumValues:
+          - si
+          - 'no'
         exampleWasSpecified: false
-        nullable: true
+        nullable: false
         deprecated: false
-      presion_sistolica_1:
+      frecuencia_frutas_verduras:
         custom: []
-        name: presion_sistolica_1
-        description: 'Must be at least 50. Must not be greater than 300.'
+        name: frecuencia_frutas_verduras
+        description: ''
         required: false
-        example: 4
-        type: integer
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: true
-        deprecated: false
-      presion_diastolica_1:
-        custom: []
-        name: presion_diastolica_1
-        description: 'Must be at least 30. Must not be greater than 200.'
-        required: false
-        example: 19
-        type: integer
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: true
-        deprecated: false
-      segundo_afinamiento_fecha:
-        custom: []
-        name: segundo_afinamiento_fecha
-        description: 'Must be a valid date.'
-        required: false
-        example: '2026-03-26T00:38:05'
+        example: no_diariamente
         type: string
-        enumValues: []
+        enumValues:
+          - diariamente
+          - no_diariamente
         exampleWasSpecified: false
-        nullable: true
+        nullable: false
         deprecated: false
-      presion_sistolica_2:
+      azucar_alto_detectado:
         custom: []
-        name: presion_sistolica_2
-        description: 'Toma 2da toma.'
+        name: azucar_alto_detectado
+        description: ''
         required: false
-        example: 135
-        type: integer
-        enumValues: []
-        exampleWasSpecified: true
-        nullable: true
-        deprecated: false
-      presion_diastolica_2:
-        custom: []
-        name: presion_diastolica_2
-        description: 'Must be at least 30. Must not be greater than 200.'
-        required: false
-        example: 19
-        type: integer
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: true
-        deprecated: false
-      tercer_afinamiento_fecha:
-        custom: []
-        name: tercer_afinamiento_fecha
-        description: 'Must be a valid date.'
-        required: false
-        example: '2026-03-26T00:38:05'
+        example: 'no'
         type: string
-        enumValues: []
+        enumValues:
+          - si
+          - 'no'
         exampleWasSpecified: false
-        nullable: true
+        nullable: false
         deprecated: false
-      presion_sistolica_3:
+      peso:
         custom: []
-        name: presion_sistolica_3
-        description: 'Must be at least 50. Must not be greater than 300.'
+        name: peso
+        description: 'Must be at least 1. Must not be greater than 300.'
         required: false
         example: 16
-        type: integer
+        type: number
         enumValues: []
         exampleWasSpecified: false
-        nullable: true
+        nullable: false
         deprecated: false
-      presion_diastolica_3:
+      talla:
         custom: []
-        name: presion_diastolica_3
-        description: 'Must be at least 30. Must not be greater than 200.'
+        name: talla
+        description: 'Must be at least 50. Must not be greater than 250.'
         required: false
         example: 23
-        type: integer
+        type: number
         enumValues: []
         exampleWasSpecified: false
-        nullable: true
+        nullable: false
+        deprecated: false
+      perimetro_abdominal:
+        custom: []
+        name: perimetro_abdominal
+        description: 'Must be at least 30. Must not be greater than 200.'
+        required: false
+        example: 2
+        type: number
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      antecedentes_familiares:
+        custom: []
+        name: antecedentes_familiares
+        description: ''
+        required: false
+        example: padres_hermanos_hijos
+        type: string
+        enumValues:
+          - 'no'
+          - abuelos_tios_primos
+          - padres_hermanos_hijos
+        exampleWasSpecified: false
+        nullable: false
         deprecated: false
       conducta:
         custom: []
@@ -568,20 +481,30 @@ endpoints:
         exampleWasSpecified: false
         nullable: true
         deprecated: false
+      promotor_vida:
+        custom: []
+        name: promotor_vida
+        description: 'Must not be greater than 100 characters.'
+        required: false
+        example: mqeopfuudtdsufvyvddqa
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
     cleanBodyParameters:
-      procedencia: vmqeopfuudtdsufvyvddq
-      fecha_tamizaje: '2026-03-26T00:38:05'
-      presion_arterial_tamiz: amniihfqcoynlazgh
-      primer_afinamiento_fecha: '2026-03-26T00:38:05'
-      presion_sistolica_1: 4
-      presion_diastolica_1: 19
-      segundo_afinamiento_fecha: '2026-03-26T00:38:05'
-      presion_sistolica_2: 135
-      presion_diastolica_2: 19
-      tercer_afinamiento_fecha: '2026-03-26T00:38:05'
-      presion_sistolica_3: 16
-      presion_diastolica_3: 23
+      vereda: vmqeopfuudtdsufvyvddq
+      telefono: amniihfqcoynlazgh
+      actividad_fisica: si
+      medicamentos_hipertension: 'no'
+      frecuencia_frutas_verduras: no_diariamente
+      azucar_alto_detectado: 'no'
+      peso: 16
+      talla: 23
+      perimetro_abdominal: 2
+      antecedentes_familiares: padres_hermanos_hijos
       conducta: consequatur
+      promotor_vida: mqeopfuudtdsufvyvddqa
     fileParameters: []
     responses: []
     responseFields: []
@@ -593,16 +516,16 @@ endpoints:
     custom: []
     httpMethods:
       - DELETE
-    uri: 'api/afinamientos/{id}'
+    uri: 'api/findrisk/{id}'
     metadata:
       custom: []
-      groupName: 'Afinamientos y Seguimiento'
+      groupName: 'Tests FINDRISK'
       groupDescription: |-
 
-        Gestión de afinamientos de presión arterial para pacientes con sospecha de HTA.
+        Evaluación de riesgo de padecer diabetes tipo 2 mediante el cuestionario FINDRISK.
       subgroup: ''
       subgroupDescription: ''
-      title: 'Eliminar afinamiento'
+      title: ''
       description: ''
       authenticated: false
       deprecated: false
@@ -613,7 +536,7 @@ endpoints:
       id:
         custom: []
         name: id
-        description: 'The ID of the afinamiento.'
+        description: 'The ID of the findrisk.'
         required: true
         example: consequatur
         type: string
@@ -638,16 +561,16 @@ endpoints:
     custom: []
     httpMethods:
       - GET
-    uri: api/mis-afinamientos
+    uri: api/findrisk-estadisticas
     metadata:
       custom: []
-      groupName: 'Afinamientos y Seguimiento'
+      groupName: 'Tests FINDRISK'
       groupDescription: |-
 
-        Gestión de afinamientos de presión arterial para pacientes con sospecha de HTA.
+        Evaluación de riesgo de padecer diabetes tipo 2 mediante el cuestionario FINDRISK.
       subgroup: ''
       subgroupDescription: ''
-      title: 'Obtener afinamientos del usuario autenticado'
+      title: ''
       description: ''
       authenticated: false
       deprecated: false
@@ -680,16 +603,16 @@ endpoints:
     custom: []
     httpMethods:
       - GET
-    uri: 'api/afinamientos/paciente/{pacienteId}'
+    uri: 'api/findrisk-estadisticas/sede/{idsede}'
     metadata:
       custom: []
-      groupName: 'Afinamientos y Seguimiento'
+      groupName: 'Tests FINDRISK'
       groupDescription: |-
 
-        Gestión de afinamientos de presión arterial para pacientes con sospecha de HTA.
+        Evaluación de riesgo de padecer diabetes tipo 2 mediante el cuestionario FINDRISK.
       subgroup: ''
       subgroupDescription: ''
-      title: 'Obtener afinamientos por paciente'
+      title: ''
       description: ''
       authenticated: false
       deprecated: false
@@ -697,9 +620,9 @@ endpoints:
       Content-Type: application/json
       Accept: application/json
     urlParameters:
-      pacienteId:
+      idsede:
         custom: []
-        name: pacienteId
+        name: idsede
         description: ''
         required: true
         example: consequatur
@@ -709,7 +632,211 @@ endpoints:
         nullable: false
         deprecated: false
     cleanUrlParameters:
-      pacienteId: consequatur
+      idsede: consequatur
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 401
+        content: '{"message":"Unauthenticated."}'
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          access-control-allow-origin: '*'
+        description: null
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - GET
+    uri: 'api/findrisk/paciente/{idpaciente}'
+    metadata:
+      custom: []
+      groupName: 'Tests FINDRISK'
+      groupDescription: |-
+
+        Evaluación de riesgo de padecer diabetes tipo 2 mediante el cuestionario FINDRISK.
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      idpaciente:
+        custom: []
+        name: idpaciente
+        description: ''
+        required: true
+        example: consequatur
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      idpaciente: consequatur
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 401
+        content: '{"message":"Unauthenticated."}'
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          access-control-allow-origin: '*'
+        description: null
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - GET
+    uri: 'api/findrisk/sede/{idsede}'
+    metadata:
+      custom: []
+      groupName: 'Tests FINDRISK'
+      groupDescription: |-
+
+        Evaluación de riesgo de padecer diabetes tipo 2 mediante el cuestionario FINDRISK.
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      idsede:
+        custom: []
+        name: idsede
+        description: ''
+        required: true
+        example: consequatur
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      idsede: consequatur
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 401
+        content: '{"message":"Unauthenticated."}'
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          access-control-allow-origin: '*'
+        description: null
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - GET
+    uri: 'api/findrisk/paciente-sede/{identificacion}'
+    metadata:
+      custom: []
+      groupName: 'Tests FINDRISK'
+      groupDescription: |-
+
+        Evaluación de riesgo de padecer diabetes tipo 2 mediante el cuestionario FINDRISK.
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      identificacion:
+        custom: []
+        name: identificacion
+        description: ''
+        required: true
+        example: consequatur
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      identificacion: consequatur
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 401
+        content: '{"message":"Unauthenticated."}'
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          access-control-allow-origin: '*'
+        description: null
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - GET
+    uri: api/findrisk-tests/export
+    metadata:
+      custom: []
+      groupName: 'Tests FINDRISK'
+      groupDescription: |-
+
+        Evaluación de riesgo de padecer diabetes tipo 2 mediante el cuestionario FINDRISK.
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []

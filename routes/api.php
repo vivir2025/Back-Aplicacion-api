@@ -23,6 +23,11 @@ use App\Http\Controllers\NotificationController;
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth:sanctum');
 
+// ✅ NUEVAS RUTAS v1 (PÚBLICAS)
+Route::group(['prefix' => 'v1'], function () {
+    Route::get('/public/mapa-calor', [App\Http\Controllers\V1\PublicStatsController::class, 'getMapaCalor']);
+});
+
 /**
  * Health Check
  * 

@@ -1,22 +1,22 @@
-name: 'Brigadas de Salud'
+name: Medicamentos
 description: |-
 
-  Gestión de brigadas en campo, incluyendo sincronización de pacientes offline y entrega de medicamentos.
+  Catálogo de medicamentos disponibles para entrega en visitas y brigadas.
 endpoints:
   -
     custom: []
     httpMethods:
       - GET
-    uri: api/brigadas
+    uri: api/medicamentos
     metadata:
       custom: []
-      groupName: 'Brigadas de Salud'
+      groupName: Medicamentos
       groupDescription: |-
 
-        Gestión de brigadas en campo, incluyendo sincronización de pacientes offline y entrega de medicamentos.
+        Catálogo de medicamentos disponibles para entrega en visitas y brigadas.
       subgroup: ''
       subgroupDescription: ''
-      title: 'Listar brigadas'
+      title: 'Listar medicamentos'
       description: ''
       authenticated: true
       deprecated: false
@@ -25,6 +25,117 @@ endpoints:
       Accept: application/json
     urlParameters: []
     cleanUrlParameters: []
+    queryParameters:
+      busqueda:
+        custom: []
+        name: busqueda
+        description: 'Filtrar por nombre de medicamento.'
+        required: false
+        example: consequatur
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanQueryParameters:
+      busqueda: consequatur
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 401
+        content: '{"message":"Unauthenticated."}'
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          access-control-allow-origin: '*'
+        description: null
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - POST
+    uri: api/medicamentos
+    metadata:
+      custom: []
+      groupName: Medicamentos
+      groupDescription: |-
+
+        Catálogo de medicamentos disponibles para entrega en visitas y brigadas.
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      nombmedicamento:
+        custom: []
+        name: nombmedicamento
+        description: ''
+        required: true
+        example: consequatur
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanBodyParameters:
+      nombmedicamento: consequatur
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - GET
+    uri: 'api/medicamentos/{id}'
+    metadata:
+      custom: []
+      groupName: Medicamentos
+      groupDescription: |-
+
+        Catálogo de medicamentos disponibles para entrega en visitas y brigadas.
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      id:
+        custom: []
+        name: id
+        description: 'The ID of the medicamento.'
+        required: true
+        example: consequatur
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      id: consequatur
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []
@@ -48,113 +159,15 @@ endpoints:
   -
     custom: []
     httpMethods:
-      - POST
-    uri: api/brigadas
+      - PUT
+      - PATCH
+    uri: 'api/medicamentos/{id}'
     metadata:
       custom: []
-      groupName: 'Brigadas de Salud'
+      groupName: Medicamentos
       groupDescription: |-
 
-        Gestión de brigadas en campo, incluyendo sincronización de pacientes offline y entrega de medicamentos.
-      subgroup: ''
-      subgroupDescription: ''
-      title: 'Crear brigada'
-      description: 'Permite crear una brigada y sincronizar los pacientes que fueron capturados offline.'
-      authenticated: true
-      deprecated: false
-    headers:
-      Content-Type: application/json
-      Accept: application/json
-    urlParameters: []
-    cleanUrlParameters: []
-    queryParameters: []
-    cleanQueryParameters: []
-    bodyParameters:
-      lugar_evento:
-        custom: []
-        name: lugar_evento
-        description: 'Nombre del lugar.'
-        required: true
-        example: 'Vereda El Cairo'
-        type: string
-        enumValues: []
-        exampleWasSpecified: true
-        nullable: false
-        deprecated: false
-      fecha_brigada:
-        custom: []
-        name: fecha_brigada
-        description: 'Fecha del evento.'
-        required: true
-        example: consequatur
-        type: date
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        deprecated: false
-      tema:
-        custom: []
-        name: tema
-        description: 'Tema desarrollado.'
-        required: true
-        example: 'Charla HTA'
-        type: string
-        enumValues: []
-        exampleWasSpecified: true
-        nullable: false
-        deprecated: false
-      pacientes:
-        custom: []
-        name: pacientes
-        description: 'Array de IDs de pacientes (reales u offline_ID).'
-        required: true
-        example:
-          - uuid-1
-          - offline_2
-        type: 'string[]'
-        enumValues: []
-        exampleWasSpecified: true
-        nullable: false
-        deprecated: false
-      pacientes_data:
-        custom: []
-        name: pacientes_data
-        description: 'Datos completos de pacientes offline para auto-creación.'
-        required: false
-        example:
-          - []
-        type: 'object[]'
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        deprecated: false
-    cleanBodyParameters:
-      lugar_evento: 'Vereda El Cairo'
-      fecha_brigada: consequatur
-      tema: 'Charla HTA'
-      pacientes:
-        - uuid-1
-        - offline_2
-      pacientes_data:
-        - []
-    fileParameters: []
-    responses: []
-    responseFields: []
-    auth: []
-    controller: null
-    method: null
-    route: null
-  -
-    custom: []
-    httpMethods:
-      - GET
-    uri: 'api/brigadas/{id}'
-    metadata:
-      custom: []
-      groupName: 'Brigadas de Salud'
-      groupDescription: |-
-
-        Gestión de brigadas en campo, incluyendo sincronización de pacientes offline y entrega de medicamentos.
+        Catálogo de medicamentos disponibles para entrega en visitas y brigadas.
       subgroup: ''
       subgroupDescription: ''
       title: ''
@@ -168,7 +181,7 @@ endpoints:
       id:
         custom: []
         name: id
-        description: 'The ID of the brigada.'
+        description: 'The ID of the medicamento.'
         required: true
         example: consequatur
         type: string
@@ -180,6 +193,107 @@ endpoints:
       id: consequatur
     queryParameters: []
     cleanQueryParameters: []
+    bodyParameters:
+      nombmedicamento:
+        custom: []
+        name: nombmedicamento
+        description: ''
+        required: false
+        example: null
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanBodyParameters: []
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - DELETE
+    uri: 'api/medicamentos/{id}'
+    metadata:
+      custom: []
+      groupName: Medicamentos
+      groupDescription: |-
+
+        Catálogo de medicamentos disponibles para entrega en visitas y brigadas.
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      id:
+        custom: []
+        name: id
+        description: 'The ID of the medicamento.'
+        required: true
+        example: consequatur
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      id: consequatur
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - GET
+    uri: api/medicamentos/buscar
+    metadata:
+      custom: []
+      groupName: Medicamentos
+      groupDescription: |-
+
+        Catálogo de medicamentos disponibles para entrega en visitas y brigadas.
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Listar medicamentos'
+      description: ''
+      authenticated: true
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters:
+      busqueda:
+        custom: []
+        name: busqueda
+        description: 'Filtrar por nombre de medicamento.'
+        required: false
+        example: consequatur
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanQueryParameters:
+      busqueda: consequatur
     bodyParameters: []
     cleanBodyParameters: []
     fileParameters: []

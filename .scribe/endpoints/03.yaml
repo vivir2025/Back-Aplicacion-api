@@ -1,25 +1,23 @@
-name: 'Estadísticas y Dashboard'
+name: 'Auditoría y Logs'
 description: |-
 
-  Módulo para obtener el resumen de actividades del usuario logueado en el mes actual o en un rango de fechas.
+  Módulo para el análisis y monitoreo de los logs del sistema (laravel.log), con filtros avanzados por módulo y prioridad.
 endpoints:
   -
     custom: []
     httpMethods:
       - GET
-    uri: api/estadisticas
+    uri: api/logs
     metadata:
       custom: []
-      groupName: 'Estadísticas y Dashboard'
+      groupName: 'Auditoría y Logs'
       groupDescription: |-
 
-        Módulo para obtener el resumen de actividades del usuario logueado en el mes actual o en un rango de fechas.
+        Módulo para el análisis y monitoreo de los logs del sistema (laravel.log), con filtros avanzados por módulo y prioridad.
       subgroup: ''
       subgroupDescription: ''
-      title: 'Obtener estadísticas generales'
-      description: |-
-        Retorna el conteo de pacientes (total) y actividades (visitas, tamizajes, envíos, encuestas) del usuario logueado.
-        Si no se envían fechas, filtra por el mes actual.
+      title: 'Listar y filtrar logs'
+      description: ''
       authenticated: true
       deprecated: false
     headers:
@@ -28,31 +26,43 @@ endpoints:
     urlParameters: []
     cleanUrlParameters: []
     queryParameters:
-      fecha_inicio:
+      search:
         custom: []
-        name: fecha_inicio
-        description: 'date Fecha inicial (YYYY-MM-DD).'
+        name: search
+        description: 'Busqueda por texto.'
         required: false
-        example: '2024-03-01'
+        example: consequatur
         type: string
         enumValues: []
-        exampleWasSpecified: true
+        exampleWasSpecified: false
         nullable: false
         deprecated: false
-      fecha_fin:
+      type:
         custom: []
-        name: fecha_fin
-        description: 'date Fecha final (YYYY-MM-DD).'
+        name: type
+        description: 'Filtrar por tipo (visita, brigada, etc).'
         required: false
-        example: '2024-03-31'
+        example: consequatur
         type: string
         enumValues: []
-        exampleWasSpecified: true
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      status:
+        custom: []
+        name: status
+        description: 'Filtrar por estado (success, error, warning).'
+        required: false
+        example: consequatur
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
         nullable: false
         deprecated: false
     cleanQueryParameters:
-      fecha_inicio: '2024-03-01'
-      fecha_fin: '2024-03-31'
+      search: consequatur
+      type: consequatur
+      status: consequatur
     bodyParameters: []
     cleanBodyParameters: []
     fileParameters: []
@@ -75,16 +85,187 @@ endpoints:
     custom: []
     httpMethods:
       - GET
-    uri: 'api/estadisticas/sede/{sedeId}'
+    uri: api/logs/stats
     metadata:
       custom: []
-      groupName: 'Estadísticas y Dashboard'
+      groupName: 'Auditoría y Logs'
       groupDescription: |-
 
-        Módulo para obtener el resumen de actividades del usuario logueado en el mes actual o en un rango de fechas.
+        Módulo para el análisis y monitoreo de los logs del sistema (laravel.log), con filtros avanzados por módulo y prioridad.
       subgroup: ''
       subgroupDescription: ''
-      title: 'Obtener estadísticas por sede específica'
+      title: ''
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 401
+        content: '{"message":"Unauthenticated."}'
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          access-control-allow-origin: '*'
+        description: null
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - GET
+    uri: api/logs/export
+    metadata:
+      custom: []
+      groupName: 'Auditoría y Logs'
+      groupDescription: |-
+
+        Módulo para el análisis y monitoreo de los logs del sistema (laravel.log), con filtros avanzados por módulo y prioridad.
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 401
+        content: '{"message":"Unauthenticated."}'
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          access-control-allow-origin: '*'
+        description: null
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - GET
+    uri: api/logs/download
+    metadata:
+      custom: []
+      groupName: 'Auditoría y Logs'
+      groupDescription: |-
+
+        Módulo para el análisis y monitoreo de los logs del sistema (laravel.log), con filtros avanzados por módulo y prioridad.
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 401
+        content: '{"message":"Unauthenticated."}'
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          access-control-allow-origin: '*'
+        description: null
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - POST
+    uri: api/logs/clear
+    metadata:
+      custom: []
+      groupName: 'Auditoría y Logs'
+      groupDescription: |-
+
+        Módulo para el análisis y monitoreo de los logs del sistema (laravel.log), con filtros avanzados por módulo y prioridad.
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      confirm:
+        custom: []
+        name: confirm
+        description: 'Must be accepted.'
+        required: true
+        example: false
+        type: boolean
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanBodyParameters:
+      confirm: false
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - GET
+    uri: 'api/logs/{id}'
+    metadata:
+      custom: []
+      groupName: 'Auditoría y Logs'
+      groupDescription: |-
+
+        Módulo para el análisis y monitoreo de los logs del sistema (laravel.log), con filtros avanzados por módulo y prioridad.
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
       description: ''
       authenticated: false
       deprecated: false
@@ -92,10 +273,10 @@ endpoints:
       Content-Type: application/json
       Accept: application/json
     urlParameters:
-      sedeId:
+      id:
         custom: []
-        name: sedeId
-        description: ''
+        name: id
+        description: 'The ID of the log.'
         required: true
         example: consequatur
         type: string
@@ -104,7 +285,7 @@ endpoints:
         nullable: false
         deprecated: false
     cleanUrlParameters:
-      sedeId: consequatur
+      id: consequatur
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []

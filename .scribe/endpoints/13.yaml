@@ -1,22 +1,22 @@
-name: 'Tests FINDRISK'
+name: 'Encuestas de Satisfacción'
 description: |-
 
-  Evaluación de riesgo de padecer diabetes tipo 2 mediante el cuestionario FINDRISK.
+  Gestión de encuestas aplicadas a los pacientes para evaluar la calidad del servicio.
 endpoints:
   -
     custom: []
     httpMethods:
       - GET
-    uri: api/findrisk
+    uri: api/encuestas
     metadata:
       custom: []
-      groupName: 'Tests FINDRISK'
+      groupName: 'Encuestas de Satisfacción'
       groupDescription: |-
 
-        Evaluación de riesgo de padecer diabetes tipo 2 mediante el cuestionario FINDRISK.
+        Gestión de encuestas aplicadas a los pacientes para evaluar la calidad del servicio.
       subgroup: ''
       subgroupDescription: ''
-      title: 'Listar tests realizados'
+      title: 'Listar todas las encuestas'
       description: ''
       authenticated: true
       deprecated: false
@@ -49,16 +49,16 @@ endpoints:
     custom: []
     httpMethods:
       - POST
-    uri: api/findrisk
+    uri: api/encuestas
     metadata:
       custom: []
-      groupName: 'Tests FINDRISK'
+      groupName: 'Encuestas de Satisfacción'
       groupDescription: |-
 
-        Evaluación de riesgo de padecer diabetes tipo 2 mediante el cuestionario FINDRISK.
+        Gestión de encuestas aplicadas a los pacientes para evaluar la calidad del servicio.
       subgroup: ''
       subgroupDescription: ''
-      title: 'Crear test FINDRISK'
+      title: 'Crear encuesta'
       description: ''
       authenticated: true
       deprecated: false
@@ -70,12 +70,23 @@ endpoints:
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters:
+      id:
+        custom: []
+        name: id
+        description: 'UUID único para la encuesta.'
+        required: true
+        example: uuid-abc
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        deprecated: false
       idpaciente:
         custom: []
         name: idpaciente
         description: 'ID del paciente.'
         required: true
-        example: 550e8400-e29b-41d4-a716-446655440000
+        example: uuid-pac
         type: string
         enumValues: []
         exampleWasSpecified: true
@@ -86,137 +97,71 @@ endpoints:
         name: idsede
         description: 'ID de la sede.'
         required: true
-        example: '4044680601076201931'
+        example: '1'
         type: string
         enumValues: []
         exampleWasSpecified: true
         nullable: false
         deprecated: false
-      vereda:
+      domicilio:
         custom: []
-        name: vereda
-        description: 'Must not be greater than 100 characters.'
-        required: false
+        name: domicilio
+        description: 'Must not be greater than 255 characters.'
+        required: true
         example: mqeopfuudtdsufvyvddqa
         type: string
         enumValues: []
         exampleWasSpecified: false
-        nullable: true
-        deprecated: false
-      telefono:
-        custom: []
-        name: telefono
-        description: 'Must not be greater than 20 characters.'
-        required: false
-        example: mniihfqcoynlazghd
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: true
-        deprecated: false
-      actividad_fisica:
-        custom: []
-        name: actividad_fisica
-        description: '"si" o "no".'
-        required: true
-        example: si
-        type: string
-        enumValues: []
-        exampleWasSpecified: true
         nullable: false
         deprecated: false
-      medicamentos_hipertension:
+      entidad_afiliada:
         custom: []
-        name: medicamentos_hipertension
-        description: '"si" o "no".'
-        required: true
-        example: si
-        type: string
-        enumValues: []
-        exampleWasSpecified: true
-        nullable: false
-        deprecated: false
-      frecuencia_frutas_verduras:
-        custom: []
-        name: frecuencia_frutas_verduras
-        description: '"diariamente" o "no_diariamente".'
-        required: true
-        example: diariamente
-        type: string
-        enumValues: []
-        exampleWasSpecified: true
-        nullable: false
-        deprecated: false
-      azucar_alto_detectado:
-        custom: []
-        name: azucar_alto_detectado
-        description: '"si" o "no".'
-        required: true
-        example: si
-        type: string
-        enumValues: []
-        exampleWasSpecified: true
-        nullable: false
-        deprecated: false
-      peso:
-        custom: []
-        name: peso
-        description: 'Peso en kg.'
-        required: true
-        example: 85.0
-        type: number
-        enumValues: []
-        exampleWasSpecified: true
-        nullable: false
-        deprecated: false
-      talla:
-        custom: []
-        name: talla
-        description: 'Talla en cm.'
-        required: true
-        example: 175.0
-        type: number
-        enumValues: []
-        exampleWasSpecified: true
-        nullable: false
-        deprecated: false
-      perimetro_abdominal:
-        custom: []
-        name: perimetro_abdominal
-        description: 'Perímetro abdominal en cm.'
-        required: true
-        example: 102.0
-        type: number
-        enumValues: []
-        exampleWasSpecified: true
-        nullable: false
-        deprecated: false
-      antecedentes_familiares:
-        custom: []
-        name: antecedentes_familiares
-        description: '(no, abuelos_tios_primos, padres_hermanos_hijos).'
-        required: true
-        example: 'no'
-        type: string
-        enumValues: []
-        exampleWasSpecified: true
-        nullable: false
-        deprecated: false
-      conducta:
-        custom: []
-        name: conducta
-        description: ''
-        required: false
-        example: consequatur
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: true
-        deprecated: false
-      promotor_vida:
-        custom: []
-        name: promotor_vida
+        name: entidad_afiliada
         description: 'Must not be greater than 100 characters.'
+        required: false
+        example: mniihfqcoynlazghdtqtq
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+      fecha:
+        custom: []
+        name: fecha
+        description: 'Must be a valid date.'
+        required: true
+        example: '2026-03-26T14:59:43'
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      respuestas_calificacion:
+        custom: []
+        name: respuestas_calificacion
+        description: 'JSON con calificaciones (Excelente, Bueno, etc).'
+        required: true
+        example: '["Excelente", "Bueno"]'
+        type: json
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        deprecated: false
+      respuestas_adicionales:
+        custom: []
+        name: respuestas_adicionales
+        description: 'JSON con respuestas abiertas.'
+        required: true
+        example: '{"pregunta1": "Respuesta"}'
+        type: json
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        deprecated: false
+      sugerencias:
+        custom: []
+        name: sugerencias
+        description: 'Must not be greater than 1000 characters.'
         required: false
         example: mqeopfuudtdsufvyvddqa
         type: string
@@ -225,20 +170,15 @@ endpoints:
         nullable: true
         deprecated: false
     cleanBodyParameters:
-      idpaciente: 550e8400-e29b-41d4-a716-446655440000
-      idsede: '4044680601076201931'
-      vereda: mqeopfuudtdsufvyvddqa
-      telefono: mniihfqcoynlazghd
-      actividad_fisica: si
-      medicamentos_hipertension: si
-      frecuencia_frutas_verduras: diariamente
-      azucar_alto_detectado: si
-      peso: 85.0
-      talla: 175.0
-      perimetro_abdominal: 102.0
-      antecedentes_familiares: 'no'
-      conducta: consequatur
-      promotor_vida: mqeopfuudtdsufvyvddqa
+      id: uuid-abc
+      idpaciente: uuid-pac
+      idsede: '1'
+      domicilio: mqeopfuudtdsufvyvddqa
+      entidad_afiliada: mniihfqcoynlazghdtqtq
+      fecha: '2026-03-26T14:59:43'
+      respuestas_calificacion: '["Excelente", "Bueno"]'
+      respuestas_adicionales: '{"pregunta1": "Respuesta"}'
+      sugerencias: mqeopfuudtdsufvyvddqa
     fileParameters: []
     responses: []
     responseFields: []
@@ -250,16 +190,16 @@ endpoints:
     custom: []
     httpMethods:
       - GET
-    uri: 'api/findrisk/{id}'
+    uri: 'api/encuestas/{id}'
     metadata:
       custom: []
-      groupName: 'Tests FINDRISK'
+      groupName: 'Encuestas de Satisfacción'
       groupDescription: |-
 
-        Evaluación de riesgo de padecer diabetes tipo 2 mediante el cuestionario FINDRISK.
+        Gestión de encuestas aplicadas a los pacientes para evaluar la calidad del servicio.
       subgroup: ''
       subgroupDescription: ''
-      title: 'Consultar test FINDRISK'
+      title: 'Consultar encuesta'
       description: ''
       authenticated: true
       deprecated: false
@@ -270,16 +210,16 @@ endpoints:
       id:
         custom: []
         name: id
-        description: 'ID del test.'
+        description: 'ID de la encuesta.'
         required: true
-        example: '1'
+        example: consequatur
         type: string
         enumValues: []
-        exampleWasSpecified: true
+        exampleWasSpecified: false
         nullable: false
         deprecated: false
     cleanUrlParameters:
-      id: '1'
+      id: consequatur
     queryParameters: []
     cleanQueryParameters: []
     bodyParameters: []
@@ -305,16 +245,16 @@ endpoints:
     httpMethods:
       - PUT
       - PATCH
-    uri: 'api/findrisk/{id}'
+    uri: 'api/encuestas/{id}'
     metadata:
       custom: []
-      groupName: 'Tests FINDRISK'
+      groupName: 'Encuestas de Satisfacción'
       groupDescription: |-
 
-        Evaluación de riesgo de padecer diabetes tipo 2 mediante el cuestionario FINDRISK.
+        Gestión de encuestas aplicadas a los pacientes para evaluar la calidad del servicio.
       subgroup: ''
       subgroupDescription: ''
-      title: 'Actualizar test FINDRISK'
+      title: 'Actualizar encuesta'
       description: ''
       authenticated: true
       deprecated: false
@@ -325,7 +265,7 @@ endpoints:
       id:
         custom: []
         name: id
-        description: 'ID del test.'
+        description: 'ID de la encuesta.'
         required: true
         example: consequatur
         type: string
@@ -337,174 +277,8 @@ endpoints:
       id: consequatur
     queryParameters: []
     cleanQueryParameters: []
-    bodyParameters:
-      idsede:
-        custom: []
-        name: idsede
-        description: 'The <code>id</code> of an existing record in the sedes table.'
-        required: false
-        example: null
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        deprecated: false
-      vereda:
-        custom: []
-        name: vereda
-        description: 'Must not be greater than 100 characters.'
-        required: false
-        example: vmqeopfuudtdsufvyvddq
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: true
-        deprecated: false
-      telefono:
-        custom: []
-        name: telefono
-        description: 'Must not be greater than 20 characters.'
-        required: false
-        example: amniihfqcoynlazgh
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: true
-        deprecated: false
-      actividad_fisica:
-        custom: []
-        name: actividad_fisica
-        description: ''
-        required: false
-        example: si
-        type: string
-        enumValues:
-          - si
-          - 'no'
-        exampleWasSpecified: false
-        nullable: false
-        deprecated: false
-      medicamentos_hipertension:
-        custom: []
-        name: medicamentos_hipertension
-        description: ''
-        required: false
-        example: 'no'
-        type: string
-        enumValues:
-          - si
-          - 'no'
-        exampleWasSpecified: false
-        nullable: false
-        deprecated: false
-      frecuencia_frutas_verduras:
-        custom: []
-        name: frecuencia_frutas_verduras
-        description: ''
-        required: false
-        example: no_diariamente
-        type: string
-        enumValues:
-          - diariamente
-          - no_diariamente
-        exampleWasSpecified: false
-        nullable: false
-        deprecated: false
-      azucar_alto_detectado:
-        custom: []
-        name: azucar_alto_detectado
-        description: ''
-        required: false
-        example: 'no'
-        type: string
-        enumValues:
-          - si
-          - 'no'
-        exampleWasSpecified: false
-        nullable: false
-        deprecated: false
-      peso:
-        custom: []
-        name: peso
-        description: 'Must be at least 1. Must not be greater than 300.'
-        required: false
-        example: 16
-        type: number
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        deprecated: false
-      talla:
-        custom: []
-        name: talla
-        description: 'Must be at least 50. Must not be greater than 250.'
-        required: false
-        example: 23
-        type: number
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        deprecated: false
-      perimetro_abdominal:
-        custom: []
-        name: perimetro_abdominal
-        description: 'Must be at least 30. Must not be greater than 200.'
-        required: false
-        example: 2
-        type: number
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        deprecated: false
-      antecedentes_familiares:
-        custom: []
-        name: antecedentes_familiares
-        description: ''
-        required: false
-        example: padres_hermanos_hijos
-        type: string
-        enumValues:
-          - 'no'
-          - abuelos_tios_primos
-          - padres_hermanos_hijos
-        exampleWasSpecified: false
-        nullable: false
-        deprecated: false
-      conducta:
-        custom: []
-        name: conducta
-        description: ''
-        required: false
-        example: consequatur
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: true
-        deprecated: false
-      promotor_vida:
-        custom: []
-        name: promotor_vida
-        description: 'Must not be greater than 100 characters.'
-        required: false
-        example: mqeopfuudtdsufvyvddqa
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: true
-        deprecated: false
-    cleanBodyParameters:
-      vereda: vmqeopfuudtdsufvyvddq
-      telefono: amniihfqcoynlazgh
-      actividad_fisica: si
-      medicamentos_hipertension: 'no'
-      frecuencia_frutas_verduras: no_diariamente
-      azucar_alto_detectado: 'no'
-      peso: 16
-      talla: 23
-      perimetro_abdominal: 2
-      antecedentes_familiares: padres_hermanos_hijos
-      conducta: consequatur
-      promotor_vida: mqeopfuudtdsufvyvddqa
+    bodyParameters: []
+    cleanBodyParameters: []
     fileParameters: []
     responses: []
     responseFields: []
@@ -516,13 +290,13 @@ endpoints:
     custom: []
     httpMethods:
       - DELETE
-    uri: 'api/findrisk/{id}'
+    uri: 'api/encuestas/{id}'
     metadata:
       custom: []
-      groupName: 'Tests FINDRISK'
+      groupName: 'Encuestas de Satisfacción'
       groupDescription: |-
 
-        Evaluación de riesgo de padecer diabetes tipo 2 mediante el cuestionario FINDRISK.
+        Gestión de encuestas aplicadas a los pacientes para evaluar la calidad del servicio.
       subgroup: ''
       subgroupDescription: ''
       title: ''
@@ -536,7 +310,7 @@ endpoints:
       id:
         custom: []
         name: id
-        description: 'The ID of the findrisk.'
+        description: 'The ID of the encuesta.'
         required: true
         example: consequatur
         type: string
@@ -561,13 +335,13 @@ endpoints:
     custom: []
     httpMethods:
       - GET
-    uri: api/findrisk-estadisticas
+    uri: api/mis-encuestas
     metadata:
       custom: []
-      groupName: 'Tests FINDRISK'
+      groupName: 'Encuestas de Satisfacción'
       groupDescription: |-
 
-        Evaluación de riesgo de padecer diabetes tipo 2 mediante el cuestionario FINDRISK.
+        Gestión de encuestas aplicadas a los pacientes para evaluar la calidad del servicio.
       subgroup: ''
       subgroupDescription: ''
       title: ''
@@ -603,67 +377,13 @@ endpoints:
     custom: []
     httpMethods:
       - GET
-    uri: 'api/findrisk-estadisticas/sede/{idsede}'
+    uri: 'api/encuestas/paciente/{idpaciente}'
     metadata:
       custom: []
-      groupName: 'Tests FINDRISK'
+      groupName: 'Encuestas de Satisfacción'
       groupDescription: |-
 
-        Evaluación de riesgo de padecer diabetes tipo 2 mediante el cuestionario FINDRISK.
-      subgroup: ''
-      subgroupDescription: ''
-      title: ''
-      description: ''
-      authenticated: false
-      deprecated: false
-    headers:
-      Content-Type: application/json
-      Accept: application/json
-    urlParameters:
-      idsede:
-        custom: []
-        name: idsede
-        description: ''
-        required: true
-        example: consequatur
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        deprecated: false
-    cleanUrlParameters:
-      idsede: consequatur
-    queryParameters: []
-    cleanQueryParameters: []
-    bodyParameters: []
-    cleanBodyParameters: []
-    fileParameters: []
-    responses:
-      -
-        custom: []
-        status: 401
-        content: '{"message":"Unauthenticated."}'
-        headers:
-          cache-control: 'no-cache, private'
-          content-type: application/json
-          access-control-allow-origin: '*'
-        description: null
-    responseFields: []
-    auth: []
-    controller: null
-    method: null
-    route: null
-  -
-    custom: []
-    httpMethods:
-      - GET
-    uri: 'api/findrisk/paciente/{idpaciente}'
-    metadata:
-      custom: []
-      groupName: 'Tests FINDRISK'
-      groupDescription: |-
-
-        Evaluación de riesgo de padecer diabetes tipo 2 mediante el cuestionario FINDRISK.
+        Gestión de encuestas aplicadas a los pacientes para evaluar la calidad del servicio.
       subgroup: ''
       subgroupDescription: ''
       title: ''
@@ -711,13 +431,67 @@ endpoints:
     custom: []
     httpMethods:
       - GET
-    uri: 'api/findrisk/sede/{idsede}'
+    uri: 'api/encuestas/usuario/{idusuario}'
     metadata:
       custom: []
-      groupName: 'Tests FINDRISK'
+      groupName: 'Encuestas de Satisfacción'
       groupDescription: |-
 
-        Evaluación de riesgo de padecer diabetes tipo 2 mediante el cuestionario FINDRISK.
+        Gestión de encuestas aplicadas a los pacientes para evaluar la calidad del servicio.
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      idusuario:
+        custom: []
+        name: idusuario
+        description: ''
+        required: true
+        example: consequatur
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      idusuario: consequatur
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 401
+        content: '{"message":"Unauthenticated."}'
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          access-control-allow-origin: '*'
+        description: null
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - GET
+    uri: 'api/encuestas/sede/{idsede}'
+    metadata:
+      custom: []
+      groupName: 'Encuestas de Satisfacción'
+      groupDescription: |-
+
+        Gestión de encuestas aplicadas a los pacientes para evaluar la calidad del servicio.
       subgroup: ''
       subgroupDescription: ''
       title: ''
@@ -765,67 +539,13 @@ endpoints:
     custom: []
     httpMethods:
       - GET
-    uri: 'api/findrisk/paciente-sede/{identificacion}'
+    uri: api/encuestas-estadisticas
     metadata:
       custom: []
-      groupName: 'Tests FINDRISK'
+      groupName: 'Encuestas de Satisfacción'
       groupDescription: |-
 
-        Evaluación de riesgo de padecer diabetes tipo 2 mediante el cuestionario FINDRISK.
-      subgroup: ''
-      subgroupDescription: ''
-      title: ''
-      description: ''
-      authenticated: false
-      deprecated: false
-    headers:
-      Content-Type: application/json
-      Accept: application/json
-    urlParameters:
-      identificacion:
-        custom: []
-        name: identificacion
-        description: ''
-        required: true
-        example: consequatur
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        deprecated: false
-    cleanUrlParameters:
-      identificacion: consequatur
-    queryParameters: []
-    cleanQueryParameters: []
-    bodyParameters: []
-    cleanBodyParameters: []
-    fileParameters: []
-    responses:
-      -
-        custom: []
-        status: 401
-        content: '{"message":"Unauthenticated."}'
-        headers:
-          cache-control: 'no-cache, private'
-          content-type: application/json
-          access-control-allow-origin: '*'
-        description: null
-    responseFields: []
-    auth: []
-    controller: null
-    method: null
-    route: null
-  -
-    custom: []
-    httpMethods:
-      - GET
-    uri: api/findrisk-tests/export
-    metadata:
-      custom: []
-      groupName: 'Tests FINDRISK'
-      groupDescription: |-
-
-        Evaluación de riesgo de padecer diabetes tipo 2 mediante el cuestionario FINDRISK.
+        Gestión de encuestas aplicadas a los pacientes para evaluar la calidad del servicio.
       subgroup: ''
       subgroupDescription: ''
       title: ''
