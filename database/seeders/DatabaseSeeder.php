@@ -2,23 +2,30 @@
 
 namespace Database\Seeders;
 
-// use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use App\Models\Usuario;
+use App\Models\Sede;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 
 class DatabaseSeeder extends Seeder
 {
-    /**
-     * Seed the application's database.
-     *
-     * @return void
-     */
     public function run()
     {
-        // \App\Models\User::factory(10)->create();
+        // El UUID de la sede que ya tenés en la base de datos
+        $miSedeId = 'id de sede';
 
-        // \App\Models\User::factory()->create([
-        //     'name' => 'Test User',
-        //     'email' => 'test@example.com',
-        // ]);
+        // 2. Creamos el Usuario Administrador asociado a ese ID
+        Usuario::create([
+            'id' => Str::uuid()->toString(),
+            'usuario' => 'admin',
+            'correo' => 'admin@fundacion.com',
+            'nombre' => 'Administrador Bornive',
+            'contrasena' => Hash::make('secreto123'),
+            'rol' => 'admin',
+            'estado' => 'activo',
+            'idsede' => $miSedeId, // Lo mandamos directo
+        ]);
     }
+
 }

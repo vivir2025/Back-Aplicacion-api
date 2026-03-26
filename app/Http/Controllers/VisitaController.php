@@ -23,11 +23,50 @@ class VisitaController extends Controller
     /**
      * Listar todas las visitas
      * 
+     * Permite filtrar las visitas por rango de fechas, usuario que realizó la visita y sede asociada al paciente.
+     * 
      * @authenticated
+     * @queryParam fecha_desde date optional Filtrar visitas desde esta fecha. Example: 2024-01-01
+     * @queryParam fecha_hasta date optional Filtrar visitas hasta esta fecha. Example: 2024-12-31
+     * @queryParam idusuario string optional Filtrar por el ID del usuario que realizó la visita.
+     * @queryParam idsede string optional Filtrar por el ID de la sede a la que pertenece el paciente.
      */
-    public function index()
+    public function index(Request $request)
     {
-        return Visita::with(['usuario', 'paciente'])->get();
+        try {
+            $query = Visita::with(['usuario', 'paciente.sede']);
+
+            // Filtro por rango de fechas
+            if ($request->has('fecha_desde')) {
+                $query->whereDate('fecha', '>=', $request->fecha_desde);
+            }
+            if ($request->has('fecha_hasta')) {
+                $query->whereDate('fecha', '<=', $request->fecha_hasta);
+            }
+
+            // Filtro por usuario (quien realizó la visita)
+            if ($request->has('idusuario')) {
+                $query->where('idusuario', $request->idusuario);
+            }
+
+            // Filtro por sede (asociada al paciente de la visita)
+            if ($request->has('idsede')) {
+                $query->whereHas('paciente', function ($q) use ($request) {
+                    $q->where('idsede', $request->idsede);
+                });
+            }
+
+            $visitas = $query->orderBy('fecha', 'desc')->get();
+
+            return response()->json($visitas);
+
+        } catch (\Exception $e) {
+            Log::error('Error al obtener visitas filtradas: ' . $e->getMessage());
+            return response()->json([
+                'success' => false,
+                'message' => 'Error al obtener las visitas'
+            ], 500);
+        }
     }
 
   /**
