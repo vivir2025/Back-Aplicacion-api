@@ -1,0 +1,621 @@
+name: 'Tamizajes de Presión Arterial (PA)'
+description: |-
+
+  Módulo para el tamizaje primario de pacientes, captura de signos básicos y conducta inicial.
+endpoints:
+  -
+    custom: []
+    httpMethods:
+      - GET
+    uri: api/tamizajes
+    metadata:
+      custom: []
+      groupName: 'Tamizajes de Presión Arterial (PA)'
+      groupDescription: |-
+
+        Módulo para el tamizaje primario de pacientes, captura de signos básicos y conducta inicial.
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Listar tamizajes'
+      description: ''
+      authenticated: true
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters:
+      paciente_id:
+        custom: []
+        name: paciente_id
+        description: 'Filtrar por paciente.'
+        required: false
+        example: consequatur
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      usuario_id:
+        custom: []
+        name: usuario_id
+        description: 'Filtrar por usuario/promotor.'
+        required: false
+        example: consequatur
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanQueryParameters:
+      paciente_id: consequatur
+      usuario_id: consequatur
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 401
+        content: '{"message":"Unauthenticated."}'
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          access-control-allow-origin: '*'
+        description: null
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - POST
+    uri: api/tamizajes
+    metadata:
+      custom: []
+      groupName: 'Tamizajes de Presión Arterial (PA)'
+      groupDescription: |-
+
+        Módulo para el tamizaje primario de pacientes, captura de signos básicos y conducta inicial.
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Crear tamizaje'
+      description: ''
+      authenticated: true
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      idpaciente:
+        custom: []
+        name: idpaciente
+        description: 'ID del paciente.'
+        required: true
+        example: id-paciente
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        deprecated: false
+      vereda_residencia:
+        custom: []
+        name: vereda_residencia
+        description: Vereda.
+        required: true
+        example: 'Vereda Norte'
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        deprecated: false
+      telefono:
+        custom: []
+        name: telefono
+        description: 'Must not be greater than 20 characters.'
+        required: false
+        example: mniihfqcoynlazghd
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+      brazo_toma:
+        custom: []
+        name: brazo_toma
+        description: 'izquierdo o derecho.'
+        required: true
+        example: izquierdo
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        deprecated: false
+      posicion_persona:
+        custom: []
+        name: posicion_persona
+        description: 'de_pie, acostado, sentado.'
+        required: true
+        example: sentado
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        deprecated: false
+      reposo_cinco_minutos:
+        custom: []
+        name: reposo_cinco_minutos
+        description: 'si o no.'
+        required: true
+        example: si
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        deprecated: false
+      fecha_primera_toma:
+        custom: []
+        name: fecha_primera_toma
+        description: 'Fecha de la toma.'
+        required: true
+        example: consequatur
+        type: date
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      pa_sistolica:
+        custom: []
+        name: pa_sistolica
+        description: Sistólica.
+        required: true
+        example: 120
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        deprecated: false
+      pa_diastolica:
+        custom: []
+        name: pa_diastolica
+        description: Diastólica.
+        required: true
+        example: 80
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        deprecated: false
+      conducta:
+        custom: []
+        name: conducta
+        description: 'Must not be greater than 1000 characters.'
+        required: false
+        example: bajwbpilpmufinllwloau
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+    cleanBodyParameters:
+      idpaciente: id-paciente
+      vereda_residencia: 'Vereda Norte'
+      telefono: mniihfqcoynlazghd
+      brazo_toma: izquierdo
+      posicion_persona: sentado
+      reposo_cinco_minutos: si
+      fecha_primera_toma: consequatur
+      pa_sistolica: 120
+      pa_diastolica: 80
+      conducta: bajwbpilpmufinllwloau
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - GET
+    uri: api/tamizajes/estadisticas
+    metadata:
+      custom: []
+      groupName: 'Tamizajes de Presión Arterial (PA)'
+      groupDescription: |-
+
+        Módulo para el tamizaje primario de pacientes, captura de signos básicos y conducta inicial.
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Obtener estadísticas de tamizajes del usuario logueado'
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 401
+        content: '{"message":"Unauthenticated."}'
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          access-control-allow-origin: '*'
+        description: null
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - GET
+    uri: 'api/tamizajes/paciente/{pacienteId}'
+    metadata:
+      custom: []
+      groupName: 'Tamizajes de Presión Arterial (PA)'
+      groupDescription: |-
+
+        Módulo para el tamizaje primario de pacientes, captura de signos básicos y conducta inicial.
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Obtener tamizajes por paciente'
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      pacienteId:
+        custom: []
+        name: pacienteId
+        description: ''
+        required: true
+        example: consequatur
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      pacienteId: consequatur
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 401
+        content: '{"message":"Unauthenticated."}'
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          access-control-allow-origin: '*'
+        description: null
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - GET
+    uri: api/tamizajes/mis-tamizajes
+    metadata:
+      custom: []
+      groupName: 'Tamizajes de Presión Arterial (PA)'
+      groupDescription: |-
+
+        Módulo para el tamizaje primario de pacientes, captura de signos básicos y conducta inicial.
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Obtener tamizajes del usuario autenticado'
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 401
+        content: '{"message":"Unauthenticated."}'
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          access-control-allow-origin: '*'
+        description: null
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - GET
+    uri: 'api/tamizajes/{id}'
+    metadata:
+      custom: []
+      groupName: 'Tamizajes de Presión Arterial (PA)'
+      groupDescription: |-
+
+        Módulo para el tamizaje primario de pacientes, captura de signos básicos y conducta inicial.
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Consultar tamizaje'
+      description: ''
+      authenticated: true
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      id:
+        custom: []
+        name: id
+        description: 'ID del tamizaje.'
+        required: true
+        example: consequatur
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      id: consequatur
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 401
+        content: '{"message":"Unauthenticated."}'
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          access-control-allow-origin: '*'
+        description: null
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - PUT
+    uri: 'api/tamizajes/{id}'
+    metadata:
+      custom: []
+      groupName: 'Tamizajes de Presión Arterial (PA)'
+      groupDescription: |-
+
+        Módulo para el tamizaje primario de pacientes, captura de signos básicos y conducta inicial.
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Actualizar tamizaje'
+      description: ''
+      authenticated: true
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      id:
+        custom: []
+        name: id
+        description: 'ID del tamizaje.'
+        required: true
+        example: consequatur
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      id: consequatur
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      vereda_residencia:
+        custom: []
+        name: vereda_residencia
+        description: 'Must not be greater than 100 characters.'
+        required: false
+        example: vmqeopfuudtdsufvyvddq
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      telefono:
+        custom: []
+        name: telefono
+        description: 'Must not be greater than 20 characters.'
+        required: false
+        example: amniihfqcoynlazgh
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+      brazo_toma:
+        custom: []
+        name: brazo_toma
+        description: ''
+        required: false
+        example: izquierdo
+        type: string
+        enumValues:
+          - izquierdo
+          - derecho
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      posicion_persona:
+        custom: []
+        name: posicion_persona
+        description: ''
+        required: false
+        example: acostado
+        type: string
+        enumValues:
+          - de_pie
+          - acostado
+          - sentado
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      reposo_cinco_minutos:
+        custom: []
+        name: reposo_cinco_minutos
+        description: ''
+        required: false
+        example: 'no'
+        type: string
+        enumValues:
+          - si
+          - 'no'
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      fecha_primera_toma:
+        custom: []
+        name: fecha_primera_toma
+        description: 'Must be a valid date.'
+        required: false
+        example: '2026-03-26T00:38:05'
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      pa_sistolica:
+        custom: []
+        name: pa_sistolica
+        description: 'Must be at least 50. Must not be greater than 300.'
+        required: false
+        example: 19
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      pa_diastolica:
+        custom: []
+        name: pa_diastolica
+        description: 'Must be at least 30. Must not be greater than 200.'
+        required: false
+        example: 16
+        type: integer
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      conducta:
+        custom: []
+        name: conducta
+        description: 'Must not be greater than 1000 characters.'
+        required: false
+        example: xbajwbpilpmufinllwloa
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+    cleanBodyParameters:
+      vereda_residencia: vmqeopfuudtdsufvyvddq
+      telefono: amniihfqcoynlazgh
+      brazo_toma: izquierdo
+      posicion_persona: acostado
+      reposo_cinco_minutos: 'no'
+      fecha_primera_toma: '2026-03-26T00:38:05'
+      pa_sistolica: 19
+      pa_diastolica: 16
+      conducta: xbajwbpilpmufinllwloa
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - DELETE
+    uri: 'api/tamizajes/{id}'
+    metadata:
+      custom: []
+      groupName: 'Tamizajes de Presión Arterial (PA)'
+      groupDescription: |-
+
+        Módulo para el tamizaje primario de pacientes, captura de signos básicos y conducta inicial.
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Eliminar un tamizaje'
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      id:
+        custom: []
+        name: id
+        description: 'The ID of the tamizaje.'
+        required: true
+        example: consequatur
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      id: consequatur
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null

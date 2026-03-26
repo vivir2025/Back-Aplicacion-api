@@ -12,10 +12,19 @@ use Carbon\Carbon;
 use App\Events\TamizajeCreado;
 use App\Events\ModuloError;
 
+/**
+ * @group Tamizajes de Presión Arterial (PA)
+ *
+ * Módulo para el tamizaje primario de pacientes, captura de signos básicos y conducta inicial.
+ */
 class TamizajeController extends Controller
 {
     /**
-     * Obtener todos los tamizajes con información del paciente y usuario
+     * Listar tamizajes
+     * 
+     * @authenticated
+     * @queryParam paciente_id string Filtrar por paciente.
+     * @queryParam usuario_id string Filtrar por usuario/promotor.
      */
     public function index(Request $request)
     {
@@ -58,7 +67,17 @@ class TamizajeController extends Controller
     }
 
     /**
-     * Crear un nuevo tamizaje
+     * Crear tamizaje
+     *
+     * @authenticated
+     * @bodyParam idpaciente string required ID del paciente. Example: id-paciente
+     * @bodyParam vereda_residencia string required Vereda. Example: Vereda Norte
+     * @bodyParam brazo_toma string required izquierdo o derecho. Example: izquierdo
+     * @bodyParam posicion_persona string required de_pie, acostado, sentado. Example: sentado
+     * @bodyParam reposo_cinco_minutos string required si o no. Example: si
+     * @bodyParam fecha_primera_toma date required Fecha de la toma.
+     * @bodyParam pa_sistolica integer required Sistólica. Example: 120
+     * @bodyParam pa_diastolica integer required Diastólica. Example: 80
      */
     public function store(Request $request)
     {
@@ -134,7 +153,10 @@ class TamizajeController extends Controller
     }
 
     /**
-     * Obtener un tamizaje específico
+     * Consultar tamizaje
+     * 
+     * @authenticated
+     * @urlParam id string required ID del tamizaje.
      */
     public function show($id)
     {
@@ -150,7 +172,10 @@ class TamizajeController extends Controller
     }
 
     /**
-     * Actualizar un tamizaje
+     * Actualizar tamizaje
+     * 
+     * @authenticated
+     * @urlParam id string required ID del tamizaje.
      */
     public function update(Request $request, $id)
     {

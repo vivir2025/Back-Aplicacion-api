@@ -1,0 +1,579 @@
+name: 'Encuestas de Satisfacción'
+description: |-
+
+  Gestión de encuestas aplicadas a los pacientes para evaluar la calidad del servicio.
+endpoints:
+  -
+    custom: []
+    httpMethods:
+      - GET
+    uri: api/encuestas
+    metadata:
+      custom: []
+      groupName: 'Encuestas de Satisfacción'
+      groupDescription: |-
+
+        Gestión de encuestas aplicadas a los pacientes para evaluar la calidad del servicio.
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Listar todas las encuestas'
+      description: ''
+      authenticated: true
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 401
+        content: '{"message":"Unauthenticated."}'
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          access-control-allow-origin: '*'
+        description: null
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - POST
+    uri: api/encuestas
+    metadata:
+      custom: []
+      groupName: 'Encuestas de Satisfacción'
+      groupDescription: |-
+
+        Gestión de encuestas aplicadas a los pacientes para evaluar la calidad del servicio.
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Crear encuesta'
+      description: ''
+      authenticated: true
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      id:
+        custom: []
+        name: id
+        description: 'UUID único para la encuesta.'
+        required: true
+        example: uuid-abc
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        deprecated: false
+      idpaciente:
+        custom: []
+        name: idpaciente
+        description: 'ID del paciente.'
+        required: true
+        example: uuid-pac
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        deprecated: false
+      idsede:
+        custom: []
+        name: idsede
+        description: 'ID de la sede.'
+        required: true
+        example: '1'
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        deprecated: false
+      domicilio:
+        custom: []
+        name: domicilio
+        description: 'Must not be greater than 255 characters.'
+        required: true
+        example: mqeopfuudtdsufvyvddqa
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      entidad_afiliada:
+        custom: []
+        name: entidad_afiliada
+        description: 'Must not be greater than 100 characters.'
+        required: false
+        example: mniihfqcoynlazghdtqtq
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+      fecha:
+        custom: []
+        name: fecha
+        description: 'Must be a valid date.'
+        required: true
+        example: '2026-03-26T00:38:05'
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      respuestas_calificacion:
+        custom: []
+        name: respuestas_calificacion
+        description: 'JSON con calificaciones (Excelente, Bueno, etc).'
+        required: true
+        example: '["Excelente", "Bueno"]'
+        type: json
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        deprecated: false
+      respuestas_adicionales:
+        custom: []
+        name: respuestas_adicionales
+        description: 'JSON con respuestas abiertas.'
+        required: true
+        example: '{"pregunta1": "Respuesta"}'
+        type: json
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        deprecated: false
+      sugerencias:
+        custom: []
+        name: sugerencias
+        description: 'Must not be greater than 1000 characters.'
+        required: false
+        example: mqeopfuudtdsufvyvddqa
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
+    cleanBodyParameters:
+      id: uuid-abc
+      idpaciente: uuid-pac
+      idsede: '1'
+      domicilio: mqeopfuudtdsufvyvddqa
+      entidad_afiliada: mniihfqcoynlazghdtqtq
+      fecha: '2026-03-26T00:38:05'
+      respuestas_calificacion: '["Excelente", "Bueno"]'
+      respuestas_adicionales: '{"pregunta1": "Respuesta"}'
+      sugerencias: mqeopfuudtdsufvyvddqa
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - GET
+    uri: 'api/encuestas/{id}'
+    metadata:
+      custom: []
+      groupName: 'Encuestas de Satisfacción'
+      groupDescription: |-
+
+        Gestión de encuestas aplicadas a los pacientes para evaluar la calidad del servicio.
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Consultar encuesta'
+      description: ''
+      authenticated: true
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      id:
+        custom: []
+        name: id
+        description: 'ID de la encuesta.'
+        required: true
+        example: consequatur
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      id: consequatur
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 401
+        content: '{"message":"Unauthenticated."}'
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          access-control-allow-origin: '*'
+        description: null
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - PUT
+      - PATCH
+    uri: 'api/encuestas/{id}'
+    metadata:
+      custom: []
+      groupName: 'Encuestas de Satisfacción'
+      groupDescription: |-
+
+        Gestión de encuestas aplicadas a los pacientes para evaluar la calidad del servicio.
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Actualizar encuesta'
+      description: ''
+      authenticated: true
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      id:
+        custom: []
+        name: id
+        description: 'ID de la encuesta.'
+        required: true
+        example: consequatur
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      id: consequatur
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - DELETE
+    uri: 'api/encuestas/{id}'
+    metadata:
+      custom: []
+      groupName: 'Encuestas de Satisfacción'
+      groupDescription: |-
+
+        Gestión de encuestas aplicadas a los pacientes para evaluar la calidad del servicio.
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      id:
+        custom: []
+        name: id
+        description: 'The ID of the encuesta.'
+        required: true
+        example: consequatur
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      id: consequatur
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - GET
+    uri: api/mis-encuestas
+    metadata:
+      custom: []
+      groupName: 'Encuestas de Satisfacción'
+      groupDescription: |-
+
+        Gestión de encuestas aplicadas a los pacientes para evaluar la calidad del servicio.
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 401
+        content: '{"message":"Unauthenticated."}'
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          access-control-allow-origin: '*'
+        description: null
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - GET
+    uri: 'api/encuestas/paciente/{idpaciente}'
+    metadata:
+      custom: []
+      groupName: 'Encuestas de Satisfacción'
+      groupDescription: |-
+
+        Gestión de encuestas aplicadas a los pacientes para evaluar la calidad del servicio.
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      idpaciente:
+        custom: []
+        name: idpaciente
+        description: ''
+        required: true
+        example: consequatur
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      idpaciente: consequatur
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 401
+        content: '{"message":"Unauthenticated."}'
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          access-control-allow-origin: '*'
+        description: null
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - GET
+    uri: 'api/encuestas/usuario/{idusuario}'
+    metadata:
+      custom: []
+      groupName: 'Encuestas de Satisfacción'
+      groupDescription: |-
+
+        Gestión de encuestas aplicadas a los pacientes para evaluar la calidad del servicio.
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      idusuario:
+        custom: []
+        name: idusuario
+        description: ''
+        required: true
+        example: consequatur
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      idusuario: consequatur
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 401
+        content: '{"message":"Unauthenticated."}'
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          access-control-allow-origin: '*'
+        description: null
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - GET
+    uri: 'api/encuestas/sede/{idsede}'
+    metadata:
+      custom: []
+      groupName: 'Encuestas de Satisfacción'
+      groupDescription: |-
+
+        Gestión de encuestas aplicadas a los pacientes para evaluar la calidad del servicio.
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      idsede:
+        custom: []
+        name: idsede
+        description: ''
+        required: true
+        example: consequatur
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      idsede: consequatur
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 401
+        content: '{"message":"Unauthenticated."}'
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          access-control-allow-origin: '*'
+        description: null
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - GET
+    uri: api/encuestas-estadisticas
+    metadata:
+      custom: []
+      groupName: 'Encuestas de Satisfacción'
+      groupDescription: |-
+
+        Gestión de encuestas aplicadas a los pacientes para evaluar la calidad del servicio.
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 401
+        content: '{"message":"Unauthenticated."}'
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          access-control-allow-origin: '*'
+        description: null
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null

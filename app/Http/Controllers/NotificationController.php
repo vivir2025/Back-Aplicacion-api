@@ -8,19 +8,23 @@ use App\Models\Usuario;
 use App\Models\DeviceToken;
 use App\Services\FirebaseNotificationService;
 
+/**
+ * @group Notificaciones Push (FCM)
+ *
+ * Gestión de tokens de dispositivo y envío de notificaciones push a través de Firebase Cloud Messaging (FCM).
+ */
 class NotificationController extends Controller
 {
-    private $firebaseService;
-    
-    public function __construct(FirebaseNotificationService $firebaseService)
-    {
-        $this->firebaseService = $firebaseService;
-    }
-    
-    // ═══════════════════════════════════════════════════════════════
-    // REGISTRAR TOKEN (Cuando el usuario hace login en Flutter)
-    // ═══════════════════════════════════════════════════════════════
-    
+    /**
+     * Registrar dispositivo
+     * 
+     * Registra el token FCM del dispositivo para recibir notificaciones push.
+     * 
+     * @authenticated
+     * @bodyParam user_id string required ID del usuario.
+     * @bodyParam fcm_token string required Token generado por Firebase en el móvil.
+     * @bodyParam platform string required android, ios, web. Example: android
+     */
     public function registerDevice(Request $request)
     {
         $validated = $request->validate([
@@ -146,6 +150,16 @@ class NotificationController extends Controller
     // ENVIAR NOTIFICACIÓN A TODOS LOS USUARIOS (Broadcast)
     // ═══════════════════════════════════════════════════════════════
     
+    /**
+     * Notificación masiva (Broadcast)
+     * 
+     * Envía una notificación push a todos los dispositivos registrados en el sistema.
+     * 
+     * @authenticated
+     * @bodyParam title string required Título de la notificación.
+     * @bodyParam body string required Contenido del mensaje.
+     * @bodyParam data object Datos adicionales (key-value).
+     */
     public function sendToAll(Request $request)
     {
         $validated = $request->validate([
@@ -200,6 +214,16 @@ class NotificationController extends Controller
     // LISTAR USUARIOS CON TOKENS REGISTRADOS
     // ═══════════════════════════════════════════════════════════════
     
+    /**
+     * Listar usuarios con tokens
+     * 
+     * Obtiene una lista paginada de usuarios que tienen tokens de FCM registrados.
+     * 
+     * @authenticated
+     * @queryParam per_page integer Resultados por página. Default: 15.
+     * @queryParam search string Buscar por nombre, correo o usuario.
+     * @queryParam platform string Filtrar por plataforma (android, ios, web).
+     */
     public function getUsersWithTokens(Request $request)
     {
         try {

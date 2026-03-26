@@ -23,12 +23,21 @@ use App\Http\Controllers\NotificationController;
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth:sanctum');
 
-// AGREGAR RUTA DE HEALTH CHECK
+/**
+ * Health Check
+ * 
+ * Verifica si la API está respondiendo correctamente.
+ * @unauthenticated
+ */
 Route::get('/health', function () {
     return response()->json(['status' => 'ok', 'timestamp' => now()]);
 });
 
-// Alternativa: usar la raíz como health check
+/**
+ * Raíz de la API
+ * 
+ * @unauthenticated
+ */
 Route::get('/', function () {
     return response()->json(['status' => 'API funcionando', 'timestamp' => now()]);
 });

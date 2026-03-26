@@ -5,8 +5,19 @@ namespace App\Http\Controllers;
 use App\Models\Medicamento;
 use Illuminate\Http\Request;
 
+/**
+ * @group Medicamentos
+ *
+ * Catálogo de medicamentos disponibles para entrega en visitas y brigadas.
+ */
 class MedicamentoController extends Controller
 {
+    /**
+     * Listar medicamentos
+     * 
+     * @authenticated
+     * @queryParam busqueda string Filtrar por nombre de medicamento.
+     */
     public function index(Request $request)
     {
         $query = Medicamento::query();

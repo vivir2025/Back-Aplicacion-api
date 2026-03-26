@@ -13,8 +13,18 @@ use App\Events\PlanillaLaboratorioCreada;
 use App\Events\LaboratorioEstadoActualizado;
 use App\Events\ModuloError;
 
+/**
+ * @group Envíos de Muestras (Laboratorio)
+ *
+ * Gestión de planillas de remisión de muestras de laboratorio desde las sedes.
+ */
 class EnvioMuestraController extends Controller
 {
+    /**
+     * Listar envíos de muestras
+     * 
+     * @authenticated
+     */
     public function index()
     {
         return EnvioMuestra::with([
@@ -24,6 +34,18 @@ class EnvioMuestraController extends Controller
         ])->get();
     }
 
+    /**
+     * Crear planilla de envío
+     *
+     * Permite registrar una nueva planilla de remisión de muestras a laboratorio.
+     *
+     * @authenticated
+     * @bodyParam fecha date required Fecha del envío.
+     * @bodyParam idsede string required ID de la sede remitente.
+     * @bodyParam detalles object[] required Lista de muestras por paciente.
+     * @bodyParam detalles.*.paciente_id string required ID del paciente.
+     * @bodyParam detalles.*.numero_orden integer required Número de orden de laboratorio.
+     */
     public function store(Request $request)
     {
         $request->validate([

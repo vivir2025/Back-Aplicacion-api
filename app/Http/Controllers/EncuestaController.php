@@ -12,8 +12,18 @@ use Illuminate\Support\Facades\Auth;
 use App\Events\EncuestaCreada;
 use App\Events\ModuloError;
 
+/**
+ * @group Encuestas de Satisfacción
+ *
+ * Gestión de encuestas aplicadas a los pacientes para evaluar la calidad del servicio.
+ */
 class EncuestaController extends Controller
 {
+    /**
+     * Listar todas las encuestas
+     * 
+     * @authenticated
+     */
     public function index()
     {
         try {
@@ -32,6 +42,16 @@ class EncuestaController extends Controller
         }
     }
 
+    /**
+     * Crear encuesta
+     *
+     * @authenticated
+     * @bodyParam id string required UUID único para la encuesta. Example: uuid-abc
+     * @bodyParam idpaciente string required ID del paciente. Example: uuid-pac
+     * @bodyParam idsede string required ID de la sede. Example: 1
+     * @bodyParam respuestas_calificacion json required JSON con calificaciones (Excelente, Bueno, etc). Example: ["Excelente", "Bueno"]
+     * @bodyParam respuestas_adicionales json required JSON con respuestas abiertas. Example: {"pregunta1": "Respuesta"}
+     */
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
@@ -105,6 +125,12 @@ class EncuestaController extends Controller
         }
     }
 
+    /**
+     * Consultar encuesta
+     * 
+     * @authenticated
+     * @urlParam id string required ID de la encuesta.
+     */
     public function show($id)
     {
         try {
@@ -123,6 +149,12 @@ class EncuestaController extends Controller
         }
     }
 
+    /**
+     * Actualizar encuesta
+     * 
+     * @authenticated
+     * @urlParam id string required ID de la encuesta.
+     */
     public function update(Request $request, $id)
     {
         try {

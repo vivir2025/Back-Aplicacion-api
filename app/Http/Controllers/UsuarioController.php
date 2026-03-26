@@ -7,12 +7,19 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 
+/**
+ * @group Gestión de Usuarios
+ *
+ * Administración de los usuarios del sistema, sus roles (admin, auxiliar, supervisor) y sedes de pertenencia.
+ */
 class UsuarioController extends Controller
 {
     /**
-     * Mostrar una lista de todos los usuarios.
-     *
-     * @return \Illuminate\Http\Response
+     * Listar usuarios
+     * 
+     * @authenticated
+     * @queryParam rol string Filtrar por rol (admin, auxiliar, supervisor).
+     * @queryParam sede_id string Filtrar por ID de sede.
      */
     public function index(Request $request)
     {

@@ -10,13 +10,38 @@ use Illuminate\Support\Facades\DB;
 use App\Events\FindriskCreado;
 use App\Events\ModuloError;
 
+/**
+ * @group Tests FINDRISK
+ *
+ * Evaluación de riesgo de padecer diabetes tipo 2 mediante el cuestionario FINDRISK.
+ */
 class FindriskTestController extends Controller
 {
+    /**
+     * Listar tests realizados
+     * 
+     * @authenticated
+     */
     public function index()
     {
         return FindriskTest::with(['paciente', 'sede'])->get();
     }
 
+    /**
+     * Crear test FINDRISK
+     *
+     * @authenticated
+     * @bodyParam idpaciente string required ID del paciente. Example: 550e8400-e29b-41d4-a716-446655440000
+     * @bodyParam idsede string required ID de la sede. Example: 4044680601076201931
+     * @bodyParam peso number required Peso en kg. Example: 85
+     * @bodyParam talla number required Talla en cm. Example: 175
+     * @bodyParam perimetro_abdominal number required Perímetro abdominal en cm. Example: 102
+     * @bodyParam actividad_fisica string required "si" o "no". Example: si
+     * @bodyParam medicamentos_hipertension string required "si" o "no". Example: si
+     * @bodyParam frecuencia_frutas_verduras string required "diariamente" o "no_diariamente". Example: diariamente
+     * @bodyParam azucar_alto_detectado string required "si" o "no". Example: si
+     * @bodyParam antecedentes_familiares string required (no, abuelos_tios_primos, padres_hermanos_hijos). Example: no
+     */
     public function store(Request $request)
     {
         $request->validate([
@@ -124,6 +149,12 @@ class FindriskTestController extends Controller
         }
     }
 
+    /**
+     * Consultar test FINDRISK
+     * 
+     * @authenticated
+     * @urlParam id string required ID del test. Example: 1
+     */
     public function show($id)
     {
         $test = FindriskTest::with(['paciente', 'sede'])->findOrFail($id);
@@ -139,6 +170,12 @@ class FindriskTestController extends Controller
         ]);
     }
 
+    /**
+     * Actualizar test FINDRISK
+     * 
+     * @authenticated
+     * @urlParam id string required ID del test.
+     */
     public function update(Request $request, $id)
     {
         $request->validate([

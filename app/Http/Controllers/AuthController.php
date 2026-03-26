@@ -8,8 +8,32 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
 
+/**
+ * @group Autenticación
+ *
+ * Endpoints para gestionar el acceso a la API y el perfil del usuario.
+ */
 class AuthController extends Controller
 {
+    /**
+     * Iniciar sesión
+     *
+     * Permite a un usuario obtener un token de acceso (Bearer) proporcionando sus credenciales.
+     *
+     * @bodyParam usuario string required El nombre de usuario. Example: admin
+     * @bodyParam contrasena string required La contraseña del usuario. Example: secret123
+     *
+     * @response 200 {
+     *  "token": "1|ABC...",
+     *  "usuario": {"id": 1, "nombre": "Admin", "rol": "admin"},
+     *  "sede": {"id": 1, "nombre": "Sede Central"}
+     * }
+     * @response 422 {
+     *  "message": "Las credenciales proporcionadas son incorrectas.",
+     *  "errors": {"usuario": ["Las credenciales proporcionadas son incorrectas."]}
+     * }
+     * @unauthenticated
+     */
     public function login(Request $request)
     {
         $request->validate([
@@ -32,6 +56,16 @@ class AuthController extends Controller
         ]);
     }
 
+    /**
+     * Cerrar sesión
+     *
+     * Revoca el token de acceso actual del usuario autenticado.
+     *
+     * @authenticated
+     * @response 200 {
+     *  "message": "Sesión cerrada correctamente"
+     * }
+     */
     public function logout(Request $request)
     {
         $request->user()->currentAccessToken()->delete();
@@ -39,11 +73,45 @@ class AuthController extends Controller
         return response()->json(['message' => 'Sesión cerrada correctamente']);
     }
 
+    /**
+     * Ver perfil
+     *
+     * Obtiene la información detallada del usuario autenticado y su sede asociada.
+     *
+     * @authenticated
+     * @response 200 {
+     *  "id": 1,
+     *  "nombre": "Admin",
+     *  "usuario": "admin",
+     *  "correo": "admin@test.com",
+     *  "rol": "admin",
+     *  "sede": {"id": 1, "nombre": "Sede Central"}
+     * }
+     */
     public function perfil(Request $request)
     {
         return response()->json($request->user()->load('sede'));
     }
 
+    /**
+     * Actualizar perfil
+     *
+     * Permite al usuario autenticado actualizar su nombre, correo y contraseña.
+     *
+     * @authenticated
+     * @bodyParam nombre string El nombre completo. Example: Juan Perez
+     * @bodyParam correo string El correo electrónico. Example: juan@test.com
+     * @bodyParam contrasena_actual string La contraseña actual (requerida si se cambia la nueva).
+     * @bodyParam contrasena_nueva string La nueva contraseña (mínimo 6 caracteres).
+     *
+     * @response 200 {
+     *  "message": "Perfil actualizado correctamente",
+     *  "usuario": {"id": 1, "nombre": "Juan Perez", "correo": "juan@test.com"}
+     * }
+     * @response 422 {
+     *  "error": "La contrasena actual no es correcta"
+     * }
+     */
     public function actualizarPerfil(Request $request)
     {
         $usuario = $request->user();

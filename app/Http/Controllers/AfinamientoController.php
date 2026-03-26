@@ -11,10 +11,40 @@ use Carbon\Carbon;
 use App\Events\AfinamientoCreado;
 use App\Events\ModuloError;
 
+/**
+ * @group Afinamientos y Seguimiento
+ *
+ * Gestión de afinamientos de presión arterial para pacientes con sospecha de HTA.
+ */
 class AfinamientoController extends Controller
 {
     /**
-     * Mostrar lista de afinamientos
+     * Listar afinamientos
+     *
+     * Permite obtener el histórico de afinamientos realizados, filtrando por usuario, paciente o rango de fechas.
+     *
+     * @authenticated
+     * @queryParam usuario_id string ID del usuario promotor. Example: 4044680601076201931
+     * @queryParam paciente_id string ID del paciente. Example: 550e8400-e29b-41d4-a716-446655440000
+     * @queryParam fecha_desde date Fecha inicial (Y-m-d). Example: 2024-01-01
+     * @queryParam fecha_hasta date Fecha final (Y-m-d). Example: 2024-12-31
+     *
+     * @response scenario=success [
+     *  {
+     *    "id": "uuid-123",
+     *    "idpaciente": "uuid-pac",
+     *    "idusuario": "uuid-user",
+     *    "fecha_tamizaje": "2024-03-25",
+     *    "presion_arterial_tamiz": "145/95",
+     *    "promedio_sistolica": 138,
+     *    "promedio_diastolica": 88,
+     *    "conducta": "Seguimiento en 3 meses",
+     *    "nombre_paciente": "Juan Pérez",
+     *    "identificacion_paciente": "12345678",
+     *    "edad_paciente": 45,
+     *    "promotor_vida": "Maria Gomez"
+     *  }
+     * ]
      */
     public function index(Request $request)
     {
@@ -59,7 +89,24 @@ class AfinamientoController extends Controller
     }
 
     /**
-     * Crear nuevo afinamiento
+     * Crear afinamiento
+     *
+     * Registra un nuevo ciclo de 3 tomas de afinamiento de presión arterial.
+     * Los promedios se calculan automáticamente en el servidor.
+     *
+     * @authenticated
+     * @bodyParam idpaciente string required ID del paciente. Example: uuid-paciente
+     * @bodyParam procedencia string required Origen/Barrio del paciente. Example: Centro
+     * @bodyParam fecha_tamizaje date required Fecha del tamizaje inicial. Example: 2024-03-25
+     * @bodyParam presion_arterial_tamiz string required Cifra PA inicial. Example: 145/95
+     * @bodyParam primer_afinamiento_fecha date Fecha 1era toma. Example: 2024-03-26
+     * @bodyParam presion_sistolica_1 int Presión 1era toma. Example: 138
+     * @bodyParam presion_diastolica_1 int Presión 1era toma. Example: 88
+     *
+     * @response scenario="success creation" {
+     *   "message": "Afinamiento creado exitosamente",
+     *   "data": { "id": "uuid-001", "promedio_sistolica": 138, "promedio_diastolica": 88 }
+     * }
      */
     public function store(Request $request)
     {
@@ -141,7 +188,19 @@ class AfinamientoController extends Controller
     }
 
     /**
-     * Mostrar afinamiento específico
+     * Consultar afinamiento
+     *
+     * Obtiene los detalles de un registro específico de afinamiento.
+     *
+     * @authenticated
+     * @urlParam id string required ID del afinamiento. Example: uuid-123
+     *
+     * @response scenario=success {
+     *   "id": "uuid-123",
+     *   "nombre_paciente": "Juan Pérez",
+     *   "promedio_sistolica": 140,
+     *   "promedio_diastolica": 90
+     * }
      */
     public function show($id)
     {
@@ -163,6 +222,12 @@ class AfinamientoController extends Controller
 
     /**
      * Actualizar afinamiento
+     *
+     * Permite modificar datos de tomas previas o agregar nuevas tomas al ciclo.
+     *
+     * @authenticated
+     * @urlParam id string required ID del afinamiento.
+     * @bodyParam presion_sistolica_2 int Toma 2da toma. Example: 135
      */
     public function update(Request $request, $id)
     {

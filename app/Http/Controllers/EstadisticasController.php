@@ -12,17 +12,22 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Carbon\Carbon;
 
+/**
+ * @group Estadísticas y Dashboard
+ *
+ * Módulo para obtener el resumen de actividades del usuario logueado en el mes actual o en un rango de fechas.
+ */
 class EstadisticasController extends Controller
 {
     /**
-     * Obtener estadísticas generales del usuario logueado.
-     * 
-     * COMPORTAMIENTO:
-     * - Sin filtro de fechas: muestra lo que el usuario hizo en el MES ACTUAL.
-     *   Al cambiar de mes se resetea a cero automáticamente.
-     * - Con filtro de fechas (fecha_inicio / fecha_fin): muestra el rango específico.
-     * - Pacientes: siempre muestra TODOS (sin filtro de usuario ni fecha).
-     * - Visitas, Tamizajes, Envíos de muestras, Encuestas: filtrados por usuario logueado.
+     * Obtener estadísticas generales
+     *
+     * Retorna el conteo de pacientes (total) y actividades (visitas, tamizajes, envíos, encuestas) del usuario logueado.
+     * Si no se envían fechas, filtra por el mes actual.
+     *
+     * @authenticated
+     * @queryParam fecha_inicio date Fecha inicial (YYYY-MM-DD). Example: 2024-03-01
+     * @queryParam fecha_fin date Fecha final (YYYY-MM-DD). Example: 2024-03-31
      */
     public function index(Request $request)
     {

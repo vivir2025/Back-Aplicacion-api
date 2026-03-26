@@ -5,8 +5,18 @@ namespace App\Http\Controllers;
 use App\Models\Sede;
 use Illuminate\Http\Request;
 
+/**
+ * @group Sedes
+ *
+ * Gestión de las sedes de atención en salud disponibles en el sistema.
+ */
 class SedeController extends Controller
 {
+    /**
+     * Listar sedes
+     * 
+     * @authenticated
+     */
     public function index()
     {
         return Sede::all();

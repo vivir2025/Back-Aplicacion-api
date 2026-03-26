@@ -7,8 +7,21 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
 use Carbon\Carbon;
 
+/**
+ * @group Auditoría y Logs
+ *
+ * Módulo para el análisis y monitoreo de los logs del sistema (laravel.log), con filtros avanzados por módulo y prioridad.
+ */
 class LogController extends Controller
 {
+    /**
+     * Listar y filtrar logs
+     * 
+     * @authenticated
+     * @queryParam search string Busqueda por texto.
+     * @queryParam type string Filtrar por tipo (visita, brigada, etc).
+     * @queryParam status string Filtrar por estado (success, error, warning).
+     */
     public function index(Request $request)
     {
         $logPath = storage_path('logs/laravel.log');

@@ -7,10 +7,35 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\DB;
 
+/**
+ * @group Gestión de Pacientes
+ *
+ * Endpoints para la sincronización masiva de datos entre dispositivos y el servidor.
+ */
 class PacienteSyncController extends Controller
 {
     /**
-     * Sincronización masiva de pacientes desde la app móvil
+     * Sincronización masiva (Offline-first)
+     *
+     * Permite sincronizar un lote de pacientes desde la aplicación móvil. El sistema identifica si debe crear o actualizar basándose en el ID.
+     * 
+     * @authenticated
+     * @bodyParam pacientes object[] required Lista de pacientes a sincronizar.
+     * @bodyParam pacientes[].id string required UUID del paciente en el dispositivo. Example: uuid-mobile-1
+     * @bodyParam pacientes[].identificacion string required Documento. Example: 12345
+     * @bodyParam pacientes[].nombre string required Nombre. Example: Pedro
+     * @bodyParam pacientes[].apellido string required Apellido. Example: Picapiedra
+     * @bodyParam pacientes[].fecnacimiento string Fecha (Y-m-d). Example: 1980-01-01
+     * 
+     * @response 200 {
+     *  "success": true,
+     *  "message": "Sincronización completada",
+     *  "resultados": {
+     *    "creados": 1,
+     *    "actualizados": 0,
+     *    "errores": []
+     *  }
+     * }
      */
     public function syncBatch(Request $request)
     {

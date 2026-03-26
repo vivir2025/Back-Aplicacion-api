@@ -13,13 +13,43 @@ use Illuminate\Support\Facades\DB;
 use App\Events\VisitaCreada;
 use App\Events\ModuloError;
 
+/**
+ * @group Visitas Domiciliarias
+ *
+ * Gestión de visitas realizadas a pacientes en su domicilio, incluyendo toma de signos vitales, fotos y firmas.
+ */
 class VisitaController extends Controller
 {
+    /**
+     * Listar todas las visitas
+     * 
+     * @authenticated
+     */
     public function index()
     {
         return Visita::with(['usuario', 'paciente'])->get();
     }
 
+  /**
+   * Crear visita domiciliaria
+   *
+   * Permite registrar una visita, procesando coordenadas, fotos de riesgo y firmas en archivos o Base64.
+   *
+   * @authenticated
+   * @bodyParam nombre_apellido string required Nombre del paciente contactado.
+   * @bodyParam identificacion string required Cédula del paciente.
+   * @bodyParam fecha date required Fecha de la visita.
+   * @bodyParam idusuario string required ID del usuario (Hacedor).
+   * @bodyParam idpaciente string ID del paciente (opcional, se busca por cédula si falta).
+   * @bodyParam hta string Presión arterial (si/no).
+   * @bodyParam dm string Diabetes (si/no).
+   * @bodyParam peso number Peso (kg).
+   * @bodyParam talla number Talla (cm).
+   * @bodyParam tension_arterial string Valor TA (e.g. 120/80).
+   * @bodyParam riesgo_fotografico_base64 string Imagen del riesgo en Base64.
+   * @bodyParam firma_base64 string Firma en Base64.
+   * @bodyParam medicamentos json JSON con lista de medicamentos e indicaciones. Example: [{"id": 1, "indicaciones": "Cena"}]
+   */
   public function store(Request $request)
 {
     Log::info('[POST] Visita Domiciliaria → Procesando', [
@@ -266,7 +296,13 @@ class VisitaController extends Controller
             return response()->json(['success' => false, 'message' => 'Visita no encontrada'], 404);
         }
     }
-public function update(Request $request, $id)
+    /**
+     * Actualizar visita
+     * 
+     * @authenticated
+     * @urlParam id string required ID de la visita.
+     */
+    public function update(Request $request, $id)
 {
     try {
         $visita = Visita::findOrFail($id);

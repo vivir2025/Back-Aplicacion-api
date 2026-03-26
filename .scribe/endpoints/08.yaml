@@ -1,0 +1,200 @@
+name: 'Brigadas de Salud'
+description: |-
+
+  Gestión de brigadas en campo, incluyendo sincronización de pacientes offline y entrega de medicamentos.
+endpoints:
+  -
+    custom: []
+    httpMethods:
+      - GET
+    uri: api/brigadas
+    metadata:
+      custom: []
+      groupName: 'Brigadas de Salud'
+      groupDescription: |-
+
+        Gestión de brigadas en campo, incluyendo sincronización de pacientes offline y entrega de medicamentos.
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Listar brigadas'
+      description: ''
+      authenticated: true
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 401
+        content: '{"message":"Unauthenticated."}'
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          access-control-allow-origin: '*'
+        description: null
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - POST
+    uri: api/brigadas
+    metadata:
+      custom: []
+      groupName: 'Brigadas de Salud'
+      groupDescription: |-
+
+        Gestión de brigadas en campo, incluyendo sincronización de pacientes offline y entrega de medicamentos.
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Crear brigada'
+      description: 'Permite crear una brigada y sincronizar los pacientes que fueron capturados offline.'
+      authenticated: true
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      lugar_evento:
+        custom: []
+        name: lugar_evento
+        description: 'Nombre del lugar.'
+        required: true
+        example: 'Vereda El Cairo'
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        deprecated: false
+      fecha_brigada:
+        custom: []
+        name: fecha_brigada
+        description: 'Fecha del evento.'
+        required: true
+        example: consequatur
+        type: date
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      tema:
+        custom: []
+        name: tema
+        description: 'Tema desarrollado.'
+        required: true
+        example: 'Charla HTA'
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        deprecated: false
+      pacientes:
+        custom: []
+        name: pacientes
+        description: 'Array de IDs de pacientes (reales u offline_ID).'
+        required: true
+        example:
+          - uuid-1
+          - offline_2
+        type: 'string[]'
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        deprecated: false
+      pacientes_data:
+        custom: []
+        name: pacientes_data
+        description: 'Datos completos de pacientes offline para auto-creación.'
+        required: false
+        example:
+          - []
+        type: 'object[]'
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanBodyParameters:
+      lugar_evento: 'Vereda El Cairo'
+      fecha_brigada: consequatur
+      tema: 'Charla HTA'
+      pacientes:
+        - uuid-1
+        - offline_2
+      pacientes_data:
+        - []
+    fileParameters: []
+    responses: []
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - GET
+    uri: 'api/brigadas/{id}'
+    metadata:
+      custom: []
+      groupName: 'Brigadas de Salud'
+      groupDescription: |-
+
+        Gestión de brigadas en campo, incluyendo sincronización de pacientes offline y entrega de medicamentos.
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      id:
+        custom: []
+        name: id
+        description: 'The ID of the brigada.'
+        required: true
+        example: consequatur
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      id: consequatur
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 401
+        content: '{"message":"Unauthenticated."}'
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          access-control-allow-origin: '*'
+        description: null
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null

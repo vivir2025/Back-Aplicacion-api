@@ -14,8 +14,18 @@ use Illuminate\Support\Str;
 use App\Events\BrigadaCreada;
 use App\Events\ModuloError;
 
+/**
+ * @group Brigadas de Salud
+ *
+ * Gestión de brigadas en campo, incluyendo sincronización de pacientes offline y entrega de medicamentos.
+ */
 class BrigadaController extends Controller
 {
+    /**
+     * Listar brigadas
+     * 
+     * @authenticated
+     */
     public function index(Request $request)
     {
         try {
@@ -53,6 +63,18 @@ class BrigadaController extends Controller
         }
     }
 
+    /**
+     * Crear brigada
+     *
+     * Permite crear una brigada y sincronizar los pacientes que fueron capturados offline.
+     *
+     * @authenticated
+     * @bodyParam lugar_evento string required Nombre del lugar. Example: Vereda El Cairo
+     * @bodyParam fecha_brigada date required Fecha del evento.
+     * @bodyParam tema string required Tema desarrollado. Example: Charla HTA
+     * @bodyParam pacientes string[] required Array de IDs de pacientes (reales u offline_ID). Example: ["uuid-1", "offline_2"]
+     * @bodyParam pacientes_data object[] Datos completos de pacientes offline para auto-creación.
+     */
     public function store(Request $request)
     {
         try {

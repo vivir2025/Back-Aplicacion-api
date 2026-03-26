@@ -1,0 +1,127 @@
+name: 'Estadísticas y Dashboard'
+description: |-
+
+  Módulo para obtener el resumen de actividades del usuario logueado en el mes actual o en un rango de fechas.
+endpoints:
+  -
+    custom: []
+    httpMethods:
+      - GET
+    uri: api/estadisticas
+    metadata:
+      custom: []
+      groupName: 'Estadísticas y Dashboard'
+      groupDescription: |-
+
+        Módulo para obtener el resumen de actividades del usuario logueado en el mes actual o en un rango de fechas.
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Obtener estadísticas generales'
+      description: |-
+        Retorna el conteo de pacientes (total) y actividades (visitas, tamizajes, envíos, encuestas) del usuario logueado.
+        Si no se envían fechas, filtra por el mes actual.
+      authenticated: true
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters:
+      fecha_inicio:
+        custom: []
+        name: fecha_inicio
+        description: 'date Fecha inicial (YYYY-MM-DD).'
+        required: false
+        example: '2024-03-01'
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        deprecated: false
+      fecha_fin:
+        custom: []
+        name: fecha_fin
+        description: 'date Fecha final (YYYY-MM-DD).'
+        required: false
+        example: '2024-03-31'
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        deprecated: false
+    cleanQueryParameters:
+      fecha_inicio: '2024-03-01'
+      fecha_fin: '2024-03-31'
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 401
+        content: '{"message":"Unauthenticated."}'
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          access-control-allow-origin: '*'
+        description: null
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - GET
+    uri: 'api/estadisticas/sede/{sedeId}'
+    metadata:
+      custom: []
+      groupName: 'Estadísticas y Dashboard'
+      groupDescription: |-
+
+        Módulo para obtener el resumen de actividades del usuario logueado en el mes actual o en un rango de fechas.
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Obtener estadísticas por sede específica'
+      description: ''
+      authenticated: false
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters:
+      sedeId:
+        custom: []
+        name: sedeId
+        description: ''
+        required: true
+        example: consequatur
+        type: string
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+    cleanUrlParameters:
+      sedeId: consequatur
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 401
+        content: '{"message":"Unauthenticated."}'
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          access-control-allow-origin: '*'
+        description: null
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
